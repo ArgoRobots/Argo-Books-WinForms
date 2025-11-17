@@ -159,6 +159,7 @@ namespace Sales_Tracker
         {
             CategoryPurchaseList.Clear();
             CategorySaleList.Clear();
+            CategoryRentalList.Clear();
             AccountantList.Clear();
             CompanyList.Clear();
             Purchase_DataGridView.Rows.Clear();
@@ -207,6 +208,7 @@ namespace Sales_Tracker
         {
             LoadCategoriesFromFile(Directories.CategoryPurchases_file, CategoryPurchaseList);
             LoadCategoriesFromFile(Directories.CategorySales_file, CategorySaleList);
+            LoadCategoriesFromFile(Directories.CategoryRentals_file, CategoryRentalList);
 
             AccountantList = Directories.ReadAllLinesInFile(Directories.Accountants_file).ToList();
             CompanyList = Directories.ReadAllLinesInFile(Directories.Companies_file).ToList();
@@ -2005,7 +2007,8 @@ namespace Sales_Tracker
             {
                 Accountants_Form => SelectedOption.Accountants,
                 Companies_Form => SelectedOption.Companies,
-                Categories_Form => Categories_Form.Instance.Purchase_RadioButton.Checked ? SelectedOption.CategoryPurchases : SelectedOption.CategorySales,
+                Categories_Form => Categories_Form.Instance.Purchase_RadioButton.Checked ? SelectedOption.CategoryPurchases :
+                                   Categories_Form.Instance.Rent_RadioButton.Checked ? SelectedOption.CategoryRentals : SelectedOption.CategorySales,
                 Products_Form => Products_Form.Instance.Purchase_RadioButton.Checked ? SelectedOption.ProductPurchases : SelectedOption.ProductSales,
                 Receipts_Form => SelectedOption.Receipts,
                 ItemsInTransaction_Form => IsButtonSelected(Purchases_Button) ? SelectedOption.ItemsInPurchase : SelectedOption.ItemsInSale,
@@ -2044,6 +2047,7 @@ namespace Sales_Tracker
             ProductSales,
             CategoryPurchases,
             CategorySales,
+            CategoryRentals,
             Accountants,
             Receipts,
             Companies,
@@ -2361,6 +2365,10 @@ namespace Sales_Tracker
             if (option == SelectedOption.CategoryPurchases || option == SelectedOption.ProductPurchases)
             {
                 categoryList = CategoryPurchaseList;
+            }
+            else if (option == SelectedOption.CategoryRentals)
+            {
+                categoryList = CategoryRentalList;
             }
             else
             {

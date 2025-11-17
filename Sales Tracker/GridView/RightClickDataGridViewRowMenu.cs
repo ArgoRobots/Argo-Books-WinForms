@@ -94,11 +94,15 @@ namespace Sales_Tracker.GridView
             // Move rows based on current selection
             if (MainMenu_Form.Instance.Selected == MainMenu_Form.SelectedOption.CategoryPurchases)
             {
-                MoveCategoryRows(selectedRows, true);
+                MoveCategoryRows(selectedRows, MainMenu_Form.SelectedOption.CategoryPurchases);
             }
             else if (MainMenu_Form.Instance.Selected == MainMenu_Form.SelectedOption.CategorySales)
             {
-                MoveCategoryRows(selectedRows, false);
+                MoveCategoryRows(selectedRows, MainMenu_Form.SelectedOption.CategorySales);
+            }
+            else if (MainMenu_Form.Instance.Selected == MainMenu_Form.SelectedOption.CategoryRentals)
+            {
+                MoveCategoryRows(selectedRows, MainMenu_Form.SelectedOption.CategoryRentals);
             }
 
             RestoreSelectionAndScroll(grid, firstSelectedIndex, scrollPosition);
@@ -161,23 +165,124 @@ namespace Sales_Tracker.GridView
                     CustomMessageBoxIcon.Error, CustomMessageBoxButtons.Ok, ex.Message);
             }
         }
-        private static void MoveCategoryRows(List<DataGridViewRow> rowsToMove, bool fromPurchaseToSale)
+        private static void MoveCategoryRows(List<DataGridViewRow> rowsToMove, MainMenu_Form.SelectedOption sourceOption)
         {
-            Guna2DataGridView sourceGrid = fromPurchaseToSale
-                ? Categories_Form.Instance.Purchase_DataGridView
-                : Categories_Form.Instance.Sale_DataGridView;
+            // Determine target option
+            MainMenu_Form.SelectedOption targetOption;
+            string targetName;
 
-            Guna2DataGridView targetGrid = fromPurchaseToSale
-                ? Categories_Form.Instance.Sale_DataGridView
-                : Categories_Form.Instance.Purchase_DataGridView;
+            if (sourceOption == MainMenu_Form.SelectedOption.CategoryPurchases)
+            {
+                // Ask user: move to Sales or Rentals
+                CustomMessageBoxResult result = CustomMessageBox.Show(
+                    "Move to",
+                    "Move selected categories to:\n\n[1] Sales\n[2] Rentals\n\nPress 1 or 2, or Cancel to abort.",
+                    CustomMessageBoxIcon.Question,
+                    CustomMessageBoxButtons.Custom1Custom2Cancel,
+                    "Sales",
+                    "Rentals");
 
-            List<Category> sourceList = fromPurchaseToSale
-                ? MainMenu_Form.Instance.CategoryPurchaseList
-                : MainMenu_Form.Instance.CategorySaleList;
+                if (result == CustomMessageBoxResult.Custom1)
+                {
+                    targetOption = MainMenu_Form.SelectedOption.CategorySales;
+                    targetName = "Sales";
+                }
+                else if (result == CustomMessageBoxResult.Custom2)
+                {
+                    targetOption = MainMenu_Form.SelectedOption.CategoryRentals;
+                    targetName = "Rentals";
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else if (sourceOption == MainMenu_Form.SelectedOption.CategorySales)
+            {
+                // Ask user: move to Purchases or Rentals
+                CustomMessageBoxResult result = CustomMessageBox.Show(
+                    "Move to",
+                    "Move selected categories to:\n\n[1] Purchases\n[2] Rentals\n\nPress 1 or 2, or Cancel to abort.",
+                    CustomMessageBoxIcon.Question,
+                    CustomMessageBoxButtons.Custom1Custom2Cancel,
+                    "Purchases",
+                    "Rentals");
 
-            List<Category> targetList = fromPurchaseToSale
-                ? MainMenu_Form.Instance.CategorySaleList
-                : MainMenu_Form.Instance.CategoryPurchaseList;
+                if (result == CustomMessageBoxResult.Custom1)
+                {
+                    targetOption = MainMenu_Form.SelectedOption.CategoryPurchases;
+                    targetName = "Purchases";
+                }
+                else if (result == CustomMessageBoxResult.Custom2)
+                {
+                    targetOption = MainMenu_Form.SelectedOption.CategoryRentals;
+                    targetName = "Rentals";
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else // CategoryRentals
+            {
+                // Ask user: move to Purchases or Sales
+                CustomMessageBoxResult result = CustomMessageBox.Show(
+                    "Move to",
+                    "Move selected categories to:\n\n[1] Purchases\n[2] Sales\n\nPress 1 or 2, or Cancel to abort.",
+                    CustomMessageBoxIcon.Question,
+                    CustomMessageBoxButtons.Custom1Custom2Cancel,
+                    "Purchases",
+                    "Sales");
+
+                if (result == CustomMessageBoxResult.Custom1)
+                {
+                    targetOption = MainMenu_Form.SelectedOption.CategoryPurchases;
+                    targetName = "Purchases";
+                }
+                else if (result == CustomMessageBoxResult.Custom2)
+                {
+                    targetOption = MainMenu_Form.SelectedOption.CategorySales;
+                    targetName = "Sales";
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            // Get source and target grids
+            Guna2DataGridView sourceGrid = sourceOption switch
+            {
+                MainMenu_Form.SelectedOption.CategoryPurchases => Categories_Form.Instance.Purchase_DataGridView,
+                MainMenu_Form.SelectedOption.CategorySales => Categories_Form.Instance.Sale_DataGridView,
+                MainMenu_Form.SelectedOption.CategoryRentals => Categories_Form.Instance.Rent_DataGridView,
+                _ => null
+            };
+
+            Guna2DataGridView targetGrid = targetOption switch
+            {
+                MainMenu_Form.SelectedOption.CategoryPurchases => Categories_Form.Instance.Purchase_DataGridView,
+                MainMenu_Form.SelectedOption.CategorySales => Categories_Form.Instance.Sale_DataGridView,
+                MainMenu_Form.SelectedOption.CategoryRentals => Categories_Form.Instance.Rent_DataGridView,
+                _ => null
+            };
+
+            // Get source and target lists
+            List<Category> sourceList = sourceOption switch
+            {
+                MainMenu_Form.SelectedOption.CategoryPurchases => MainMenu_Form.Instance.CategoryPurchaseList,
+                MainMenu_Form.SelectedOption.CategorySales => MainMenu_Form.Instance.CategorySaleList,
+                MainMenu_Form.SelectedOption.CategoryRentals => MainMenu_Form.Instance.CategoryRentalList,
+                _ => null
+            };
+
+            List<Category> targetList = targetOption switch
+            {
+                MainMenu_Form.SelectedOption.CategoryPurchases => MainMenu_Form.Instance.CategoryPurchaseList,
+                MainMenu_Form.SelectedOption.CategorySales => MainMenu_Form.Instance.CategorySaleList,
+                MainMenu_Form.SelectedOption.CategoryRentals => MainMenu_Form.Instance.CategoryRentalList,
+                _ => null
+            };
 
             MainMenu_Form.IsProgramLoading = true;
             int successfulMoves = 0;
@@ -207,24 +312,19 @@ namespace Sales_Tracker.GridView
                         "The category '{1}' contains the following products:\n\n{2}\n\nDo you want to move all these products to the {3} category?",
                         CustomMessageBoxIcon.Question,
                         CustomMessageBoxButtons.OkCancel,
-                        category.ProductList.Count, categoryName, allProductsList, fromPurchaseToSale ? "Sales" : "Purchases");
+                        category.ProductList.Count, categoryName, allProductsList, targetName);
 
                     if (result != CustomMessageBoxResult.Ok)
                     {
                         continue;
                     }
 
-                    // Move all products to the target list
-                    List<Category> targetCategories = fromPurchaseToSale
-                        ? MainMenu_Form.Instance.CategorySaleList
-                        : MainMenu_Form.Instance.CategoryPurchaseList;
-
                     // Find or create a category in the target list
-                    Category targetCategory = targetCategories.FirstOrDefault(c => c.Name == categoryName);
+                    Category targetCategory = targetList.FirstOrDefault(c => c.Name == categoryName);
                     if (targetCategory == null)
                     {
                         targetCategory = new Category { Name = categoryName };
-                        targetCategories.Add(targetCategory);
+                        targetList.Add(targetCategory);
                     }
 
                     // Open Products_Form if it exists
@@ -233,13 +333,21 @@ namespace Sales_Tracker.GridView
                         : null;
 
                     // Determine which grids to update based on current view
-                    Guna2DataGridView sourceProductGrid = fromPurchaseToSale
-                        ? productsForm?.Purchase_DataGridView
-                        : productsForm?.Sale_DataGridView;
+                    Guna2DataGridView sourceProductGrid = sourceOption switch
+                    {
+                        MainMenu_Form.SelectedOption.CategoryPurchases => productsForm?.Purchase_DataGridView,
+                        MainMenu_Form.SelectedOption.CategorySales => productsForm?.Sale_DataGridView,
+                        MainMenu_Form.SelectedOption.CategoryRentals => productsForm?.Rent_DataGridView,
+                        _ => null
+                    };
 
-                    Guna2DataGridView targetProductGrid = fromPurchaseToSale
-                        ? productsForm?.Sale_DataGridView
-                        : productsForm?.Purchase_DataGridView;
+                    Guna2DataGridView targetProductGrid = targetOption switch
+                    {
+                        MainMenu_Form.SelectedOption.CategoryPurchases => productsForm?.Purchase_DataGridView,
+                        MainMenu_Form.SelectedOption.CategorySales => productsForm?.Sale_DataGridView,
+                        MainMenu_Form.SelectedOption.CategoryRentals => productsForm?.Rent_DataGridView,
+                        _ => null
+                    };
 
                     // Move products
                     foreach (Product product in category.ProductList.ToList())
@@ -288,10 +396,9 @@ namespace Sales_Tracker.GridView
 
             if (successfulMoves > 0)
             {
-                string direction = fromPurchaseToSale ? "Sales" : "Purchases";
                 string message = successfulMoves == 1
-                    ? $"Moved {successfulMoves} category to {direction}"
-                    : $"Moved {successfulMoves} categories to {direction}";
+                    ? $"Moved {successfulMoves} category to {targetName}"
+                    : $"Moved {successfulMoves} categories to {targetName}";
                 CustomMessage_Form.AddThingThatHasChangedAndLogMessage(MainMenu_Form.ThingsThatHaveChangedInFile, 2, message);
             }
 
@@ -300,12 +407,8 @@ namespace Sales_Tracker.GridView
             DataGridViewManager.SortDataGridViewByCurrentDirection(targetGrid);
 
             // Save changes to file
-            MainMenu_Form.Instance.SaveCategoriesToFile(
-                fromPurchaseToSale ? MainMenu_Form.SelectedOption.CategoryPurchases : MainMenu_Form.SelectedOption.CategorySales
-            );
-            MainMenu_Form.Instance.SaveCategoriesToFile(
-                fromPurchaseToSale ? MainMenu_Form.SelectedOption.CategorySales : MainMenu_Form.SelectedOption.CategoryPurchases
-            );
+            MainMenu_Form.Instance.SaveCategoriesToFile(sourceOption);
+            MainMenu_Form.Instance.SaveCategoriesToFile(targetOption);
 
             MainMenu_Form.IsProgramLoading = false;
         }

@@ -36,7 +36,7 @@ namespace Sales_Tracker
             LabelManager.ShowTotalLabel(Total_Label, selectedDataGridView);
             ShowingResultsFor_Label.Visible = false;
             LanguageManager.UpdateLanguageForControl(this);
-            DataGridViewManager.SortFirstColumnAndSelectFirstRow(Purchase_DataGridView, Sale_DataGridView);
+            DataGridViewManager.SortFirstColumnAndSelectFirstRow(Purchase_DataGridView, Sale_DataGridView, Rent_DataGridView);
             AddEventHandlers();
 
             PanelCloseFilter panelCloseFilter = new(this, ClosePanels, TextBoxManager.RightClickTextBox_Panel, RightClickDataGridViewRowMenu.Panel);
@@ -54,6 +54,9 @@ namespace Sales_Tracker
 
             Sale_DataGridView.RowsAdded += (_, _) => LabelManager.ShowTotalLabel(Total_Label, Sale_DataGridView);
             Sale_DataGridView.RowsRemoved += (_, _) => LabelManager.ShowTotalLabel(Total_Label, Sale_DataGridView);
+
+            Rent_DataGridView.RowsAdded += (_, _) => LabelManager.ShowTotalLabel(Total_Label, Rent_DataGridView);
+            Rent_DataGridView.RowsRemoved += (_, _) => LabelManager.ShowTotalLabel(Total_Label, Rent_DataGridView);
 
             ForPurchase_Label.Click += (_, _) => Purchase_RadioButton.Checked = !Purchase_RadioButton.Checked;
             ForSale_Label.Click += (_, _) => Sale_RadioButton.Checked = !Sale_RadioButton.Checked;
@@ -87,6 +90,12 @@ namespace Sales_Tracker
                 Sale_DataGridView.Rows.Add(category.Name);
             }
             DataGridViewManager.ScrollToTopOfDataGridView(Sale_DataGridView);
+
+            foreach (Category category in MainMenu_Form.Instance.CategoryRentalList)
+            {
+                Rent_DataGridView.Rows.Add(category.Name);
+            }
+            DataGridViewManager.ScrollToTopOfDataGridView(Rent_DataGridView);
         }
         private void CheckRadioButton(bool selectPurchaseRadioButton)
         {
@@ -124,6 +133,12 @@ namespace Sales_Tracker
             {
                 MainMenu_Form.Instance.CategoryPurchaseList.Add(new Category(name));
                 int newRowIndex = Purchase_DataGridView.Rows.Add(name);
+                DataGridViewManager.DataGridViewRowsAdded(selectedDataGridView, new DataGridViewRowsAddedEventArgs(newRowIndex, 1));
+            }
+            else if (Rent_RadioButton.Checked)
+            {
+                MainMenu_Form.Instance.CategoryRentalList.Add(new Category(name));
+                int newRowIndex = Rent_DataGridView.Rows.Add(name);
                 DataGridViewManager.DataGridViewRowsAdded(selectedDataGridView, new DataGridViewRowsAddedEventArgs(newRowIndex, 1));
             }
             else
@@ -165,7 +180,16 @@ namespace Sales_Tracker
         }
         private void Rent_RadioButton_CheckedChanged(object sender, EventArgs e)
         {
-
+            if (Rent_RadioButton.Checked)
+            {
+                Rent_DataGridView.Visible = true;
+                Purchase_DataGridView.Visible = false;
+                Sale_DataGridView.Visible = false;
+                Rent_DataGridView.ClearSelection();
+                selectedDataGridView = Rent_DataGridView;
+                VaidateCategoryTextBox();
+                LabelManager.ShowTotalLabel(Total_Label, Rent_DataGridView);
+            }
         }
         private void Category_TextBox_KeyDown(object sender, KeyEventArgs e)
         {
@@ -215,6 +239,8 @@ namespace Sales_Tracker
         public Guna2DataGridView Purchase_DataGridView { get; set; }
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Guna2DataGridView Sale_DataGridView { get; set; }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public Guna2DataGridView Rent_DataGridView { get; set; }
 
         // DataGridView methods
         private void ConstructDataGridViews()
@@ -233,6 +259,14 @@ namespace Sales_Tracker
             Sale_DataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Left;
             Sale_DataGridView.Tag = MainMenu_Form.DataGridViewTag.Category;
             ThemeManager.CustomizeScrollBar(Sale_DataGridView);
+
+            Rent_DataGridView = new();
+            DataGridViewManager.InitializeDataGridView(Rent_DataGridView, "rent_DataGridView", ColumnHeaders, null, this);
+            Rent_DataGridView.Size = new Size(ClientSize.Width - 80, ClientSize.Height - _topForDataGridView - 70);
+            Rent_DataGridView.Location = new Point((ClientSize.Width - Rent_DataGridView.Width) / 2, _topForDataGridView);
+            Rent_DataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Left;
+            Rent_DataGridView.Tag = MainMenu_Form.DataGridViewTag.Category;
+            ThemeManager.CustomizeScrollBar(Rent_DataGridView);
         }
 
         // Validate category name
@@ -243,6 +277,10 @@ namespace Sales_Tracker
             if (Sale_RadioButton.Checked)
             {
                 categories = MainMenu_Form.Instance.CategorySaleList;
+            }
+            else if (Rent_RadioButton.Checked)
+            {
+                categories = MainMenu_Form.Instance.CategoryRentalList;
             }
             else
             {

@@ -144,6 +144,7 @@ namespace Sales_Tracker.Startup.Menus
             Directories.CreateFile(Directories.Sales_file);
             Directories.CreateFile(Directories.CategorySales_file);
             Directories.CreateFile(Directories.CategoryPurchases_file);
+            Directories.CreateFile(Directories.CategoryRentals_file);
             Directories.CreateFile(Directories.Accountants_file);
             Directories.CreateFile(Directories.Companies_file);
 

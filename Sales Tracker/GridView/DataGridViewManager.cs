@@ -1009,6 +1009,7 @@ namespace Sales_Tracker.GridView
                 MainMenu_Form.SelectedOption.Customers => Directories.Customers_file,
                 MainMenu_Form.SelectedOption.CategoryPurchases => Directories.CategoryPurchases_file,
                 MainMenu_Form.SelectedOption.CategorySales => Directories.CategorySales_file,
+                MainMenu_Form.SelectedOption.CategoryRentals => Directories.CategoryRentals_file,
                 MainMenu_Form.SelectedOption.ProductPurchases => Directories.CategoryPurchases_file,
                 MainMenu_Form.SelectedOption.ProductSales => Directories.CategorySales_file,
                 MainMenu_Form.SelectedOption.Accountants => Directories.Accountants_file,
