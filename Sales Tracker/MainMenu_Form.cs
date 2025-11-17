@@ -1815,8 +1815,9 @@ namespace Sales_Tracker
         }
 
         // List getters
-        public List<Category> CategorySaleList { get; } = [];
         public List<Category> CategoryPurchaseList { get; } = [];
+        public List<Category> CategorySaleList { get; } = [];
+        public List<Category> CategoryRentalList { get; } = [];
         public List<string> AccountantList { get; private set; } = [];
         public List<string> CompanyList { get; private set; } = [];
         public List<Customer> CustomerList { get; private set; } = [];
@@ -1970,14 +1971,11 @@ namespace Sales_Tracker
         public List<string> GetFormattedRentableProductNames()
         {
             List<string> names = [];
-            foreach (Category category in CategoryPurchaseList)
+            foreach (Category category in CategoryRentalList)
             {
                 foreach (Product product in category.ProductList)
                 {
-                    if (product.IsRentable)
-                    {
-                        names.Add($"{product.CompanyOfOrigin} > {category.Name} > {product.Name}");
-                    }
+                    names.Add($"{product.CompanyOfOrigin} > {category.Name} > {product.Name}");
                 }
             }
             return names;

@@ -1640,8 +1640,7 @@ namespace Sales_Tracker
                    product.CountryOfOrigin != newProduct.CountryOfOrigin ||
                    product.CompanyOfOrigin != newProduct.CompanyOfOrigin ||
                    product.ItemType != newProduct.ItemType ||
-                   product.IsRentable != newProduct.IsRentable ||
-                   newCategoryName != _listOfOldValues[2];  // Check if category changed
+                   newCategoryName != _listOfOldValues[2];
         }
         private void UpdateProductDetails(Product product)
         {
@@ -1652,7 +1651,6 @@ namespace Sales_Tracker
             product.CountryOfOrigin = newProduct.CountryOfOrigin;
             product.CompanyOfOrigin = newProduct.CompanyOfOrigin;
             product.ItemType = newProduct.ItemType;
-            product.IsRentable = newProduct.IsRentable;
         }
         private Product GetNewProductInfo()
         {

@@ -17,12 +17,11 @@
         public string CountryOfOrigin { get; set; }
         public string CompanyOfOrigin { get; set; }
         public TypeOption? ItemType { get; set; }
-        public bool IsRentable { get; set; } = false;
 
         // Default constructor required for deserialization
         public Product() { }
 
-        public Product(string productID, string productName, string countryOfOrigin, string companyOfOrigin, TypeOption type)
+        public Product(string productID, string productName, string countryOfOrigin, string companyOfOrigin, TypeOption? type)
         {
             ProductID = productID;
             Name = productName;

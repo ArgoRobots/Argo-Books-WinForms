@@ -37,14 +37,14 @@ namespace Sales_Tracker
             ShowingResultsFor_Label.Visible = false;
             LanguageManager.UpdateLanguageForControl(this);
             DataGridViewManager.SortFirstColumnAndSelectFirstRow(Purchase_DataGridView, Sale_DataGridView);
-            AddEventHandlersToTextBoxes();
+            AddEventHandlers();
 
             PanelCloseFilter panelCloseFilter = new(this, ClosePanels, TextBoxManager.RightClickTextBox_Panel, RightClickDataGridViewRowMenu.Panel);
             Application.AddMessageFilter(panelCloseFilter);
 
             LoadingPanel.ShowBlankLoadingPanel(this);
         }
-        private void AddEventHandlersToTextBoxes()
+        private void AddEventHandlers()
         {
             TextBoxManager.Attach(Category_TextBox);
             TextBoxManager.Attach(Search_TextBox);
@@ -54,6 +54,10 @@ namespace Sales_Tracker
 
             Sale_DataGridView.RowsAdded += (_, _) => LabelManager.ShowTotalLabel(Total_Label, Sale_DataGridView);
             Sale_DataGridView.RowsRemoved += (_, _) => LabelManager.ShowTotalLabel(Total_Label, Sale_DataGridView);
+
+            ForPurchase_Label.Click += (_, _) => Purchase_RadioButton.Checked = !Purchase_RadioButton.Checked;
+            ForSale_Label.Click += (_, _) => Sale_RadioButton.Checked = !Sale_RadioButton.Checked;
+            ForRent_Label.Click += (_, _) => Rent_RadioButton.Checked = !Rent_RadioButton.Checked;
         }
         private void SetAccessibleDescriptions()
         {
@@ -159,6 +163,10 @@ namespace Sales_Tracker
                 LabelManager.ShowTotalLabel(Total_Label, Sale_DataGridView);
             }
         }
+        private void Rent_RadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
         private void Category_TextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -189,14 +197,6 @@ namespace Sales_Tracker
         private void Search_TextBox_IconRightClick(object sender, EventArgs e)
         {
             Search_TextBox.Text = "";
-        }
-        private void ForPurchase_Label_Click(object sender, EventArgs e)
-        {
-            Purchase_RadioButton.Checked = true;
-        }
-        private void ForSale_Label_Click(object sender, EventArgs e)
-        {
-            Sale_RadioButton.Checked = true;
         }
 
         // DataGridView properties
