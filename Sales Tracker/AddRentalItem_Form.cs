@@ -199,8 +199,6 @@ namespace Sales_Tracker
 
             // Add to inventory
             RentalInventoryManager.AddRentalItem(newItem);
-
-            // Refresh the ManageRentals form if it's open
             Rentals_Form.Instance?.RefreshDataGridView();
 
             string logMessage = $"Added rental item '{rentalItemID}' - {productName}";

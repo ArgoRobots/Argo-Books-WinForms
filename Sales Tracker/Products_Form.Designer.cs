@@ -48,6 +48,7 @@ namespace Sales_Tracker
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges16 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges17 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges18 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges19 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             CountryOfOrigin_Label = new Label();
             CountryOfOrigin_TextBox = new Guna.UI2.WinForms.Guna2TextBox();
             AddProduct_Label = new Label();
@@ -76,6 +77,8 @@ namespace Sales_Tracker
             Total_Label = new Label();
             Type_ComboBox = new Guna.UI2.WinForms.Guna2ComboBox();
             Type_Label = new Label();
+            Rent_RadioButton = new Guna.UI2.WinForms.Guna2CustomRadioButton();
+            ForRent_Label = new Label();
             ((System.ComponentModel.ISupportInitialize)WarningProductName_PictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)WarningCategory_PictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)WarningCompany_PictureBox).BeginInit();
@@ -428,13 +431,12 @@ namespace Sales_Tracker
             ForSale_Label.Anchor = AnchorStyles.Top;
             ForSale_Label.AutoSize = true;
             ForSale_Label.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            ForSale_Label.Location = new Point(286, 37);
+            ForSale_Label.Location = new Point(245, 42);
             ForSale_Label.Name = "ForSale_Label";
             ForSale_Label.Padding = new Padding(5);
             ForSale_Label.Size = new Size(102, 41);
             ForSale_Label.TabIndex = 0;
             ForSale_Label.Text = "For sale";
-            ForSale_Label.Click += ForSale_Label_Click;
             // 
             // Sale_RadioButton
             // 
@@ -444,7 +446,7 @@ namespace Sales_Tracker
             Sale_RadioButton.CheckedState.BorderThickness = 0;
             Sale_RadioButton.CheckedState.FillColor = Color.FromArgb(94, 148, 255);
             Sale_RadioButton.CheckedState.InnerColor = Color.White;
-            Sale_RadioButton.Location = new Point(263, 47);
+            Sale_RadioButton.Location = new Point(222, 50);
             Sale_RadioButton.Name = "Sale_RadioButton";
             Sale_RadioButton.ShadowDecoration.CustomizableEdges = customizableEdges15;
             Sale_RadioButton.Size = new Size(25, 25);
@@ -460,13 +462,12 @@ namespace Sales_Tracker
             ForPurchase_Label.Anchor = AnchorStyles.Top;
             ForPurchase_Label.AutoSize = true;
             ForPurchase_Label.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            ForPurchase_Label.Location = new Point(94, 37);
+            ForPurchase_Label.Location = new Point(61, 42);
             ForPurchase_Label.Name = "ForPurchase_Label";
             ForPurchase_Label.Padding = new Padding(5);
             ForPurchase_Label.Size = new Size(155, 41);
             ForPurchase_Label.TabIndex = 0;
             ForPurchase_Label.Text = "For purchase";
-            ForPurchase_Label.Click += ForPurchase_Label_Click;
             // 
             // Purchase_RadioButton
             // 
@@ -476,7 +477,7 @@ namespace Sales_Tracker
             Purchase_RadioButton.CheckedState.BorderThickness = 0;
             Purchase_RadioButton.CheckedState.FillColor = Color.FromArgb(94, 148, 255);
             Purchase_RadioButton.CheckedState.InnerColor = Color.White;
-            Purchase_RadioButton.Location = new Point(71, 47);
+            Purchase_RadioButton.Location = new Point(38, 50);
             Purchase_RadioButton.Name = "Purchase_RadioButton";
             Purchase_RadioButton.ShadowDecoration.CustomizableEdges = customizableEdges16;
             Purchase_RadioButton.Size = new Size(25, 25);
@@ -527,11 +528,44 @@ namespace Sales_Tracker
             Type_Label.TabIndex = 58;
             Type_Label.Text = "Type";
             // 
+            // Rent_RadioButton
+            // 
+            Rent_RadioButton.Anchor = AnchorStyles.Top;
+            Rent_RadioButton.Animated = true;
+            Rent_RadioButton.CheckedState.BorderColor = Color.FromArgb(94, 148, 255);
+            Rent_RadioButton.CheckedState.BorderThickness = 0;
+            Rent_RadioButton.CheckedState.FillColor = Color.FromArgb(94, 148, 255);
+            Rent_RadioButton.CheckedState.InnerColor = Color.White;
+            Rent_RadioButton.Location = new Point(353, 50);
+            Rent_RadioButton.Name = "Rent_RadioButton";
+            Rent_RadioButton.ShadowDecoration.CustomizableEdges = customizableEdges19;
+            Rent_RadioButton.Size = new Size(25, 25);
+            Rent_RadioButton.TabIndex = 60;
+            Rent_RadioButton.UncheckedState.BorderColor = Color.FromArgb(125, 137, 149);
+            Rent_RadioButton.UncheckedState.BorderThickness = 2;
+            Rent_RadioButton.UncheckedState.FillColor = Color.Transparent;
+            Rent_RadioButton.UncheckedState.InnerColor = Color.Transparent;
+            Rent_RadioButton.CheckedChanged += Rent_RadioButton_CheckedChanged;
+            // 
+            // ForRent_Label
+            // 
+            ForRent_Label.Anchor = AnchorStyles.Top;
+            ForRent_Label.AutoSize = true;
+            ForRent_Label.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            ForRent_Label.Location = new Point(376, 42);
+            ForRent_Label.Name = "ForRent_Label";
+            ForRent_Label.Padding = new Padding(5);
+            ForRent_Label.Size = new Size(103, 41);
+            ForRent_Label.TabIndex = 59;
+            ForRent_Label.Text = "For rent";
+            // 
             // Products_Form
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1678, 794);
+            Controls.Add(Rent_RadioButton);
+            Controls.Add(ForRent_Label);
             Controls.Add(Type_Label);
             Controls.Add(Type_ComboBox);
             Controls.Add(Total_Label);
@@ -606,8 +640,9 @@ namespace Sales_Tracker
         public Label Total_Label;
         public Guna.UI2.WinForms.Guna2ComboBox Type_ComboBox;
         private Label Type_Label;
-        private Guna.UI2.WinForms.Guna2CustomCheckBox Rentable_CheckBox;
         private Label Rentable_Label;
         public Guna.UI2.WinForms.Guna2CustomRadioButton Purchase_RadioButton;
+        private Guna.UI2.WinForms.Guna2CustomRadioButton Rent_RadioButton;
+        private Label ForRent_Label;
     }
 }

@@ -20,9 +20,9 @@ namespace Sales_Tracker.Classes
         {
             try
             {
-                if (File.Exists(Directories.Rentals_file))
+                if (File.Exists(Directories.RentalInventory_file))
                 {
-                    string json = File.ReadAllText(Directories.Rentals_file);
+                    string json = File.ReadAllText(Directories.RentalInventory_file);
                     RentalInventory = JsonConvert.DeserializeObject<List<RentalItem>>(json) ?? [];
                 }
                 else
@@ -45,7 +45,7 @@ namespace Sales_Tracker.Classes
             try
             {
                 string json = JsonConvert.SerializeObject(RentalInventory, Formatting.Indented);
-                File.WriteAllText(Directories.Rentals_file, json);
+                File.WriteAllText(Directories.RentalInventory_file, json);
             }
             catch (Exception ex)
             {

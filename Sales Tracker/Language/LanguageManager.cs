@@ -305,6 +305,7 @@ namespace Sales_Tracker.Language
             if (Tools.IsFormOpen<Products_Form>())
             {
                 Products_Form.Instance.BeginInvoke(new Action(Products_Form.Instance.PopulateTypeComboBox));
+                Products_Form.Instance.BeginInvoke(new Action(Products_Form.Instance.AdjustRadioButtonPositions));
             }
 
             if (Tools.IsFormOpen<AddPurchase_Form>())

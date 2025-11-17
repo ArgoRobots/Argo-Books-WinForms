@@ -378,7 +378,6 @@ namespace Sales_Tracker
             int left = 0;
             int searchBoxMaxHeight = 100;
             int productIDLeft = 0; // Store ProductID position for Rentable checkbox
-            bool rentableValue = false;
 
             foreach (DataGridViewColumn column in _selectedRow.DataGridView.Columns)
             {
@@ -439,53 +438,10 @@ namespace Sales_Tracker
                         comboBox.SelectedIndexChanged += ValidateInputs;
                         left += ScaledStandardWidth + CustomControls.SpaceBetweenControls;
                         break;
-
-                    case nameof(Products_Form.Column.Rentable):
-                        rentableValue = cellValue.Equals("True", StringComparison.OrdinalIgnoreCase);
-                        // Don't increment left here - will be positioned below ProductID
-                        break;
                 }
             }
 
-            // Construct Rentable checkbox below ProductID
-            ConstructRentableCheckBox(productIDLeft, rentableValue);
-
             return left - CustomControls.SpaceBetweenControls;
-        }
-        private void ConstructRentableCheckBox(int left, bool isChecked)
-        {
-            // Position below ProductID textbox
-            int topPosition = 45 + CustomControls.SpaceBetweenControls + ScaledControlHeight + 20;
-
-            // Create checkbox
-            _rentable_CheckBox = new Guna2CustomCheckBox
-            {
-                Size = new Size(20, 20),
-                Location = new Point(left, topPosition),
-                Animated = true,
-                Name = nameof(Products_Form.Column.Rentable),
-                Checked = isChecked
-            };
-            ThemeManager.SetThemeForControls([_rentable_CheckBox]);
-            Panel.Controls.Add(_rentable_CheckBox);
-
-            // Create label
-            _rentable_Label = new Label
-            {
-                Text = Products_Form.ColumnHeaders[Products_Form.Column.Rentable],
-                Name = "Rentable_Label",
-                AutoSize = true,
-                Font = new Font("Segoe UI", 9),
-                ForeColor = CustomColors.Text,
-                Location = new Point(_rentable_CheckBox.Right + 5, _rentable_CheckBox.Top),
-                Cursor = Cursors.Hand
-            };
-            _rentable_Label.Click += (_, _) => { _rentable_CheckBox.Checked = !_rentable_CheckBox.Checked; };
-            Panel.Controls.Add(_rentable_Label);
-
-            // Adjust vertical alignment so checkbox and label are centered together
-            int labelY = _rentable_CheckBox.Top + (_rentable_CheckBox.Height / 2) - (_rentable_Label.Height / 2);
-            _rentable_Label.Top = labelY;
         }
 
         // Construct controls for purchase or sale
@@ -493,10 +449,6 @@ namespace Sales_Tracker
         private Guna2ImageButton _removeReceipt_ImageButton;
         private Guna2Button _receipt_Button;
         private bool _containsReceipt, _removedReceipt, _addedReceipt;
-
-        // Rentable checkbox for products
-        private Guna2CustomCheckBox _rentable_CheckBox;
-        private Label _rentable_Label;
         private (int, int) ConstructControlsForPurchaseOrSale()
         {
             ConstructSecondPanel();
@@ -1730,10 +1682,6 @@ namespace Sales_Tracker
                 else if (control is Guna2ComboBox comboBox && comboBox.Name == nameof(Products_Form.Column.Type))
                 {
                     product.ItemType = comboBox.SelectedIndex == 0 ? Product.TypeOption.Product : Product.TypeOption.Service;
-                }
-                else if (control is Guna2CustomCheckBox checkBox && checkBox.Name == nameof(Products_Form.Column.Rentable))
-                {
-                    product.IsRentable = checkBox.Checked;
                 }
             }
             return product;

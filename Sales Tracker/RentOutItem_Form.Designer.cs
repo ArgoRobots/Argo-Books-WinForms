@@ -25,23 +25,23 @@ namespace Sales_Tracker
 
         private void InitializeComponent()
         {
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges7 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges9 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges11 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges12 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges13 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges14 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges15 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges16 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges17 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges18 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges19 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges20 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges21 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges22 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges23 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges24 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges25 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges26 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges27 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges28 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges29 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges30 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges31 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges32 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges33 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges34 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             ProductName_Label = new Label();
             AvailableQuantity_Label = new Label();
             Customer_ComboBox = new Guna.UI2.WinForms.Guna2ComboBox();
@@ -94,7 +94,7 @@ namespace Sales_Tracker
             // 
             Customer_ComboBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             Customer_ComboBox.BackColor = Color.Transparent;
-            Customer_ComboBox.CustomizableEdges = customizableEdges1;
+            Customer_ComboBox.CustomizableEdges = customizableEdges18;
             Customer_ComboBox.DrawMode = DrawMode.OwnerDrawFixed;
             Customer_ComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             Customer_ComboBox.FocusedColor = Color.Empty;
@@ -104,20 +104,20 @@ namespace Sales_Tracker
             Customer_ComboBox.Location = new Point(38, 203);
             Customer_ComboBox.Margin = new Padding(4, 5, 4, 5);
             Customer_ComboBox.Name = "Customer_ComboBox";
-            Customer_ComboBox.ShadowDecoration.CustomizableEdges = customizableEdges2;
+            Customer_ComboBox.ShadowDecoration.CustomizableEdges = customizableEdges19;
             Customer_ComboBox.Size = new Size(672, 50);
             Customer_ComboBox.TabIndex = 3;
             // 
             // Quantity_NumericUpDown
             // 
             Quantity_NumericUpDown.BackColor = Color.Transparent;
-            Quantity_NumericUpDown.CustomizableEdges = customizableEdges3;
+            Quantity_NumericUpDown.CustomizableEdges = customizableEdges20;
             Quantity_NumericUpDown.Font = new Font("Segoe UI", 10F);
             Quantity_NumericUpDown.Location = new Point(38, 344);
             Quantity_NumericUpDown.Margin = new Padding(5, 8, 5, 8);
             Quantity_NumericUpDown.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             Quantity_NumericUpDown.Name = "Quantity_NumericUpDown";
-            Quantity_NumericUpDown.ShadowDecoration.CustomizableEdges = customizableEdges4;
+            Quantity_NumericUpDown.ShadowDecoration.CustomizableEdges = customizableEdges21;
             Quantity_NumericUpDown.Size = new Size(188, 56);
             Quantity_NumericUpDown.TabIndex = 6;
             Quantity_NumericUpDown.Value = new decimal(new int[] { 1, 0, 0, 0 });
@@ -127,7 +127,7 @@ namespace Sales_Tracker
             // 
             RentalStartDate_DateTimePicker.BackColor = Color.Transparent;
             RentalStartDate_DateTimePicker.Checked = true;
-            RentalStartDate_DateTimePicker.CustomizableEdges = customizableEdges5;
+            RentalStartDate_DateTimePicker.CustomizableEdges = customizableEdges22;
             RentalStartDate_DateTimePicker.FillColor = Color.White;
             RentalStartDate_DateTimePicker.Font = new Font("Segoe UI", 10F);
             RentalStartDate_DateTimePicker.Format = DateTimePickerFormat.Short;
@@ -136,7 +136,7 @@ namespace Sales_Tracker
             RentalStartDate_DateTimePicker.MaxDate = new DateTime(9998, 12, 31, 0, 0, 0, 0);
             RentalStartDate_DateTimePicker.MinDate = new DateTime(1753, 1, 1, 0, 0, 0, 0);
             RentalStartDate_DateTimePicker.Name = "RentalStartDate_DateTimePicker";
-            RentalStartDate_DateTimePicker.ShadowDecoration.CustomizableEdges = customizableEdges6;
+            RentalStartDate_DateTimePicker.ShadowDecoration.CustomizableEdges = customizableEdges23;
             RentalStartDate_DateTimePicker.Size = new Size(250, 56);
             RentalStartDate_DateTimePicker.TabIndex = 8;
             RentalStartDate_DateTimePicker.Value = new DateTime(2025, 11, 9, 17, 21, 22, 428);
@@ -151,7 +151,7 @@ namespace Sales_Tracker
             DailyRate_RadioButton.Location = new Point(38, 477);
             DailyRate_RadioButton.Margin = new Padding(4, 5, 4, 5);
             DailyRate_RadioButton.Name = "DailyRate_RadioButton";
-            DailyRate_RadioButton.ShadowDecoration.CustomizableEdges = customizableEdges7;
+            DailyRate_RadioButton.ShadowDecoration.CustomizableEdges = customizableEdges24;
             DailyRate_RadioButton.Size = new Size(25, 31);
             DailyRate_RadioButton.TabIndex = 10;
             DailyRate_RadioButton.UncheckedState.BorderColor = Color.FromArgb(125, 137, 149);
@@ -182,7 +182,7 @@ namespace Sales_Tracker
             WeeklyRate_RadioButton.Location = new Point(250, 477);
             WeeklyRate_RadioButton.Margin = new Padding(4, 5, 4, 5);
             WeeklyRate_RadioButton.Name = "WeeklyRate_RadioButton";
-            WeeklyRate_RadioButton.ShadowDecoration.CustomizableEdges = customizableEdges8;
+            WeeklyRate_RadioButton.ShadowDecoration.CustomizableEdges = customizableEdges25;
             WeeklyRate_RadioButton.Size = new Size(25, 31);
             WeeklyRate_RadioButton.TabIndex = 12;
             WeeklyRate_RadioButton.UncheckedState.BorderColor = Color.FromArgb(125, 137, 149);
@@ -213,7 +213,7 @@ namespace Sales_Tracker
             MonthlyRate_RadioButton.Location = new Point(475, 477);
             MonthlyRate_RadioButton.Margin = new Padding(4, 5, 4, 5);
             MonthlyRate_RadioButton.Name = "MonthlyRate_RadioButton";
-            MonthlyRate_RadioButton.ShadowDecoration.CustomizableEdges = customizableEdges9;
+            MonthlyRate_RadioButton.ShadowDecoration.CustomizableEdges = customizableEdges26;
             MonthlyRate_RadioButton.Size = new Size(25, 31);
             MonthlyRate_RadioButton.TabIndex = 14;
             MonthlyRate_RadioButton.UncheckedState.BorderColor = Color.FromArgb(125, 137, 149);
@@ -237,7 +237,7 @@ namespace Sales_Tracker
             // SecurityDeposit_TextBox
             // 
             SecurityDeposit_TextBox.Cursor = Cursors.IBeam;
-            SecurityDeposit_TextBox.CustomizableEdges = customizableEdges10;
+            SecurityDeposit_TextBox.CustomizableEdges = customizableEdges27;
             SecurityDeposit_TextBox.DefaultText = "0.00";
             SecurityDeposit_TextBox.Font = new Font("Segoe UI", 10F);
             SecurityDeposit_TextBox.Location = new Point(38, 586);
@@ -245,7 +245,7 @@ namespace Sales_Tracker
             SecurityDeposit_TextBox.Name = "SecurityDeposit_TextBox";
             SecurityDeposit_TextBox.PlaceholderText = "0.00";
             SecurityDeposit_TextBox.SelectedText = "";
-            SecurityDeposit_TextBox.ShadowDecoration.CustomizableEdges = customizableEdges11;
+            SecurityDeposit_TextBox.ShadowDecoration.CustomizableEdges = customizableEdges28;
             SecurityDeposit_TextBox.Size = new Size(250, 56);
             SecurityDeposit_TextBox.TabIndex = 17;
             SecurityDeposit_TextBox.TextChanged += SecurityDeposit_TextBox_TextChanged;
@@ -255,7 +255,7 @@ namespace Sales_Tracker
             // 
             Notes_TextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             Notes_TextBox.Cursor = Cursors.IBeam;
-            Notes_TextBox.CustomizableEdges = customizableEdges12;
+            Notes_TextBox.CustomizableEdges = customizableEdges29;
             Notes_TextBox.DefaultText = "";
             Notes_TextBox.Font = new Font("Segoe UI", 10F);
             Notes_TextBox.Location = new Point(38, 711);
@@ -264,20 +264,20 @@ namespace Sales_Tracker
             Notes_TextBox.Name = "Notes_TextBox";
             Notes_TextBox.PlaceholderText = "Enter any additional notes...";
             Notes_TextBox.SelectedText = "";
-            Notes_TextBox.ShadowDecoration.CustomizableEdges = customizableEdges13;
+            Notes_TextBox.ShadowDecoration.CustomizableEdges = customizableEdges30;
             Notes_TextBox.Size = new Size(673, 125);
             Notes_TextBox.TabIndex = 19;
             // 
             // RentOut_Button
             // 
             RentOut_Button.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            RentOut_Button.CustomizableEdges = customizableEdges14;
+            RentOut_Button.CustomizableEdges = customizableEdges31;
             RentOut_Button.Font = new Font("Segoe UI", 11F);
             RentOut_Button.ForeColor = Color.White;
             RentOut_Button.Location = new Point(510, 916);
             RentOut_Button.Margin = new Padding(4, 5, 4, 5);
             RentOut_Button.Name = "RentOut_Button";
-            RentOut_Button.ShadowDecoration.CustomizableEdges = customizableEdges15;
+            RentOut_Button.ShadowDecoration.CustomizableEdges = customizableEdges32;
             RentOut_Button.Size = new Size(200, 50);
             RentOut_Button.TabIndex = 21;
             RentOut_Button.Text = "Rent Out";
@@ -286,13 +286,13 @@ namespace Sales_Tracker
             // Cancel_Button
             // 
             Cancel_Button.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            Cancel_Button.CustomizableEdges = customizableEdges16;
+            Cancel_Button.CustomizableEdges = customizableEdges33;
             Cancel_Button.Font = new Font("Segoe UI", 11F);
             Cancel_Button.ForeColor = Color.White;
             Cancel_Button.Location = new Point(302, 916);
             Cancel_Button.Margin = new Padding(4, 5, 4, 5);
             Cancel_Button.Name = "Cancel_Button";
-            Cancel_Button.ShadowDecoration.CustomizableEdges = customizableEdges17;
+            Cancel_Button.ShadowDecoration.CustomizableEdges = customizableEdges34;
             Cancel_Button.Size = new Size(200, 50);
             Cancel_Button.TabIndex = 22;
             Cancel_Button.Text = "Cancel";

@@ -21,6 +21,7 @@ namespace Sales_Tracker.Classes
         public static string CompanyData_file { get; private set; }
         public static string Purchases_file { get; private set; }
         public static string Sales_file { get; private set; }
+        public static string RentalInventory_file { get; private set; }
         public static string Rentals_file { get; private set; }
         public static string CategoryPurchases_file { get; private set; }
         public static string CategorySales_file { get; private set; }
@@ -65,7 +66,8 @@ namespace Sales_Tracker.Classes
             // Main files
             Purchases_file = TempCompany_dir + "purchases" + ArgoFiles.TxtFileExtension;
             Sales_file = TempCompany_dir + "sales" + ArgoFiles.TxtFileExtension;
-            Rentals_file = TempCompany_dir + "rentals" + ArgoFiles.TxtFileExtension;
+            RentalInventory_file = TempCompany_dir + "rentalInventory" + ArgoFiles.TxtFileExtension;
+            Rentals_file = TempCompany_dir + "rental" + ArgoFiles.TxtFileExtension;
             CategoryPurchases_file = TempCompany_dir + "categoryPurchases" + ArgoFiles.JsonFileExtension;
             CategorySales_file = TempCompany_dir + "categorySales" + ArgoFiles.JsonFileExtension;
             Accountants_file = TempCompany_dir + "accountants" + ArgoFiles.TxtFileExtension;
