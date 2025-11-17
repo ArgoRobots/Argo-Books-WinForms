@@ -292,8 +292,8 @@ namespace Sales_Tracker.GridView
                     {
                         CategoryMoveDirection.PurchaseToSale => productsForm?.Purchase_DataGridView,
                         CategoryMoveDirection.SaleToPurchase => productsForm?.Sale_DataGridView,
-                        CategoryMoveDirection.RentalToPurchase => productsForm?.Rent_DataGridView,
-                        CategoryMoveDirection.RentalToSale => productsForm?.Rent_DataGridView,
+                        CategoryMoveDirection.RentalToPurchase => productsForm?.Rentals_DataGridView,
+                        CategoryMoveDirection.RentalToSale => productsForm?.Rentals_DataGridView,
                         _ => null
                     };
 
