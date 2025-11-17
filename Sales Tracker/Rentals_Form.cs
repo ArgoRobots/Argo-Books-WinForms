@@ -16,7 +16,6 @@ namespace Sales_Tracker
 
         // Getters
         public static Rentals_Form Instance => _instance;
-        public static List<string> ThingsThatHaveChangedInFile { get; } = [];
 
         // Init.
         public Rentals_Form()

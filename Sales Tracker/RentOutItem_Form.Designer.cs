@@ -107,6 +107,7 @@ namespace Sales_Tracker
             Customer_ComboBox.ShadowDecoration.CustomizableEdges = customizableEdges19;
             Customer_ComboBox.Size = new Size(672, 50);
             Customer_ComboBox.TabIndex = 3;
+            Customer_ComboBox.SelectedIndexChanged += Customer_ComboBox_SelectedIndexChanged;
             // 
             // Quantity_NumericUpDown
             // 
@@ -249,7 +250,6 @@ namespace Sales_Tracker
             SecurityDeposit_TextBox.Size = new Size(250, 56);
             SecurityDeposit_TextBox.TabIndex = 17;
             SecurityDeposit_TextBox.TextChanged += SecurityDeposit_TextBox_TextChanged;
-            SecurityDeposit_TextBox.KeyPress += SecurityDeposit_TextBox_KeyPress;
             // 
             // Notes_TextBox
             // 

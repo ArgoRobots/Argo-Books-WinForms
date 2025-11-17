@@ -130,7 +130,7 @@ namespace Sales_Tracker
             MainTop_Panel.Location = new Point(0, 45);
             MainTop_Panel.Name = "MainTop_Panel";
             MainTop_Panel.ShadowDecoration.CustomizableEdges = customizableEdges20;
-            MainTop_Panel.Size = new Size(2404, 90);
+            MainTop_Panel.Size = new Size(2178, 90);
             MainTop_Panel.TabIndex = 6;
             // 
             // Companies_Button
@@ -144,7 +144,7 @@ namespace Sales_Tracker
             Companies_Button.FillColor = Color.White;
             Companies_Button.Font = new Font("Segoe UI", 10F);
             Companies_Button.ForeColor = Color.Black;
-            Companies_Button.Location = new Point(1979, 20);
+            Companies_Button.Location = new Point(1753, 20);
             Companies_Button.Name = "Companies_Button";
             Companies_Button.ShadowDecoration.CustomizableEdges = customizableEdges2;
             Companies_Button.Size = new Size(200, 50);
@@ -163,7 +163,7 @@ namespace Sales_Tracker
             Accountants_Button.FillColor = Color.White;
             Accountants_Button.Font = new Font("Segoe UI", 10F);
             Accountants_Button.ForeColor = Color.Black;
-            Accountants_Button.Location = new Point(2186, 20);
+            Accountants_Button.Location = new Point(1960, 20);
             Accountants_Button.Name = "Accountants_Button";
             Accountants_Button.ShadowDecoration.CustomizableEdges = customizableEdges4;
             Accountants_Button.Size = new Size(200, 50);
@@ -182,7 +182,7 @@ namespace Sales_Tracker
             Categories_Button.FillColor = Color.White;
             Categories_Button.Font = new Font("Segoe UI", 10F);
             Categories_Button.ForeColor = Color.Black;
-            Categories_Button.Location = new Point(1567, 20);
+            Categories_Button.Location = new Point(1341, 20);
             Categories_Button.Name = "Categories_Button";
             Categories_Button.ShadowDecoration.CustomizableEdges = customizableEdges6;
             Categories_Button.Size = new Size(200, 50);
@@ -205,7 +205,7 @@ namespace Sales_Tracker
             AddSale_Button.FillColor = Color.White;
             AddSale_Button.Font = new Font("Segoe UI", 9F);
             AddSale_Button.ForeColor = Color.Black;
-            AddSale_Button.Location = new Point(949, 20);
+            AddSale_Button.Location = new Point(723, 20);
             AddSale_Button.Name = "AddSale_Button";
             AddSale_Button.ShadowDecoration.CustomizableEdges = customizableEdges8;
             AddSale_Button.Size = new Size(200, 50);
@@ -228,7 +228,7 @@ namespace Sales_Tracker
             AddPurchase_Button.FillColor = Color.White;
             AddPurchase_Button.Font = new Font("Segoe UI", 9F);
             AddPurchase_Button.ForeColor = Color.Black;
-            AddPurchase_Button.Location = new Point(743, 20);
+            AddPurchase_Button.Location = new Point(517, 20);
             AddPurchase_Button.Name = "AddPurchase_Button";
             AddPurchase_Button.ShadowDecoration.CustomizableEdges = customizableEdges10;
             AddPurchase_Button.Size = new Size(200, 50);
@@ -251,7 +251,7 @@ namespace Sales_Tracker
             ManageRentals_Button.FillColor = Color.White;
             ManageRentals_Button.Font = new Font("Segoe UI", 9F);
             ManageRentals_Button.ForeColor = Color.Black;
-            ManageRentals_Button.Location = new Point(1154, 20);
+            ManageRentals_Button.Location = new Point(928, 20);
             ManageRentals_Button.Name = "ManageRentals_Button";
             ManageRentals_Button.ShadowDecoration.CustomizableEdges = customizableEdges12;
             ManageRentals_Button.Size = new Size(200, 50);
@@ -292,7 +292,7 @@ namespace Sales_Tracker
             Products_Button.FillColor = Color.White;
             Products_Button.Font = new Font("Segoe UI", 10F);
             Products_Button.ForeColor = Color.Black;
-            Products_Button.Location = new Point(1361, 20);
+            Products_Button.Location = new Point(1135, 20);
             Products_Button.Name = "Products_Button";
             Products_Button.ShadowDecoration.CustomizableEdges = customizableEdges16;
             Products_Button.Size = new Size(200, 50);
@@ -311,7 +311,7 @@ namespace Sales_Tracker
             Customers_Button.FillColor = Color.White;
             Customers_Button.Font = new Font("Segoe UI", 10F);
             Customers_Button.ForeColor = Color.Black;
-            Customers_Button.Location = new Point(1773, 20);
+            Customers_Button.Location = new Point(1547, 20);
             Customers_Button.Name = "Customers_Button";
             Customers_Button.ShadowDecoration.CustomizableEdges = customizableEdges18;
             Customers_Button.Size = new Size(200, 50);
@@ -362,7 +362,7 @@ namespace Sales_Tracker
             Top_Panel.Controls.Add(File_Button);
             Top_Panel.Location = new Point(0, 0);
             Top_Panel.Name = "Top_Panel";
-            Top_Panel.Size = new Size(2404, 45);
+            Top_Panel.Size = new Size(2178, 45);
             Top_Panel.TabIndex = 0;
             // 
             // Saved_Label
@@ -392,11 +392,11 @@ namespace Sales_Tracker
             Help_Button.HoverState.FillColor = Color.FromArgb(187, 187, 187);
             Help_Button.Image = Properties.Resources.HelpGray;
             Help_Button.ImageSize = new Size(30, 30);
-            Help_Button.Location = new Point(2359, 0);
+            Help_Button.Location = new Point(2133, 0);
             Help_Button.Name = "Help_Button";
             Help_Button.PressedColor = Color.Empty;
             Help_Button.ShadowDecoration.CustomizableEdges = customizableEdges24;
-            Help_Button.Size = new Size(46, 45);
+            Help_Button.Size = new Size(45, 45);
             Help_Button.TabIndex = 5;
             Help_Button.Click += Help_Button_Click;
             // 
@@ -418,7 +418,7 @@ namespace Sales_Tracker
             Save_Button.Location = new Point(63, 0);
             Save_Button.Name = "Save_Button";
             Save_Button.ShadowDecoration.CustomizableEdges = customizableEdges26;
-            Save_Button.Size = new Size(46, 45);
+            Save_Button.Size = new Size(45, 45);
             Save_Button.TabIndex = 4;
             Save_Button.Click += Save_Button_Click;
             Save_Button.MouseDown += Save_Button_MouseDown;
@@ -514,10 +514,10 @@ namespace Sales_Tracker
             Total_Panel.Controls.Add(Quantity_Label);
             Total_Panel.Controls.Add(Total_Label);
             Total_Panel.CustomizableEdges = customizableEdges29;
-            Total_Panel.Location = new Point(229, 1447);
+            Total_Panel.Location = new Point(229, 1359);
             Total_Panel.Name = "Total_Panel";
             Total_Panel.ShadowDecoration.CustomizableEdges = customizableEdges30;
-            Total_Panel.Size = new Size(1949, 75);
+            Total_Panel.Size = new Size(1723, 75);
             Total_Panel.TabIndex = 2;
             // 
             // Discount_Label
@@ -603,7 +603,7 @@ namespace Sales_Tracker
             LineChart_Label.AutoSize = true;
             LineChart_Label.BackColor = Color.Transparent;
             LineChart_Label.Font = new Font("Segoe UI", 11.25F);
-            LineChart_Label.Location = new Point(1666, 157);
+            LineChart_Label.Location = new Point(1440, 157);
             LineChart_Label.Name = "LineChart_Label";
             LineChart_Label.Size = new Size(114, 31);
             LineChart_Label.TabIndex = 16;
@@ -622,7 +622,7 @@ namespace Sales_Tracker
             LineChart_ToggleSwitch.CheckedState.InnerBorderRadius = 10;
             LineChart_ToggleSwitch.CheckedState.InnerColor = Color.White;
             LineChart_ToggleSwitch.CustomizableEdges = customizableEdges35;
-            LineChart_ToggleSwitch.Location = new Point(1786, 157);
+            LineChart_ToggleSwitch.Location = new Point(1560, 157);
             LineChart_ToggleSwitch.Name = "LineChart_ToggleSwitch";
             LineChart_ToggleSwitch.ShadowDecoration.CustomizableEdges = customizableEdges36;
             LineChart_ToggleSwitch.Size = new Size(60, 30);
@@ -672,7 +672,7 @@ namespace Sales_Tracker
             Search_TextBox.IconRight = Properties.Resources.CloseGray;
             Search_TextBox.IconRightOffset = new Point(5, 0);
             Search_TextBox.IconRightSize = new Size(22, 22);
-            Search_TextBox.Location = new Point(1853, 147);
+            Search_TextBox.Location = new Point(1627, 147);
             Search_TextBox.Margin = new Padding(6, 8, 6, 8);
             Search_TextBox.MaxLength = 100;
             Search_TextBox.Name = "Search_TextBox";
@@ -691,7 +691,7 @@ namespace Sales_Tracker
             ShowingResultsFor_Label.Anchor = AnchorStyles.Top;
             ShowingResultsFor_Label.AutoSize = true;
             ShowingResultsFor_Label.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            ShowingResultsFor_Label.Location = new Point(1077, 155);
+            ShowingResultsFor_Label.Location = new Point(964, 155);
             ShowingResultsFor_Label.Name = "ShowingResultsFor_Label";
             ShowingResultsFor_Label.Size = new Size(236, 32);
             ShowingResultsFor_Label.TabIndex = 56;
@@ -713,7 +713,7 @@ namespace Sales_Tracker
             TimeRange_Button.FillColor = Color.White;
             TimeRange_Button.Font = new Font("Segoe UI", 9F);
             TimeRange_Button.ForeColor = Color.Black;
-            TimeRange_Button.Location = new Point(2160, 147);
+            TimeRange_Button.Location = new Point(1934, 147);
             TimeRange_Button.Name = "TimeRange_Button";
             TimeRange_Button.ShadowDecoration.CustomizableEdges = customizableEdges42;
             TimeRange_Button.Size = new Size(226, 50);
@@ -725,7 +725,7 @@ namespace Sales_Tracker
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(2404, 1132);
+            ClientSize = new Size(2178, 1044);
             Controls.Add(TimeRange_Button);
             Controls.Add(ShowingResultsFor_Label);
             Controls.Add(Search_TextBox);
@@ -741,7 +741,7 @@ namespace Sales_Tracker
             DoubleBuffered = true;
             Icon = (Icon)resources.GetObject("$this.Icon");
             KeyPreview = true;
-            MinimumSize = new Size(1486, 966);
+            MinimumSize = new Size(1550, 900);
             Name = "MainMenu_Form";
             Text = "Argo Sales Tracker";
             WindowState = FormWindowState.Maximized;

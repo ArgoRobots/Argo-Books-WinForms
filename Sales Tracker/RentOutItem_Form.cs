@@ -1,4 +1,3 @@
-using Guna.UI2.WinForms;
 using Sales_Tracker.Classes;
 using Sales_Tracker.DataClasses;
 using Sales_Tracker.GridView;
@@ -76,6 +75,8 @@ namespace Sales_Tracker
             DailyRate_Label.Click += (s, e) => DailyRate_RadioButton.Checked = !DailyRate_RadioButton.Checked;
             WeeklyRate_Label.Click += (s, e) => WeeklyRate_RadioButton.Checked = !WeeklyRate_RadioButton.Checked;
             MonthlyRate_Label.Click += (s, e) => MonthlyRate_RadioButton.Checked = !MonthlyRate_RadioButton.Checked;
+
+            TextBoxValidation.OnlyAllowNumbersAndOneDecimal(SecurityDeposit_TextBox);
 
             UpdateTotalCost();
         }
@@ -167,8 +168,6 @@ namespace Sales_Tracker
         // Event handlers
         private void RentOut_Button_Click(object sender, EventArgs e)
         {
-            if (!ValidateInputs()) { return; }
-
             // Get selected customer
             string selectedCustomerText = Customer_ComboBox.SelectedItem.ToString();
             string customerID = selectedCustomerText.Substring(selectedCustomerText.LastIndexOf('(') + 1).TrimEnd(')');
@@ -224,18 +223,39 @@ namespace Sales_Tracker
             _inventoryRow.Cells[Rentals_Form.Column.Status.ToString()].Value = _rentalItem.Status.ToString();
             _inventoryRow.Cells[Rentals_Form.Column.LastRentalDate.ToString()].Value = _rentalItem.LastRentalDate?.ToString("yyyy-MM-dd") ?? "-";
 
-            // Refresh the form if it's open
+            // Refresh the form
             Rentals_Form.Instance?.RefreshDataGridView();
 
             string message = $"Rented out {quantity} unit(s) of '{_rentalItem.ProductName}' to {customer.FullName}";
-            CustomMessage_Form.AddThingThatHasChangedAndLogMessage(
-                Rentals_Form.ThingsThatHaveChangedInFile,
-                2,
-                message);
+            CustomMessage_Form.AddThingThatHasChangedAndLogMessage(AddRentalItem_Form.ThingsThatHaveChangedInFile, 2, message);
 
             DialogResult = DialogResult.OK;
             Close();
         }
+        private void Cancel_Button_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
+        }
+        private void Customer_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ValidateInputs();
+        }
+        private void Quantity_NumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            UpdateTotalCost();
+        }
+        private void RateType_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateTotalCost();
+        }
+        private void SecurityDeposit_TextBox_TextChanged(object sender, EventArgs e)
+        {
+            UpdateTotalCost();
+            ValidateInputs();
+        }
+
+        // Methods
         private void CreateRentalTransaction(Customer customer, RentalRecord record, int quantity, decimal rate, decimal totalCost)
         {
             // Get the product details from category lists
@@ -326,46 +346,16 @@ namespace Sales_Tracker
 
             return $"R-{highestID + 1:D4}";
         }
-        private bool ValidateInputs()
+        private void ValidateInputs()
         {
-            if (Customer_ComboBox.SelectedIndex == -1)
+            if (Customer_ComboBox.SelectedIndex == -1 ||
+                !decimal.TryParse(SecurityDeposit_TextBox.Text, out decimal deposit) || deposit < 0)
             {
-                CustomMessageBox.Show("No Customer Selected", "Please select a customer.",
-                    CustomMessageBoxIcon.Warning, CustomMessageBoxButtons.Ok);
-                return false;
+                RentOut_Button.Enabled = false;
             }
-
-            return true;
-        }
-        private void Cancel_Button_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
-            Close();
-        }
-        private void Quantity_NumericUpDown_ValueChanged(object sender, EventArgs e)
-        {
-            UpdateTotalCost();
-        }
-        private void RateType_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateTotalCost();
-        }
-        private void SecurityDeposit_TextBox_TextChanged(object sender, EventArgs e)
-        {
-            UpdateTotalCost();
-        }
-        private void SecurityDeposit_TextBox_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            // Only allow numbers, decimal point, and control keys
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
+            else
             {
-                e.Handled = true;
-            }
-
-            // Only allow one decimal point
-            if (e.KeyChar == '.' && (sender as Guna2TextBox).Text.Contains('.'))
-            {
-                e.Handled = true;
+                RentOut_Button.Enabled = true;
             }
         }
     }
