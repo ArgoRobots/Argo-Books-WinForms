@@ -128,25 +128,25 @@ namespace Sales_Tracker
         private void AddCategory_Button_Click(object sender, EventArgs e)
         {
             string name = Category_TextBox.Text.Trim();
+            int newRowIndex;
 
             if (Purchase_RadioButton.Checked)
             {
                 MainMenu_Form.Instance.CategoryPurchaseList.Add(new Category(name));
-                int newRowIndex = Purchase_DataGridView.Rows.Add(name);
-                DataGridViewManager.DataGridViewRowsAdded(selectedDataGridView, new DataGridViewRowsAddedEventArgs(newRowIndex, 1));
+                newRowIndex = Purchase_DataGridView.Rows.Add(name);
             }
             else if (Rent_RadioButton.Checked)
             {
                 MainMenu_Form.Instance.CategoryRentalList.Add(new Category(name));
-                int newRowIndex = Rent_DataGridView.Rows.Add(name);
-                DataGridViewManager.DataGridViewRowsAdded(selectedDataGridView, new DataGridViewRowsAddedEventArgs(newRowIndex, 1));
+                newRowIndex = Rent_DataGridView.Rows.Add(name);
             }
             else
             {
                 MainMenu_Form.Instance.CategorySaleList.Add(new Category(name));
-                int newRowIndex = Sale_DataGridView.Rows.Add(name);
-                DataGridViewManager.DataGridViewRowsAdded(selectedDataGridView, new DataGridViewRowsAddedEventArgs(newRowIndex, 1));
+                newRowIndex = Sale_DataGridView.Rows.Add(name);
             }
+
+            DataGridViewManager.DataGridViewRowsAdded(selectedDataGridView, new DataGridViewRowsAddedEventArgs(newRowIndex, 1));
 
             string message = $"Added category '{name}'";
             CustomMessage_Form.AddThingThatHasChangedAndLogMessage(ThingsThatHaveChangedInFile, 3, message);
