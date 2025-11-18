@@ -2,6 +2,7 @@
 using Sales_Tracker.Classes;
 using Sales_Tracker.DataClasses;
 using Sales_Tracker.LostProduct;
+using Sales_Tracker.Rentals;
 using Sales_Tracker.ReturnProduct;
 using Sales_Tracker.Theme;
 using Sales_Tracker.UI;
@@ -10,10 +11,22 @@ namespace Sales_Tracker.GridView
 {
     internal class RightClickDataGridViewRowMenu
     {
+        // Enum for category move direction
+        private enum CategoryMoveDirection
+        {
+            PurchaseToSale,
+            PurchaseToRental,
+            SaleToPurchase,
+            SaleToRental,
+            RentalToPurchase,
+            RentalToSale
+        }
+
         // Getters
         public static Guna2Panel Panel { get; private set; }
         public static Guna2Button Modify_Button { get; private set; }
         public static Guna2Button Move_Button { get; private set; }
+        public static Guna2Button Move2_Button { get; private set; }
         public static Guna2Button ViewReceipt_Button { get; private set; }
         public static Guna2Button ExportReceipt_Button { get; private set; }
         public static Guna2Button ShowItems_Button { get; private set; }
@@ -41,6 +54,9 @@ namespace Sales_Tracker.GridView
 
             Move_Button = CustomControls.ConstructBtnForMenu("Move", CustomControls.PanelBtnWidth, flowPanel);
             Move_Button.Click += MoveRows;
+
+            Move2_Button = CustomControls.ConstructBtnForMenu("Move", CustomControls.PanelBtnWidth, flowPanel);
+            Move2_Button.Click += MoveRows2;
 
             ViewReceipt_Button = CustomControls.ConstructBtnForMenu("View receipt", CustomControls.PanelBtnWidth, flowPanel);
             ViewReceipt_Button.Click += ViewReceipt;
@@ -91,17 +107,49 @@ namespace Sales_Tracker.GridView
             int scrollPosition = grid.FirstDisplayedScrollingRowIndex;
             int firstSelectedIndex = selectedRows[0].Index;
 
-            // Move rows based on current selection
+            // Move rows based on current selection (first destination)
             if (MainMenu_Form.Instance.Selected == MainMenu_Form.SelectedOption.CategoryPurchases)
             {
-                MoveCategoryRows(selectedRows, true);
+                MoveCategoryRows(selectedRows, CategoryMoveDirection.PurchaseToSale);
             }
             else if (MainMenu_Form.Instance.Selected == MainMenu_Form.SelectedOption.CategorySales)
             {
-                MoveCategoryRows(selectedRows, false);
+                MoveCategoryRows(selectedRows, CategoryMoveDirection.SaleToPurchase);
+            }
+            else if (MainMenu_Form.Instance.Selected == MainMenu_Form.SelectedOption.CategoryRentals)
+            {
+                MoveCategoryRows(selectedRows, CategoryMoveDirection.RentalToPurchase);
             }
 
             RestoreSelectionAndScroll(grid, firstSelectedIndex, scrollPosition);
+            MainMenu_Form.CloseRightClickPanels();
+        }
+        private static void MoveRows2(object sender, EventArgs e)
+        {
+            Guna2DataGridView grid = (Guna2DataGridView)Panel.Tag;
+            List<DataGridViewRow> selectedRows = grid.SelectedRows.Cast<DataGridViewRow>().ToList();
+            if (selectedRows.Count == 0) { return; }
+
+            // Save scroll position
+            int scrollPosition = grid.FirstDisplayedScrollingRowIndex;
+            int firstSelectedIndex = selectedRows[0].Index;
+
+            // Move rows based on current selection (second destination)
+            if (MainMenu_Form.Instance.Selected == MainMenu_Form.SelectedOption.CategoryPurchases)
+            {
+                MoveCategoryRows(selectedRows, CategoryMoveDirection.PurchaseToRental);
+            }
+            else if (MainMenu_Form.Instance.Selected == MainMenu_Form.SelectedOption.CategorySales)
+            {
+                MoveCategoryRows(selectedRows, CategoryMoveDirection.SaleToRental);
+            }
+            else if (MainMenu_Form.Instance.Selected == MainMenu_Form.SelectedOption.CategoryRentals)
+            {
+                MoveCategoryRows(selectedRows, CategoryMoveDirection.RentalToSale);
+            }
+
+            RestoreSelectionAndScroll(grid, firstSelectedIndex, scrollPosition);
+            MainMenu_Form.CloseRightClickPanels();
         }
         private static void ViewReceipt(object sender, EventArgs e)
         {
@@ -161,23 +209,97 @@ namespace Sales_Tracker.GridView
                     CustomMessageBoxIcon.Error, CustomMessageBoxButtons.Ok, ex.Message);
             }
         }
-        private static void MoveCategoryRows(List<DataGridViewRow> rowsToMove, bool fromPurchaseToSale)
+        private static void MoveCategoryRows(List<DataGridViewRow> rowsToMove, CategoryMoveDirection direction)
         {
-            Guna2DataGridView sourceGrid = fromPurchaseToSale
-                ? Categories_Form.Instance.Purchase_DataGridView
-                : Categories_Form.Instance.Sale_DataGridView;
+            Guna2DataGridView sourceGrid = direction switch
+            {
+                CategoryMoveDirection.PurchaseToSale => Categories_Form.Instance.Purchase_DataGridView,
+                CategoryMoveDirection.PurchaseToRental => Categories_Form.Instance.Purchase_DataGridView,
+                CategoryMoveDirection.SaleToPurchase => Categories_Form.Instance.Sale_DataGridView,
+                CategoryMoveDirection.SaleToRental => Categories_Form.Instance.Sale_DataGridView,
+                CategoryMoveDirection.RentalToPurchase => Categories_Form.Instance.Rent_DataGridView,
+                CategoryMoveDirection.RentalToSale => Categories_Form.Instance.Rent_DataGridView,
+                _ => null
+            };
 
-            Guna2DataGridView targetGrid = fromPurchaseToSale
-                ? Categories_Form.Instance.Sale_DataGridView
-                : Categories_Form.Instance.Purchase_DataGridView;
+            Guna2DataGridView targetGrid = direction switch
+            {
+                CategoryMoveDirection.PurchaseToSale => Categories_Form.Instance.Sale_DataGridView,
+                CategoryMoveDirection.PurchaseToRental => Categories_Form.Instance.Rent_DataGridView,
+                CategoryMoveDirection.SaleToPurchase => Categories_Form.Instance.Purchase_DataGridView,
+                CategoryMoveDirection.SaleToRental => Categories_Form.Instance.Rent_DataGridView,
+                CategoryMoveDirection.RentalToPurchase => Categories_Form.Instance.Purchase_DataGridView,
+                CategoryMoveDirection.RentalToSale => Categories_Form.Instance.Sale_DataGridView,
+                _ => null
+            };
 
-            List<Category> sourceList = fromPurchaseToSale
-                ? MainMenu_Form.Instance.CategoryPurchaseList
-                : MainMenu_Form.Instance.CategorySaleList;
+            List<Category> sourceList = direction switch
+            {
+                CategoryMoveDirection.PurchaseToSale => MainMenu_Form.Instance.CategoryPurchaseList,
+                CategoryMoveDirection.PurchaseToRental => MainMenu_Form.Instance.CategoryPurchaseList,
+                CategoryMoveDirection.SaleToPurchase => MainMenu_Form.Instance.CategorySaleList,
+                CategoryMoveDirection.SaleToRental => MainMenu_Form.Instance.CategorySaleList,
+                CategoryMoveDirection.RentalToPurchase => MainMenu_Form.Instance.CategoryRentalList,
+                CategoryMoveDirection.RentalToSale => MainMenu_Form.Instance.CategoryRentalList,
+                _ => null
+            };
 
-            List<Category> targetList = fromPurchaseToSale
-                ? MainMenu_Form.Instance.CategorySaleList
-                : MainMenu_Form.Instance.CategoryPurchaseList;
+            List<Category> targetList = direction switch
+            {
+                CategoryMoveDirection.PurchaseToSale => MainMenu_Form.Instance.CategorySaleList,
+                CategoryMoveDirection.PurchaseToRental => MainMenu_Form.Instance.CategoryRentalList,
+                CategoryMoveDirection.SaleToPurchase => MainMenu_Form.Instance.CategoryPurchaseList,
+                CategoryMoveDirection.SaleToRental => MainMenu_Form.Instance.CategoryRentalList,
+                CategoryMoveDirection.RentalToPurchase => MainMenu_Form.Instance.CategoryPurchaseList,
+                CategoryMoveDirection.RentalToSale => MainMenu_Form.Instance.CategorySaleList,
+                _ => null
+            };
+
+            // Check if any selected categories already exist in the target list
+            List<string> duplicateCategories = [];
+            foreach (DataGridViewRow row in rowsToMove)
+            {
+                string categoryName = row.Cells[0].Value.ToString();
+                if (targetList.Any(c => c.Name == categoryName))
+                {
+                    duplicateCategories.Add(categoryName);
+                }
+            }
+
+            if (duplicateCategories.Count > 0)
+            {
+                string targetName = direction switch
+                {
+                    CategoryMoveDirection.PurchaseToSale => "Sales",
+                    CategoryMoveDirection.PurchaseToRental => "Rentals",
+                    CategoryMoveDirection.SaleToPurchase => "Purchases",
+                    CategoryMoveDirection.SaleToRental => "Rentals",
+                    CategoryMoveDirection.RentalToPurchase => "Purchases",
+                    CategoryMoveDirection.RentalToSale => "Sales",
+                    _ => ""
+                };
+
+                if (duplicateCategories.Count == 1)
+                {
+                    CustomMessageBox.ShowWithFormat(
+                        "Cannot move category",
+                        "The category '{0}' already exists in {1}.",
+                        CustomMessageBoxIcon.Warning,
+                        CustomMessageBoxButtons.Ok,
+                        duplicateCategories[0], targetName);
+                }
+                else
+                {
+                    string categoriesList = string.Join("\n• ", duplicateCategories);
+                    CustomMessageBox.ShowWithFormat(
+                        "Cannot move categories",
+                        "The following categories already exist in {0}:\n\n• {1}",
+                        CustomMessageBoxIcon.Warning,
+                        CustomMessageBoxButtons.Ok,
+                        targetName, categoriesList);
+                }
+                return;
+            }
 
             MainMenu_Form.IsProgramLoading = true;
             int successfulMoves = 0;
@@ -201,30 +323,37 @@ namespace Sales_Tracker.GridView
                     // Prepare products list for message box
                     string allProductsList = string.Join("\n", category.ProductList.Select(p => $"• {p.Name} ({p.CompanyOfOrigin})"));
 
+                    // Determine target name based on direction
+                    string targetName = direction switch
+                    {
+                        CategoryMoveDirection.PurchaseToSale => "Sales",
+                        CategoryMoveDirection.PurchaseToRental => "Rentals",
+                        CategoryMoveDirection.SaleToPurchase => "Purchases",
+                        CategoryMoveDirection.SaleToRental => "Rentals",
+                        CategoryMoveDirection.RentalToPurchase => "Purchases",
+                        CategoryMoveDirection.RentalToSale => "Sales",
+                        _ => ""
+                    };
+
                     // Ask user if they want to move products
                     CustomMessageBoxResult result = CustomMessageBox.ShowWithFormat(
                         "Move category with {0} products",
                         "The category '{1}' contains the following products:\n\n{2}\n\nDo you want to move all these products to the {3} category?",
                         CustomMessageBoxIcon.Question,
                         CustomMessageBoxButtons.OkCancel,
-                        category.ProductList.Count, categoryName, allProductsList, fromPurchaseToSale ? "Sales" : "Purchases");
+                        category.ProductList.Count, categoryName, allProductsList, targetName);
 
                     if (result != CustomMessageBoxResult.Ok)
                     {
                         continue;
                     }
 
-                    // Move all products to the target list
-                    List<Category> targetCategories = fromPurchaseToSale
-                        ? MainMenu_Form.Instance.CategorySaleList
-                        : MainMenu_Form.Instance.CategoryPurchaseList;
-
                     // Find or create a category in the target list
-                    Category targetCategory = targetCategories.FirstOrDefault(c => c.Name == categoryName);
+                    Category targetCategory = targetList.FirstOrDefault(c => c.Name == categoryName);
                     if (targetCategory == null)
                     {
                         targetCategory = new Category { Name = categoryName };
-                        targetCategories.Add(targetCategory);
+                        targetList.Add(targetCategory);
                     }
 
                     // Open Products_Form if it exists
@@ -233,13 +362,27 @@ namespace Sales_Tracker.GridView
                         : null;
 
                     // Determine which grids to update based on current view
-                    Guna2DataGridView sourceProductGrid = fromPurchaseToSale
-                        ? productsForm?.Purchase_DataGridView
-                        : productsForm?.Sale_DataGridView;
+                    Guna2DataGridView sourceProductGrid = direction switch
+                    {
+                        CategoryMoveDirection.PurchaseToSale => productsForm?.Purchase_DataGridView,
+                        CategoryMoveDirection.PurchaseToRental => productsForm?.Purchase_DataGridView,
+                        CategoryMoveDirection.SaleToPurchase => productsForm?.Sale_DataGridView,
+                        CategoryMoveDirection.SaleToRental => productsForm?.Sale_DataGridView,
+                        CategoryMoveDirection.RentalToPurchase => productsForm?.Rentals_DataGridView,
+                        CategoryMoveDirection.RentalToSale => productsForm?.Rentals_DataGridView,
+                        _ => null
+                    };
 
-                    Guna2DataGridView targetProductGrid = fromPurchaseToSale
-                        ? productsForm?.Sale_DataGridView
-                        : productsForm?.Purchase_DataGridView;
+                    Guna2DataGridView targetProductGrid = direction switch
+                    {
+                        CategoryMoveDirection.PurchaseToSale => productsForm?.Sale_DataGridView,
+                        CategoryMoveDirection.PurchaseToRental => productsForm?.Rentals_DataGridView,
+                        CategoryMoveDirection.SaleToPurchase => productsForm?.Purchase_DataGridView,
+                        CategoryMoveDirection.SaleToRental => productsForm?.Rentals_DataGridView,
+                        CategoryMoveDirection.RentalToPurchase => productsForm?.Purchase_DataGridView,
+                        CategoryMoveDirection.RentalToSale => productsForm?.Sale_DataGridView,
+                        _ => null
+                    };
 
                     // Move products
                     foreach (Product product in category.ProductList.ToList())
@@ -288,10 +431,20 @@ namespace Sales_Tracker.GridView
 
             if (successfulMoves > 0)
             {
-                string direction = fromPurchaseToSale ? "Sales" : "Purchases";
+                string targetName = direction switch
+                {
+                    CategoryMoveDirection.PurchaseToSale => "Sales",
+                    CategoryMoveDirection.PurchaseToRental => "Rentals",
+                    CategoryMoveDirection.SaleToPurchase => "Purchases",
+                    CategoryMoveDirection.SaleToRental => "Rentals",
+                    CategoryMoveDirection.RentalToPurchase => "Purchases",
+                    CategoryMoveDirection.RentalToSale => "Sales",
+                    _ => ""
+                };
+
                 string message = successfulMoves == 1
-                    ? $"Moved {successfulMoves} category to {direction}"
-                    : $"Moved {successfulMoves} categories to {direction}";
+                    ? $"Moved {successfulMoves} category to {targetName}"
+                    : $"Moved {successfulMoves} categories to {targetName}";
                 CustomMessage_Form.AddThingThatHasChangedAndLogMessage(MainMenu_Form.ThingsThatHaveChangedInFile, 2, message);
             }
 
@@ -299,13 +452,32 @@ namespace Sales_Tracker.GridView
             LabelManager.ShowTotalLabel(Categories_Form.Instance.Total_Label, sourceGrid);
             DataGridViewManager.SortDataGridViewByCurrentDirection(targetGrid);
 
+            // Determine source and target options for saving
+            MainMenu_Form.SelectedOption sourceOption = direction switch
+            {
+                CategoryMoveDirection.PurchaseToSale => MainMenu_Form.SelectedOption.CategoryPurchases,
+                CategoryMoveDirection.PurchaseToRental => MainMenu_Form.SelectedOption.CategoryPurchases,
+                CategoryMoveDirection.SaleToPurchase => MainMenu_Form.SelectedOption.CategorySales,
+                CategoryMoveDirection.SaleToRental => MainMenu_Form.SelectedOption.CategorySales,
+                CategoryMoveDirection.RentalToPurchase => MainMenu_Form.SelectedOption.CategoryRentals,
+                CategoryMoveDirection.RentalToSale => MainMenu_Form.SelectedOption.CategoryRentals,
+                _ => MainMenu_Form.SelectedOption.CategoryPurchases
+            };
+
+            MainMenu_Form.SelectedOption targetOption = direction switch
+            {
+                CategoryMoveDirection.PurchaseToSale => MainMenu_Form.SelectedOption.CategorySales,
+                CategoryMoveDirection.PurchaseToRental => MainMenu_Form.SelectedOption.CategoryRentals,
+                CategoryMoveDirection.SaleToPurchase => MainMenu_Form.SelectedOption.CategoryPurchases,
+                CategoryMoveDirection.SaleToRental => MainMenu_Form.SelectedOption.CategoryRentals,
+                CategoryMoveDirection.RentalToPurchase => MainMenu_Form.SelectedOption.CategoryPurchases,
+                CategoryMoveDirection.RentalToSale => MainMenu_Form.SelectedOption.CategorySales,
+                _ => MainMenu_Form.SelectedOption.CategorySales
+            };
+
             // Save changes to file
-            MainMenu_Form.Instance.SaveCategoriesToFile(
-                fromPurchaseToSale ? MainMenu_Form.SelectedOption.CategoryPurchases : MainMenu_Form.SelectedOption.CategorySales
-            );
-            MainMenu_Form.Instance.SaveCategoriesToFile(
-                fromPurchaseToSale ? MainMenu_Form.SelectedOption.CategorySales : MainMenu_Form.SelectedOption.CategoryPurchases
-            );
+            MainMenu_Form.Instance.SaveCategoriesToFile(sourceOption);
+            MainMenu_Form.Instance.SaveCategoriesToFile(targetOption);
 
             MainMenu_Form.IsProgramLoading = false;
         }
@@ -580,6 +752,7 @@ namespace Sales_Tracker.GridView
 
                     case MainMenu_Form.SelectedOption.CategoryPurchases:
                     case MainMenu_Form.SelectedOption.CategorySales:
+                    case MainMenu_Form.SelectedOption.CategoryRentals:
                         itemType = "the category";
                         identifier = grid.SelectedRows[0].Cells[Categories_Form.Column.CategoryName.ToString()].Value?.ToString() ?? "Unknown";
                         break;
@@ -599,6 +772,11 @@ namespace Sales_Tracker.GridView
                         {
                             identifier = "Unknown";
                         }
+                        break;
+
+                    case MainMenu_Form.SelectedOption.Rentals:
+                        itemType = "the rental item";
+                        identifier = grid.SelectedRows[0].Cells[Rentals_Form.Column.ProductName.ToString()].Value?.ToString() ?? "Unknown";
                         break;
 
                     case MainMenu_Form.SelectedOption.Purchases:
@@ -627,7 +805,7 @@ namespace Sales_Tracker.GridView
                 {
                     MainMenu_Form.SelectedOption.Accountants => "accountants",
                     MainMenu_Form.SelectedOption.Companies => "companies",
-                    MainMenu_Form.SelectedOption.CategoryPurchases or MainMenu_Form.SelectedOption.CategorySales => "categories",
+                    MainMenu_Form.SelectedOption.CategoryPurchases or MainMenu_Form.SelectedOption.CategorySales or MainMenu_Form.SelectedOption.CategoryRentals => "categories",
                     MainMenu_Form.SelectedOption.ProductPurchases or MainMenu_Form.SelectedOption.ProductSales => "products",
                     MainMenu_Form.SelectedOption.Customers => "customers",
                     MainMenu_Form.SelectedOption.Purchases or MainMenu_Form.SelectedOption.Sales => "transactions",

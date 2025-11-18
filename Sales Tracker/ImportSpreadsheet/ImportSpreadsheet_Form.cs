@@ -9,6 +9,9 @@ using Sales_Tracker.UI;
 
 namespace Sales_Tracker.ImportSpreadsheet
 {
+    /// <summary>
+    /// Form for importing transaction data from spreadsheet files.
+    /// </summary>
     public partial class ImportSpreadsheet_Form : BaseForm
     {
         // Properties

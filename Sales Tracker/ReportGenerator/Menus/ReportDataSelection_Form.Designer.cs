@@ -275,7 +275,6 @@
             Today_Label.Size = new Size(67, 30);
             Today_Label.TabIndex = 2;
             Today_Label.Text = "Today";
-            Today_Label.Click += Today_Label_Click;
             // 
             // Yesterday_RadioButton
             // 
@@ -307,7 +306,6 @@
             Yesterday_Label.Size = new Size(101, 30);
             Yesterday_Label.TabIndex = 4;
             Yesterday_Label.Text = "Yesterday";
-            Yesterday_Label.Click += Yesterday_Label_Click;
             // 
             // Last7Days_RadioButton
             // 
@@ -339,7 +337,6 @@
             Last7Days_Label.Size = new Size(115, 30);
             Last7Days_Label.TabIndex = 6;
             Last7Days_Label.Text = "Last 7 days";
-            Last7Days_Label.Click += Last7Days_Label_Click;
             // 
             // Last30Days_RadioButton
             // 
@@ -371,7 +368,6 @@
             Last30Days_Label.Size = new Size(126, 30);
             Last30Days_Label.TabIndex = 8;
             Last30Days_Label.Text = "Last 30 days";
-            Last30Days_Label.Click += Last30Days_Label_Click;
             // 
             // ThisMonth_RadioButton
             // 
@@ -403,7 +399,6 @@
             ThisMonth_Label.Size = new Size(117, 30);
             ThisMonth_Label.TabIndex = 10;
             ThisMonth_Label.Text = "This month";
-            ThisMonth_Label.Click += ThisMonth_Label_Click;
             // 
             // LastMonth_RadioButton
             // 
@@ -435,7 +430,6 @@
             LastMonth_Label.Size = new Size(117, 30);
             LastMonth_Label.TabIndex = 12;
             LastMonth_Label.Text = "Last month";
-            LastMonth_Label.Click += LastMonth_Label_Click;
             // 
             // ThisQuarter_RadioButton
             // 
@@ -467,7 +461,6 @@
             ThisQuarter_Label.Size = new Size(123, 30);
             ThisQuarter_Label.TabIndex = 14;
             ThisQuarter_Label.Text = "This quarter";
-            ThisQuarter_Label.Click += ThisQuarter_Label_Click;
             // 
             // LastQuarter_RadioButton
             // 
@@ -499,7 +492,6 @@
             LastQuarter_Label.Size = new Size(123, 30);
             LastQuarter_Label.TabIndex = 16;
             LastQuarter_Label.Text = "Last quarter";
-            LastQuarter_Label.Click += LastQuarter_Label_Click;
             // 
             // YearToDate_RadioButton
             // 
@@ -531,7 +523,6 @@
             YearToDate_Label.Size = new Size(124, 30);
             YearToDate_Label.TabIndex = 18;
             YearToDate_Label.Text = "Year to date";
-            YearToDate_Label.Click += YearToDate_Label_Click;
             // 
             // LastYear_RadioButton
             // 
@@ -563,7 +554,6 @@
             LastYear_Label.Size = new Size(95, 30);
             LastYear_Label.TabIndex = 20;
             LastYear_Label.Text = "Last year";
-            LastYear_Label.Click += LastYear_Label_Click;
             // 
             // AllTime_RadioButton
             // 
@@ -595,7 +585,6 @@
             AllTime_Label.Size = new Size(84, 30);
             AllTime_Label.TabIndex = 22;
             AllTime_Label.Text = "All time";
-            AllTime_Label.Click += AllTime_Label_Click;
             // 
             // Custom_RadioButton
             // 
@@ -627,7 +616,6 @@
             Custom_Label.Size = new Size(84, 30);
             Custom_Label.TabIndex = 24;
             Custom_Label.Text = "Custom";
-            Custom_Label.Click += Custom_Label_Click;
             // 
             // ReportSettings_GroupBox
             // 

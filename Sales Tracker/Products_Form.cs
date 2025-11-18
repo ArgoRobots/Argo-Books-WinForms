@@ -8,6 +8,9 @@ using Sales_Tracker.UI;
 
 namespace Sales_Tracker
 {
+    /// <summary>
+    /// Form for managing product inventory and information.
+    /// </summary>
     public partial class Products_Form : BaseForm
     {
         private static Products_Form _instance;
@@ -42,7 +45,7 @@ namespace Sales_Tracker
             LanguageManager.UpdateLanguageForControl(this);
             AdjustRadioButtonPositions();
             PopulateTypeComboBox();
-            DataGridViewManager.SortFirstColumnAndSelectFirstRow(_purchases_DataGridView, _sales_DataGridView, _rentals_DataGridView);
+            DataGridViewManager.SortFirstColumnAndSelectFirstRow(Purchase_DataGridView, Sale_DataGridView, Rentals_DataGridView);
             AddEventHandlers();
 
             PanelCloseFilter panelCloseFilter = new(this, ClosePanels,
@@ -67,36 +70,45 @@ namespace Sales_Tracker
 
             TextBoxManager.Attach(CompanyOfOrigin_TextBox);
 
-            _purchases_DataGridView.RowsAdded += (_, _) => LabelManager.ShowTotalLabel(Total_Label, _purchases_DataGridView);
-            _purchases_DataGridView.RowsRemoved += (_, _) => LabelManager.ShowTotalLabel(Total_Label, _purchases_DataGridView);
+            Purchase_DataGridView.RowsAdded += (_, _) => LabelManager.ShowTotalLabel(Total_Label, Purchase_DataGridView);
+            Purchase_DataGridView.RowsRemoved += (_, _) => LabelManager.ShowTotalLabel(Total_Label, Purchase_DataGridView);
 
-            _sales_DataGridView.RowsAdded += (_, _) => LabelManager.ShowTotalLabel(Total_Label, _sales_DataGridView);
-            _sales_DataGridView.RowsRemoved += (_, _) => LabelManager.ShowTotalLabel(Total_Label, _sales_DataGridView);
+            Sale_DataGridView.RowsAdded += (_, _) => LabelManager.ShowTotalLabel(Total_Label, Sale_DataGridView);
+            Sale_DataGridView.RowsRemoved += (_, _) => LabelManager.ShowTotalLabel(Total_Label, Sale_DataGridView);
 
-            _rentals_DataGridView.RowsAdded += (_, _) => LabelManager.ShowTotalLabel(Total_Label, _rentals_DataGridView);
-            _rentals_DataGridView.RowsRemoved += (_, _) => LabelManager.ShowTotalLabel(Total_Label, _rentals_DataGridView);
+            Rentals_DataGridView.RowsAdded += (_, _) => LabelManager.ShowTotalLabel(Total_Label, Rentals_DataGridView);
+            Rentals_DataGridView.RowsRemoved += (_, _) => LabelManager.ShowTotalLabel(Total_Label, Rentals_DataGridView);
 
             TextBoxManager.Attach(Search_TextBox);
 
-            ForPurchase_Label.Click += (_, _) => Purchase_RadioButton.Checked = !Purchase_RadioButton.Checked;
-            ForSale_Label.Click += (_, _) => Sale_RadioButton.Checked = !Sale_RadioButton.Checked;
-            ForRent_Label.Click += (_, _) => Rent_RadioButton.Checked = !Rent_RadioButton.Checked;
+            ForPurchase_Label.Click += (_, _) => Purchase_RadioButton.Checked = true;
+            ForSale_Label.Click += (_, _) => Sale_RadioButton.Checked = true;
+            ForRent_Label.Click += (_, _) => Rent_RadioButton.Checked = true;
         }
         private void AddSearchBoxEvents()
         {
             int searchBoxMaxHeight = 300;
 
             SearchBox.Attach(ProductCategory_TextBox, this, GetSearchResultsForCategory, searchBoxMaxHeight, false, false, true, true);
-
             SearchBox.Attach(CountryOfOrigin_TextBox, this, () => Country.CountrySearchResults, searchBoxMaxHeight, false, true, true, false);
-
             SearchBox.Attach(CompanyOfOrigin_TextBox, this, GetSearchResultsForCompany, searchBoxMaxHeight, false, false, true, true);
         }
         private List<SearchResult> GetSearchResultsForCategory()
         {
-            List<string> categoryNames = Sale_RadioButton.Checked
-                ? MainMenu_Form.Instance.GetCategorySaleNames()
-                : MainMenu_Form.Instance.GetCategoryPurchaseNames();
+            List<string> categoryNames;
+
+            if (Purchase_RadioButton.Checked)
+            {
+                categoryNames = MainMenu_Form.Instance.CategoryPurchaseList.Select(p => p.Name).ToList();
+            }
+            else if (Sale_RadioButton.Checked)
+            {
+                categoryNames = MainMenu_Form.Instance.CategorySaleList.Select(s => s.Name).ToList();
+            }
+            else
+            {
+                categoryNames = MainMenu_Form.Instance.CategoryRentalList.Select(s => s.Name).ToList();
+            }
 
             return SearchBox.ConvertToSearchResults(categoryNames);
         }
@@ -111,29 +123,29 @@ namespace Sales_Tracker
                 foreach (Product product in category.ProductList)
                 {
                     Product.TypeOption type = product.ItemType ?? Product.TypeOption.Product;
-                    _purchases_DataGridView.Rows.Add(product.ProductID, product.Name, category.Name, product.CountryOfOrigin, product.CompanyOfOrigin, type);
+                    Purchase_DataGridView.Rows.Add(product.ProductID, product.Name, category.Name, product.CountryOfOrigin, product.CompanyOfOrigin, type);
                 }
             }
-            DataGridViewManager.ScrollToTopOfDataGridView(_purchases_DataGridView);
+            DataGridViewManager.ScrollToTopOfDataGridView(Purchase_DataGridView);
 
             foreach (Category category in MainMenu_Form.Instance.CategorySaleList)
             {
                 foreach (Product product in category.ProductList)
                 {
                     Product.TypeOption type = product.ItemType ?? Product.TypeOption.Product;
-                    _sales_DataGridView.Rows.Add(product.ProductID, product.Name, category.Name, product.CountryOfOrigin, product.CompanyOfOrigin, type);
+                    Sale_DataGridView.Rows.Add(product.ProductID, product.Name, category.Name, product.CountryOfOrigin, product.CompanyOfOrigin, type);
                 }
             }
-            DataGridViewManager.ScrollToTopOfDataGridView(_sales_DataGridView);
+            DataGridViewManager.ScrollToTopOfDataGridView(Sale_DataGridView);
 
             foreach (Category category in MainMenu_Form.Instance.CategoryRentalList)
             {
                 foreach (Product product in category.ProductList)
                 {
-                    _sales_DataGridView.Rows.Add(product.ProductID, product.Name, category.Name, product.CountryOfOrigin, product.CompanyOfOrigin);
+                    Sale_DataGridView.Rows.Add(product.ProductID, product.Name, category.Name, product.CountryOfOrigin, product.CompanyOfOrigin);
                 }
             }
-            DataGridViewManager.ScrollToTopOfDataGridView(_sales_DataGridView);
+            DataGridViewManager.ScrollToTopOfDataGridView(Sale_DataGridView);
         }
         private void CheckRadioButton(bool selectPurchaseRadioButton)
         {
@@ -181,7 +193,7 @@ namespace Sales_Tracker
         }
         private void Products_Form_Shown(object sender, EventArgs e)
         {
-            _purchases_DataGridView.ClearSelection();
+            Purchase_DataGridView.ClearSelection();
             LoadingPanel.HideBlankLoadingPanel(this);
         }
         private void Products_Form_Resize(object sender, EventArgs e)
@@ -242,17 +254,17 @@ namespace Sales_Tracker
             if (Purchase_RadioButton.Checked)
             {
                 MainMenu_Form.AddProductToCategoryByName(MainMenu_Form.Instance.CategoryPurchaseList, category, product);
-                newRowIndex = _purchases_DataGridView.Rows.Add(product.ProductID, product.Name, category, product.CountryOfOrigin, product.CompanyOfOrigin, product.ItemType);
+                newRowIndex = Purchase_DataGridView.Rows.Add(product.ProductID, product.Name, category, product.CountryOfOrigin, product.CompanyOfOrigin, product.ItemType);
             }
             else if (Sale_RadioButton.Checked)
             {
                 MainMenu_Form.AddProductToCategoryByName(MainMenu_Form.Instance.CategorySaleList, category, product);
-                newRowIndex = _sales_DataGridView.Rows.Add(product.ProductID, product.Name, category, product.CountryOfOrigin, product.CompanyOfOrigin, product.ItemType);
+                newRowIndex = Sale_DataGridView.Rows.Add(product.ProductID, product.Name, category, product.CountryOfOrigin, product.CompanyOfOrigin, product.ItemType);
             }
             else
             {
                 MainMenu_Form.AddProductToCategoryByName(MainMenu_Form.Instance.CategoryRentalList, category, product);
-                newRowIndex = _rentals_DataGridView.Rows.Add(product.ProductID, product.Name, category, product.CountryOfOrigin, product.CompanyOfOrigin);
+                newRowIndex = Rentals_DataGridView.Rows.Add(product.ProductID, product.Name, category, product.CountryOfOrigin, product.CompanyOfOrigin);
             }
 
             DataGridViewManager.DataGridViewRowsAdded(_selectedDataGridView, new DataGridViewRowsAddedEventArgs(newRowIndex, 1));
@@ -267,48 +279,48 @@ namespace Sales_Tracker
         {
             if (Purchase_RadioButton.Checked)
             {
-                _purchases_DataGridView.Visible = true;
-                _sales_DataGridView.Visible = false;
-                _rentals_DataGridView.Visible = false;
+                Purchase_DataGridView.Visible = true;
+                Sale_DataGridView.Visible = false;
+                Rentals_DataGridView.Visible = false;
                 ShowTypeControls();
-                _selectedDataGridView = _purchases_DataGridView;
-                _purchases_DataGridView.ClearSelection();
+                _selectedDataGridView = Purchase_DataGridView;
+                Purchase_DataGridView.ClearSelection();
                 ProductCategory_TextBox.Clear();
                 ValidateCategoryTextBox();
                 SetProductsRemainingLabel();
-                LabelManager.ShowTotalLabel(Total_Label, _purchases_DataGridView);
+                LabelManager.ShowTotalLabel(Total_Label, Purchase_DataGridView);
             }
         }
         private void Sale_RadioButton_CheckedChanged(object sender, EventArgs e)
         {
             if (Sale_RadioButton.Checked)
             {
-                _sales_DataGridView.Visible = true;
-                _purchases_DataGridView.Visible = false;
-                _rentals_DataGridView.Visible = false;
+                Sale_DataGridView.Visible = true;
+                Purchase_DataGridView.Visible = false;
+                Rentals_DataGridView.Visible = false;
                 ShowTypeControls();
-                _selectedDataGridView = _sales_DataGridView;
-                _sales_DataGridView.ClearSelection();
+                _selectedDataGridView = Sale_DataGridView;
+                Sale_DataGridView.ClearSelection();
                 ProductCategory_TextBox.Clear();
                 ValidateCategoryTextBox();
                 SetProductsRemainingLabel();
-                LabelManager.ShowTotalLabel(Total_Label, _sales_DataGridView);
+                LabelManager.ShowTotalLabel(Total_Label, Sale_DataGridView);
             }
         }
         private void Rent_RadioButton_CheckedChanged(object sender, EventArgs e)
         {
             if (Rent_RadioButton.Checked)
             {
-                _rentals_DataGridView.Visible = true;
-                _purchases_DataGridView.Visible = false;
-                _sales_DataGridView.Visible = false;
+                Rentals_DataGridView.Visible = true;
+                Purchase_DataGridView.Visible = false;
+                Sale_DataGridView.Visible = false;
                 HideTypeControls();
-                _selectedDataGridView = _rentals_DataGridView;
-                _rentals_DataGridView.ClearSelection();
+                _selectedDataGridView = Rentals_DataGridView;
+                Rentals_DataGridView.ClearSelection();
                 ProductCategory_TextBox.Clear();
                 ValidateCategoryTextBox();
                 SetProductsRemainingLabel();
-                LabelManager.ShowTotalLabel(Total_Label, _rentals_DataGridView);
+                LabelManager.ShowTotalLabel(Total_Label, Rentals_DataGridView);
             }
         }
         private void ProductName_TextBox_TextChanged(object sender, EventArgs e)
@@ -570,32 +582,33 @@ namespace Sales_Tracker
             { Column.CompanyOfOrigin, "Company of origin" },
             { Column.Type, "Type" }
         };
-        private Guna2DataGridView _purchases_DataGridView, _sales_DataGridView, _rentals_DataGridView, _selectedDataGridView;
-        public Guna2DataGridView Purchase_DataGridView => _purchases_DataGridView;
-        public Guna2DataGridView Sale_DataGridView => _sales_DataGridView;
+        private Guna2DataGridView _selectedDataGridView;
+        public Guna2DataGridView Purchase_DataGridView { get; private set; }
+        public Guna2DataGridView Sale_DataGridView { get; private set; }
+        public Guna2DataGridView Rentals_DataGridView { get; private set; }
 
         // DataGridView methods
         private void ConstructDataGridViews()
         {
-            _purchases_DataGridView = new();
-            DataGridViewManager.InitializeDataGridView(_purchases_DataGridView, "purchases_DataGridView", ColumnHeaders, null, this);
-            _purchases_DataGridView.RowsAdded += DataGridView_RowsChanged;
-            _purchases_DataGridView.RowsRemoved += DataGridView_RowsChanged;
-            _purchases_DataGridView.Size = new Size(ClientSize.Width - 80, ClientSize.Height - _topForDataGridView - 70);
-            _purchases_DataGridView.Location = new Point((ClientSize.Width - _purchases_DataGridView.Width) / 2, _topForDataGridView);
-            _purchases_DataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Left;
-            _purchases_DataGridView.Tag = MainMenu_Form.DataGridViewTag.Product;
-            ThemeManager.CustomizeScrollBar(_purchases_DataGridView);
+            Purchase_DataGridView = new();
+            DataGridViewManager.InitializeDataGridView(Purchase_DataGridView, "Purchase_DataGridView", ColumnHeaders, null, this);
+            Purchase_DataGridView.RowsAdded += DataGridView_RowsChanged;
+            Purchase_DataGridView.RowsRemoved += DataGridView_RowsChanged;
+            Purchase_DataGridView.Size = new Size(ClientSize.Width - 80, ClientSize.Height - _topForDataGridView - 70);
+            Purchase_DataGridView.Location = new Point((ClientSize.Width - Purchase_DataGridView.Width) / 2, _topForDataGridView);
+            Purchase_DataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Left;
+            Purchase_DataGridView.Tag = MainMenu_Form.DataGridViewTag.Product;
+            ThemeManager.CustomizeScrollBar(Purchase_DataGridView);
 
-            _sales_DataGridView = new();
-            DataGridViewManager.InitializeDataGridView(_sales_DataGridView, "sales_DataGridView", ColumnHeaders, null, this);
-            _sales_DataGridView.RowsAdded += DataGridView_RowsChanged;
-            _sales_DataGridView.RowsRemoved += DataGridView_RowsChanged;
-            _sales_DataGridView.Size = new Size(ClientSize.Width - 80, ClientSize.Height - _topForDataGridView - 70);
-            _sales_DataGridView.Location = new Point((ClientSize.Width - _sales_DataGridView.Width) / 2, _topForDataGridView);
-            _sales_DataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Left;
-            _sales_DataGridView.Tag = MainMenu_Form.DataGridViewTag.Product;
-            ThemeManager.CustomizeScrollBar(_sales_DataGridView);
+            Sale_DataGridView = new();
+            DataGridViewManager.InitializeDataGridView(Sale_DataGridView, "Sale_DataGridView", ColumnHeaders, null, this);
+            Sale_DataGridView.RowsAdded += DataGridView_RowsChanged;
+            Sale_DataGridView.RowsRemoved += DataGridView_RowsChanged;
+            Sale_DataGridView.Size = new Size(ClientSize.Width - 80, ClientSize.Height - _topForDataGridView - 70);
+            Sale_DataGridView.Location = new Point((ClientSize.Width - Sale_DataGridView.Width) / 2, _topForDataGridView);
+            Sale_DataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Left;
+            Sale_DataGridView.Tag = MainMenu_Form.DataGridViewTag.Product;
+            ThemeManager.CustomizeScrollBar(Sale_DataGridView);
 
             List<Column> rentalColumns = [
                 Column.ProductID,
@@ -604,15 +617,15 @@ namespace Sales_Tracker
                 Column.CountryOfOrigin,
                 Column.CompanyOfOrigin];
 
-            _rentals_DataGridView = new();
-            DataGridViewManager.InitializeDataGridView(_rentals_DataGridView, "rentals_DataGridView", ColumnHeaders, rentalColumns, this);
-            _rentals_DataGridView.RowsAdded += DataGridView_RowsChanged;
-            _rentals_DataGridView.RowsRemoved += DataGridView_RowsChanged;
-            _rentals_DataGridView.Size = new Size(ClientSize.Width - 80, ClientSize.Height - _topForDataGridView - 70);
-            _rentals_DataGridView.Location = new Point((ClientSize.Width - _rentals_DataGridView.Width) / 2, _topForDataGridView);
-            _rentals_DataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Left;
-            _rentals_DataGridView.Tag = MainMenu_Form.DataGridViewTag.Product;
-            ThemeManager.CustomizeScrollBar(_rentals_DataGridView);
+            Rentals_DataGridView = new();
+            DataGridViewManager.InitializeDataGridView(Rentals_DataGridView, "rentals_DataGridView", ColumnHeaders, rentalColumns, this);
+            Rentals_DataGridView.RowsAdded += DataGridView_RowsChanged;
+            Rentals_DataGridView.RowsRemoved += DataGridView_RowsChanged;
+            Rentals_DataGridView.Size = new Size(ClientSize.Width - 80, ClientSize.Height - _topForDataGridView - 70);
+            Rentals_DataGridView.Location = new Point((ClientSize.Width - Rentals_DataGridView.Width) / 2, _topForDataGridView);
+            Rentals_DataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Left;
+            Rentals_DataGridView.Tag = MainMenu_Form.DataGridViewTag.Product;
+            ThemeManager.CustomizeScrollBar(Rentals_DataGridView);
         }
         private void DataGridView_RowsChanged(object sender, EventArgs e)
         {

@@ -6,6 +6,9 @@ using Sales_Tracker.Theme;
 
 namespace Sales_Tracker.Settings.Menus
 {
+    /// <summary>
+    /// Form for selecting and managing language preferences.
+    /// </summary>
     public partial class LanguageSelection_Form : BaseForm
     {
         // Properties

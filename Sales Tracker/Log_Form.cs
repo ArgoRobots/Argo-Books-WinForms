@@ -8,6 +8,9 @@ using System.Text.RegularExpressions;
 
 namespace Sales_Tracker
 {
+    /// <summary>
+    /// Form for viewing application logs and debug information.
+    /// </summary>
     public partial class Log_Form : BaseForm
     {
         // Properties

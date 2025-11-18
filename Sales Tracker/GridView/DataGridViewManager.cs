@@ -3,6 +3,7 @@ using Sales_Tracker.Classes;
 using Sales_Tracker.DataClasses;
 using Sales_Tracker.Language;
 using Sales_Tracker.LostProduct;
+using Sales_Tracker.Rentals;
 using Sales_Tracker.ReturnProduct;
 using Sales_Tracker.Theme;
 using Sales_Tracker.UI;
@@ -112,11 +113,9 @@ namespace Sales_Tracker.GridView
                     break;
 
                 case MainMenu_Form.SelectedOption.CategoryPurchases:
-                    HandleCategoryPurchasesDeletion(e);
-                    break;
-
                 case MainMenu_Form.SelectedOption.CategorySales:
-                    HandleCategorySalesDeletion(e);
+                case MainMenu_Form.SelectedOption.CategoryRentals:
+                    HandleCategoryDeletion(e);
                     break;
 
                 case MainMenu_Form.SelectedOption.Accountants:
@@ -177,8 +176,11 @@ namespace Sales_Tracker.GridView
                 MainMenu_Form.Instance.LoadOrRefreshMainCharts();
                 MainMenu_Form.SaveDataGridViewToFileAsJson(dataGridView, selected);
             }
-            else if (selected is MainMenu_Form.SelectedOption.CategoryPurchases or MainMenu_Form.SelectedOption.CategorySales or
-               MainMenu_Form.SelectedOption.ProductPurchases or MainMenu_Form.SelectedOption.ProductSales)
+            else if (selected is MainMenu_Form.SelectedOption.CategoryPurchases or
+                MainMenu_Form.SelectedOption.CategorySales or
+                MainMenu_Form.SelectedOption.CategoryRentals or
+                MainMenu_Form.SelectedOption.ProductPurchases or
+                MainMenu_Form.SelectedOption.ProductSales)
             {
                 MainMenu_Form.Instance.SaveCategoriesToFile(selected);
             }
@@ -344,29 +346,26 @@ namespace Sales_Tracker.GridView
         // Methods for DataGridView_UserDeletingRow
         private static void HandlePurchasesDeletion(DataGridViewRowCancelEventArgs e)
         {
-            string type = "purchase";
             string columnName = ReadOnlyVariables.ID_column;
             string name = e.Row.Cells[columnName].Value?.ToString();
 
-            string message = $"Deleted {type} '{name}'";
+            string message = $"Deleted purchase '{name}'";
             CustomMessage_Form.AddThingThatHasChangedAndLogMessage(MainMenu_Form.ThingsThatHaveChangedInFile, 2, message);
         }
         private static void HandleSalesDeletion(DataGridViewRowCancelEventArgs e)
         {
-            string type = "sale";
             string columnName = ReadOnlyVariables.ID_column;
             string name = e.Row.Cells[columnName].Value?.ToString();
 
-            string message = $"Deleted {type} '{name}'";
+            string message = $"Deleted sale '{name}'";
             CustomMessage_Form.AddThingThatHasChangedAndLogMessage(MainMenu_Form.ThingsThatHaveChangedInFile, 2, message);
         }
         private static void HandleRentalsDeletion(DataGridViewRowCancelEventArgs e)
         {
-            string type = "rental";
-            string columnName = ReadOnlyVariables.ID_column;
+            string columnName = Rentals_Form.Column.ProductName.ToString();
             string name = e.Row.Cells[columnName].Value?.ToString();
 
-            string message = $"Deleted {type} '{name}'";
+            string message = $"Deleted rental '{name}'";
             CustomMessage_Form.AddThingThatHasChangedAndLogMessage(MainMenu_Form.ThingsThatHaveChangedInFile, 2, message);
         }
         private static void HandleProductPurchasesDeletion(DataGridViewRowCancelEventArgs e)
@@ -413,48 +412,43 @@ namespace Sales_Tracker.GridView
             string message = $"Deleted {type} '{valueBeingRemoved}'";
             CustomMessage_Form.AddThingThatHasChangedAndLogMessage(MainMenu_Form.ThingsThatHaveChangedInFile, 2, message);
         }
-        private static void HandleCategoryPurchasesDeletion(DataGridViewRowCancelEventArgs e)
+        private static void HandleCategoryDeletion(DataGridViewRowCancelEventArgs e)
         {
-            string type = "category";
             string columnName = Categories_Form.Column.CategoryName.ToString();
             string valueBeingRemoved = e.Row.Cells[columnName].Value?.ToString();
 
-            if (!CanCategoryBeMovedOrDeleted(valueBeingRemoved, MainMenu_Form.Instance.CategoryPurchaseList, _deleteAction))
+            List<Category>? categoryList = MainMenu_Form.Instance.Selected switch
+            {
+                MainMenu_Form.SelectedOption.CategoryPurchases => MainMenu_Form.Instance.CategoryPurchaseList,
+                MainMenu_Form.SelectedOption.CategorySales => MainMenu_Form.Instance.CategorySaleList,
+                MainMenu_Form.SelectedOption.CategoryRentals => MainMenu_Form.Instance.CategoryRentalList,
+                _ => null
+            };
+
+            if (categoryList == null)
+            {
+                CustomMessageBox.Show(
+                   "Cannot delete category",
+                   "Failed to delete the category",
+                   CustomMessageBoxIcon.Error,
+                   CustomMessageBoxButtons.Ok);
+                e.Cancel = true;
+                return;
+            }
+
+            if (!CanCategoryBeMovedOrDeleted(valueBeingRemoved, categoryList, _deleteAction))
             {
                 e.Cancel = true;
                 return;
             }
 
             // Remove category from list
-            MainMenu_Form.Instance.CategoryPurchaseList.Remove(
-                MainMenu_Form.Instance.CategoryPurchaseList.FirstOrDefault(c => c.Name == valueBeingRemoved));
+            categoryList.Remove(categoryList.FirstOrDefault(c => c.Name == valueBeingRemoved));
 
             // In case the category name that is being deleted is in the TextBox
             Categories_Form.Instance.VaidateCategoryTextBox();
 
-            string message = $"Deleted {type} '{valueBeingRemoved}'";
-            CustomMessage_Form.AddThingThatHasChangedAndLogMessage(MainMenu_Form.ThingsThatHaveChangedInFile, 2, message);
-        }
-        private static void HandleCategorySalesDeletion(DataGridViewRowCancelEventArgs e)
-        {
-            string type = "category";
-            string columnName = Categories_Form.Column.CategoryName.ToString();
-            string valueBeingRemoved = e.Row.Cells[columnName].Value?.ToString();
-
-            if (!CanCategoryBeMovedOrDeleted(valueBeingRemoved, MainMenu_Form.Instance.CategorySaleList, _deleteAction))
-            {
-                e.Cancel = true;
-                return;
-            }
-
-            // Remove category from list
-            MainMenu_Form.Instance.CategorySaleList.Remove(
-                MainMenu_Form.Instance.CategorySaleList.FirstOrDefault(c => c.Name == valueBeingRemoved));
-
-            // In case the category name that is being deleted is in the TextBox
-            Categories_Form.Instance.VaidateCategoryTextBox();
-
-            string message = $"Deleted {type} '{valueBeingRemoved}'";
+            string message = $"Deleted category '{valueBeingRemoved}'";
             CustomMessage_Form.AddThingThatHasChangedAndLogMessage(MainMenu_Form.ThingsThatHaveChangedInFile, 2, message);
         }
         private static void HandleAccountantsDeletion(DataGridViewRowCancelEventArgs e)
@@ -698,20 +692,36 @@ namespace Sales_Tracker.GridView
                 flowPanel.Controls.SetChildIndex(RightClickDataGridViewRowMenu.Modify_Button, currentIndex++);
             }
 
-            // Add Move_Button
+            // Add Move_Button and Move2_Button for categories
             if (selectedOption == MainMenu_Form.SelectedOption.CategoryPurchases)
             {
-                string text = LanguageManager.TranslateString("Move category to sales");
                 RightClickDataGridViewRowMenu.Move_Button.Visible = true;
-                RightClickDataGridViewRowMenu.Move_Button.Text = text;
+                RightClickDataGridViewRowMenu.Move_Button.Text = LanguageManager.TranslateString("Move category to sales");
                 flowPanel.Controls.SetChildIndex(RightClickDataGridViewRowMenu.Move_Button, currentIndex++);
+
+                RightClickDataGridViewRowMenu.Move2_Button.Visible = true;
+                RightClickDataGridViewRowMenu.Move2_Button.Text = LanguageManager.TranslateString("Move category to rentals");
+                flowPanel.Controls.SetChildIndex(RightClickDataGridViewRowMenu.Move2_Button, currentIndex++);
             }
             else if (selectedOption == MainMenu_Form.SelectedOption.CategorySales)
             {
-                string text = LanguageManager.TranslateString("Move category to purchases");
                 RightClickDataGridViewRowMenu.Move_Button.Visible = true;
-                RightClickDataGridViewRowMenu.Move_Button.Text = text;
+                RightClickDataGridViewRowMenu.Move_Button.Text = LanguageManager.TranslateString("Move category to purchases");
                 flowPanel.Controls.SetChildIndex(RightClickDataGridViewRowMenu.Move_Button, currentIndex++);
+
+                RightClickDataGridViewRowMenu.Move2_Button.Visible = true;
+                RightClickDataGridViewRowMenu.Move2_Button.Text = LanguageManager.TranslateString("Move category to rentals");
+                flowPanel.Controls.SetChildIndex(RightClickDataGridViewRowMenu.Move2_Button, currentIndex++);
+            }
+            else if (selectedOption == MainMenu_Form.SelectedOption.CategoryRentals)
+            {
+                RightClickDataGridViewRowMenu.Move_Button.Visible = true;
+                RightClickDataGridViewRowMenu.Move_Button.Text = LanguageManager.TranslateString("Move category to purchases");
+                flowPanel.Controls.SetChildIndex(RightClickDataGridViewRowMenu.Move_Button, currentIndex++);
+
+                RightClickDataGridViewRowMenu.Move2_Button.Visible = true;
+                RightClickDataGridViewRowMenu.Move2_Button.Text = LanguageManager.TranslateString("Move category to sales");
+                flowPanel.Controls.SetChildIndex(RightClickDataGridViewRowMenu.Move2_Button, currentIndex++);
             }
 
             if (isPurchasesOrSales)
@@ -1009,6 +1019,7 @@ namespace Sales_Tracker.GridView
                 MainMenu_Form.SelectedOption.Customers => Directories.Customers_file,
                 MainMenu_Form.SelectedOption.CategoryPurchases => Directories.CategoryPurchases_file,
                 MainMenu_Form.SelectedOption.CategorySales => Directories.CategorySales_file,
+                MainMenu_Form.SelectedOption.CategoryRentals => Directories.CategoryRentals_file,
                 MainMenu_Form.SelectedOption.ProductPurchases => Directories.CategoryPurchases_file,
                 MainMenu_Form.SelectedOption.ProductSales => Directories.CategorySales_file,
                 MainMenu_Form.SelectedOption.Accountants => Directories.Accountants_file,

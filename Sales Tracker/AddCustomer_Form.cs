@@ -7,6 +7,9 @@ using Sales_Tracker.UI;
 
 namespace Sales_Tracker
 {
+    /// <summary>
+    /// Form for adding new customers to the system.
+    /// </summary>
     public partial class AddCustomer_Form : Form
     {
         // Properties

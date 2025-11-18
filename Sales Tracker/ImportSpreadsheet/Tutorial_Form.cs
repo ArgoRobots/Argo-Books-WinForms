@@ -5,6 +5,9 @@ using Sales_Tracker.UI;
 
 namespace Sales_Tracker.ImportSpreadsheet
 {
+    /// <summary>
+    /// Tutorial form for spreadsheet import functionality.
+    /// </summary>
     public partial class Tutorial_Form : BaseForm
     {
         // Init.

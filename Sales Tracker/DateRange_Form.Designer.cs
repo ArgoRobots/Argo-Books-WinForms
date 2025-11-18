@@ -217,7 +217,6 @@ namespace Sales_Tracker
             AllTime_Label.Size = new Size(103, 41);
             AllTime_Label.TabIndex = 54;
             AllTime_Label.Text = "All time";
-            AllTime_Label.Click += AllTime_Label_Click;
             // 
             // Last24Hours_RadioButton
             // 
@@ -246,7 +245,6 @@ namespace Sales_Tracker
             Last24Hours_Label.Size = new Size(158, 41);
             Last24Hours_Label.TabIndex = 56;
             Last24Hours_Label.Text = "Last 24 hours";
-            Last24Hours_Label.Click += Last24Hours_Label_Click;
             // 
             // Last48Hours_RadioButton
             // 
@@ -275,7 +273,6 @@ namespace Sales_Tracker
             Last48Hours_Label.Size = new Size(158, 41);
             Last48Hours_Label.TabIndex = 58;
             Last48Hours_Label.Text = "Last 48 hours";
-            Last48Hours_Label.Click += Last48Hours_Label_Click;
             // 
             // Last3Days_RadioButton
             // 
@@ -304,7 +301,6 @@ namespace Sales_Tracker
             Last3Days_Label.Size = new Size(136, 41);
             Last3Days_Label.TabIndex = 60;
             Last3Days_Label.Text = "Last 3 days";
-            Last3Days_Label.Click += Last3Days_Label_Click;
             // 
             // Last5Days_RadioButton
             // 
@@ -333,7 +329,6 @@ namespace Sales_Tracker
             Last5Days_Label.Size = new Size(136, 41);
             Last5Days_Label.TabIndex = 62;
             Last5Days_Label.Text = "Last 5 days";
-            Last5Days_Label.Click += Last5Days_Label_Click;
             // 
             // Last10Days_RadioButton
             // 
@@ -362,7 +357,6 @@ namespace Sales_Tracker
             Last10Days_Label.Size = new Size(148, 41);
             Last10Days_Label.TabIndex = 64;
             Last10Days_Label.Text = "Last 10 days";
-            Last10Days_Label.Click += Last10Days_Label_Click;
             // 
             // Custom_RadioButton
             // 
@@ -392,7 +386,6 @@ namespace Sales_Tracker
             Custom_Label.Size = new Size(102, 41);
             Custom_Label.TabIndex = 76;
             Custom_Label.Text = "Custom";
-            Custom_Label.Click += Custom_Label_Click;
             // 
             // Last5Years_RadioButton
             // 
@@ -421,7 +414,6 @@ namespace Sales_Tracker
             Last5Years_Label.Size = new Size(142, 41);
             Last5Years_Label.TabIndex = 74;
             Last5Years_Label.Text = "Last 5 years";
-            Last5Years_Label.Click += Last5Years_Label_Click;
             // 
             // Last2Years_RadioButton
             // 
@@ -450,7 +442,6 @@ namespace Sales_Tracker
             Last2Years_Label.Size = new Size(142, 41);
             Last2Years_Label.TabIndex = 72;
             Last2Years_Label.Text = "Last 2 years";
-            Last2Years_Label.Click += Last2Years_Label_Click;
             // 
             // LastYear_RadioButton
             // 
@@ -479,7 +470,6 @@ namespace Sales_Tracker
             LastYear_Label.Size = new Size(114, 41);
             LastYear_Label.TabIndex = 70;
             LastYear_Label.Text = "Last year";
-            LastYear_Label.Click += LastYear_Label_Click;
             // 
             // Last100Days_RadioButton
             // 
@@ -508,7 +498,6 @@ namespace Sales_Tracker
             Last100Days_Label.Size = new Size(160, 41);
             Last100Days_Label.TabIndex = 68;
             Last100Days_Label.Text = "Last 100 days";
-            Last100Days_Label.Click += Last100Days_Label_Click;
             // 
             // Last30Days_RadioButton
             // 
@@ -537,7 +526,6 @@ namespace Sales_Tracker
             Last30Days_Label.Size = new Size(148, 41);
             Last30Days_Label.TabIndex = 66;
             Last30Days_Label.Text = "Last 30 days";
-            Last30Days_Label.Click += Last30Days_Label_Click;
             // 
             // Bottom_Separator
             // 

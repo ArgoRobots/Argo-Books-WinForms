@@ -9,6 +9,9 @@ using Sales_Tracker.UI;
 
 namespace Sales_Tracker.Startup.Menus
 {
+    /// <summary>
+    /// Form for configuring company information and settings.
+    /// </summary>
     public partial class ConfigureCompany_Form : BaseForm
     {
         // Properties
@@ -144,6 +147,7 @@ namespace Sales_Tracker.Startup.Menus
             Directories.CreateFile(Directories.Sales_file);
             Directories.CreateFile(Directories.CategorySales_file);
             Directories.CreateFile(Directories.CategoryPurchases_file);
+            Directories.CreateFile(Directories.CategoryRentals_file);
             Directories.CreateFile(Directories.Accountants_file);
             Directories.CreateFile(Directories.Companies_file);
 

@@ -10,6 +10,9 @@ using Sales_Tracker.UI;
 
 namespace Sales_Tracker.Startup.Menus
 {
+    /// <summary>
+    /// Getting started form for opening or creating companies.
+    /// </summary>
     public partial class GetStarted_Form : BaseForm
     {
         // Properties

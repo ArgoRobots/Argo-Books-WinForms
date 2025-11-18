@@ -7,6 +7,9 @@ using Sales_Tracker.Theme;
 
 namespace Sales_Tracker.UI
 {
+    /// <summary>
+    /// Form for viewing detailed information about a transaction.
+    /// </summary>
     public partial class ViewTransactionDetails_Form : BaseForm
     {
         // Enums

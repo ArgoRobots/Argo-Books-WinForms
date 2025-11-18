@@ -5,6 +5,9 @@ using System.Runtime.InteropServices;
 
 namespace Sales_Tracker
 {
+    /// <summary>
+    /// End User License Agreement form for application acceptance.
+    /// </summary>
     public partial class EULA_Form : BaseForm
     {
         private bool _userActionTaken = false;

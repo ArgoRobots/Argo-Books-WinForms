@@ -6,6 +6,9 @@ using Sales_Tracker.UI;
 
 namespace Sales_Tracker.Settings.Menus
 {
+    /// <summary>
+    /// Form displaying available application updates and version information.
+    /// </summary>
     public partial class Updates_Form : BaseForm
     {
         // Properties

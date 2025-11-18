@@ -8,6 +8,9 @@ using Sales_Tracker.UI;
 
 namespace Sales_Tracker
 {
+    /// <summary>
+    /// Form for upgrading to the paid version of the application.
+    /// </summary>
     public partial class Upgrade_Form : BaseForm
     {
         // Properties

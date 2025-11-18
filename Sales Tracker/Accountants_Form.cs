@@ -8,6 +8,9 @@ using Sales_Tracker.UI;
 
 namespace Sales_Tracker
 {
+    /// <summary>
+    /// Form for managing accountants in the system.
+    /// </summary>
     public partial class Accountants_Form : BaseForm
     {
         // Properties

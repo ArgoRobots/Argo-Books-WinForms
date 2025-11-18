@@ -9,6 +9,9 @@ using Sales_Tracker.UI;
 
 namespace Sales_Tracker
 {
+    /// <summary>
+    /// Form for undoing a product return transaction.
+    /// </summary>
     public partial class UndoReturn_Form : BaseForm
     {
         // Properties

@@ -90,7 +90,6 @@ namespace Sales_Tracker.ReportGenerator.Menus
             UpdateExisting_Label.TabIndex = 2;
             UpdateExisting_Label.Text = "Update existing template";
             UpdateExisting_Label.Visible = false;
-            UpdateExisting_Label.Click += UpdateExisting_Label_Click;
             // 
             // SaveAsNew_RadioButton
             // 
@@ -125,7 +124,6 @@ namespace Sales_Tracker.ReportGenerator.Menus
             SaveAsNew_Label.TabIndex = 4;
             SaveAsNew_Label.Text = "Save as new template";
             SaveAsNew_Label.Visible = false;
-            SaveAsNew_Label.Click += SaveAsNew_Label_Click;
             // 
             // TemplateName_Label
             // 

@@ -9,6 +9,9 @@ using Sales_Tracker.UI;
 
 namespace Sales_Tracker
 {
+    /// <summary>
+    /// Form for adding new sale transactions.
+    /// </summary>
     public partial class AddSale_Form : BaseForm
     {
         // Properties

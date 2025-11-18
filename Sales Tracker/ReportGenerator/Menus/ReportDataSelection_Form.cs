@@ -38,6 +38,7 @@ namespace Sales_Tracker.ReportGenerator.Menus
             DateRange_GroupBox.Height = Right_Panel.Height - Right_Panel.Padding.Bottom - DateRange_GroupBox.Top;
             DateRange_GroupBox.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
 
+            AddEventHandlers();
             InitializeDatePresets();
             InitChartSelectionControl();
             SetupChartSelection();
@@ -45,6 +46,21 @@ namespace Sales_Tracker.ReportGenerator.Menus
             SetupTemplates();
             StoreInitialSizes();
             ScaleControls();
+        }
+        private void AddEventHandlers()
+        {
+            Today_RadioButton.Click += (_, _) => Today_RadioButton.Checked = true;
+            Yesterday_RadioButton.Click += (_, _) => Yesterday_RadioButton.Checked = true;
+            Last7Days_RadioButton.Click += (_, _) => Last7Days_RadioButton.Checked = true;
+            Last30Days_RadioButton.Click += (_, _) => Last30Days_RadioButton.Checked = true;
+            ThisMonth_RadioButton.Click += (_, _) => ThisMonth_RadioButton.Checked = true;
+            LastMonth_RadioButton.Click += (_, _) => LastMonth_RadioButton.Checked = true;
+            ThisQuarter_RadioButton.Click += (_, _) => ThisQuarter_RadioButton.Checked = true;
+            LastQuarter_RadioButton.Click += (_, _) => LastQuarter_RadioButton.Checked = true;
+            YearToDate_RadioButton.Click += (_, _) => YearToDate_RadioButton.Checked = true;
+            LastYear_RadioButton.Click += (_, _) => LastYear_RadioButton.Checked = true;
+            AllTime_RadioButton.Click += (_, _) => AllTime_RadioButton.Checked = true;
+            Custom_RadioButton.Click += (_, _) => Custom_RadioButton.Checked = true;
         }
         private void InitChartSelectionControl()
         {
@@ -712,20 +728,6 @@ namespace Sales_Tracker.ReportGenerator.Menus
                 NotifyParentValidationChanged();
             });
         }
-
-        // Label click event handlers to toggle radio buttons
-        private void Today_Label_Click(object sender, EventArgs e) => Today_RadioButton.Checked = !Today_RadioButton.Checked;
-        private void Yesterday_Label_Click(object sender, EventArgs e) => Yesterday_RadioButton.Checked = !Yesterday_RadioButton.Checked;
-        private void Last7Days_Label_Click(object sender, EventArgs e) => Last7Days_RadioButton.Checked = !Last7Days_RadioButton.Checked;
-        private void Last30Days_Label_Click(object sender, EventArgs e) => Last30Days_RadioButton.Checked = !Last30Days_RadioButton.Checked;
-        private void ThisMonth_Label_Click(object sender, EventArgs e) => ThisMonth_RadioButton.Checked = !ThisMonth_RadioButton.Checked;
-        private void LastMonth_Label_Click(object sender, EventArgs e) => LastMonth_RadioButton.Checked = !LastMonth_RadioButton.Checked;
-        private void ThisQuarter_Label_Click(object sender, EventArgs e) => ThisQuarter_RadioButton.Checked = !ThisQuarter_RadioButton.Checked;
-        private void LastQuarter_Label_Click(object sender, EventArgs e) => LastQuarter_RadioButton.Checked = !LastQuarter_RadioButton.Checked;
-        private void YearToDate_Label_Click(object sender, EventArgs e) => YearToDate_RadioButton.Checked = !YearToDate_RadioButton.Checked;
-        private void LastYear_Label_Click(object sender, EventArgs e) => LastYear_RadioButton.Checked = !LastYear_RadioButton.Checked;
-        private void AllTime_Label_Click(object sender, EventArgs e) => AllTime_RadioButton.Checked = !AllTime_RadioButton.Checked;
-        private void Custom_Label_Click(object sender, EventArgs e) => Custom_RadioButton.Checked = !Custom_RadioButton.Checked;
 
         // Event handler helper methods
         private static DateTime GetEarliestTransactionDate()

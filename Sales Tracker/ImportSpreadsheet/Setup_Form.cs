@@ -3,6 +3,9 @@ using Sales_Tracker.Theme;
 
 namespace Sales_Tracker.ImportSpreadsheet
 {
+    /// <summary>
+    /// Setup form for importing spreadsheet data.
+    /// </summary>
     public partial class Setup_Form : BaseForm
     {
         // Properties

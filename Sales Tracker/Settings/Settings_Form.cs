@@ -7,6 +7,9 @@ using Sales_Tracker.UI;
 
 namespace Sales_Tracker.Settings
 {
+    /// <summary>
+    /// Main settings form for application configuration.
+    /// </summary>
     public partial class Settings_Form : BaseForm
     {
         // Properties

@@ -5,6 +5,9 @@ using Sales_Tracker.UI;
 
 namespace Sales_Tracker.Passwords
 {
+    /// <summary>
+    /// Form for managing application password settings.
+    /// </summary>
     public partial class PasswordManager_Form : BaseForm
     {
         // Init.
@@ -12,17 +15,20 @@ namespace Sales_Tracker.Passwords
         {
             InitializeComponent();
 
-            AddEventHandlersToTextBoxes();
+            AddEventHandlers();
             Modify_RadioButton.Checked = true;
             ThemeManager.SetThemeForForm(this);
             LanguageManager.UpdateLanguageForControl(this);
             Message_Label.MaximumSize = new Size(ClientSize.Width - 40, 0);
             LoadingPanel.ShowBlankLoadingPanel(this);
         }
-        private void AddEventHandlersToTextBoxes()
+        private void AddEventHandlers()
         {
             TextBoxManager.Attach(false, CurrentPassword_TextBox);
             TextBoxManager.Attach(false, NewPassword_TextBox);
+
+            Modify_RadioButton.Click += (_, _) => Modify_RadioButton.Checked = true;
+            Remove_RadioButton.Click += (_, _) => Remove_RadioButton.Checked = true;
         }
 
         // Form event handlers
@@ -99,14 +105,6 @@ namespace Sales_Tracker.Passwords
                 CustomMessageBox.Show("Password removed", "Password removed successfully.", CustomMessageBoxIcon.Success, CustomMessageBoxButtons.Ok);
                 Close();
             }
-        }
-        private void Modify_Label_Click(object sender, EventArgs e)
-        {
-            Modify_RadioButton.Checked = !Modify_RadioButton.Checked;
-        }
-        private void Remove_Label_Click(object sender, EventArgs e)
-        {
-            Remove_RadioButton.Checked = !Remove_RadioButton.Checked;
         }
 
         // Methods

@@ -7,6 +7,9 @@ using Sales_Tracker.UI;
 
 namespace Sales_Tracker.LostProduct
 {
+    /// <summary>
+    /// Form for marking products as lost or damaged.
+    /// </summary>
     public partial class MarkProductAsLost_Form : BaseForm
     {
         // Properties

@@ -8,6 +8,9 @@ using Sales_Tracker.UI;
 
 namespace Sales_Tracker
 {
+    /// <summary>
+    /// Custom message box form for displaying dialogs and user prompts.
+    /// </summary>
     public partial class CustomMessage_Form : BaseForm
     {
         // Getter

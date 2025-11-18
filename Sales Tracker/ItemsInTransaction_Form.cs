@@ -8,6 +8,9 @@ using System.Text;
 
 namespace Sales_Tracker
 {
+    /// <summary>
+    /// Form for viewing and managing items within a transaction.
+    /// </summary>
     public partial class ItemsInTransaction_Form : BaseForm
     {
         // Properties

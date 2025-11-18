@@ -8,6 +8,9 @@ using Sales_Tracker.UI;
 
 namespace Sales_Tracker.Settings.Menus
 {
+    /// <summary>
+    /// Security settings form for password and encryption configuration.
+    /// </summary>
     public partial class Security_Form : BaseForm
     {
         // Properties

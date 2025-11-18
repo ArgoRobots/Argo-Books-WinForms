@@ -8,6 +8,9 @@ using Sales_Tracker.UI;
 
 namespace Sales_Tracker
 {
+    /// <summary>
+    /// Form for modifying transaction row data.
+    /// </summary>
     public partial class ModifyRow_Form : BaseForm
     {
         // Properties

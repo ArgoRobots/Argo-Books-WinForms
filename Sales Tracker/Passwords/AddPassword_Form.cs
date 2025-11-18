@@ -7,6 +7,9 @@ using Sales_Tracker.UI;
 
 namespace Sales_Tracker.Passwords
 {
+    /// <summary>
+    /// Form for adding a new password to the application.
+    /// </summary>
     public partial class AddPassword_Form : BaseForm
     {
         // Init.

@@ -1,3 +1,5 @@
+using Sales_Tracker.Rentals;
+
 namespace Sales_Tracker.DataClasses
 {
     /// <summary>

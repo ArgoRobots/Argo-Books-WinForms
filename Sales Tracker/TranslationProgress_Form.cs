@@ -4,6 +4,9 @@ using Timer = System.Windows.Forms.Timer;
 
 namespace Sales_Tracker
 {
+    /// <summary>
+    /// Form showing progress of language translation operations.
+    /// </summary>
     public partial class TranslationProgress_Form : Form
     {
         // Properties

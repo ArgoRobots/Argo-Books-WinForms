@@ -11,6 +11,9 @@ using System.Diagnostics;
 
 namespace Sales_Tracker
 {
+    /// <summary>
+    /// Form for exporting company data and creating backups.
+    /// </summary>
     public partial class Export_Form : BaseForm
     {
         // Properties

@@ -10,6 +10,9 @@ using Windows.Security.Credentials;
 
 namespace Sales_Tracker.Passwords
 {
+    /// <summary>
+    /// Form for entering password authentication.
+    /// </summary>
     public partial class EnterPassword_Form : BaseForm
     {
         // Properties

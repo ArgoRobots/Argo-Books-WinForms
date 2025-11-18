@@ -7,6 +7,9 @@ using Sales_Tracker.UI;
 
 namespace Sales_Tracker.LostProduct
 {
+    /// <summary>
+    /// Form for undoing a product loss transaction.
+    /// </summary>
     public partial class UndoLoss_Form : BaseForm
     {
         // Properties

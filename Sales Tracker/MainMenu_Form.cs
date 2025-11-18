@@ -13,6 +13,7 @@ using Sales_Tracker.GridView;
 using Sales_Tracker.Language;
 using Sales_Tracker.LostProduct;
 using Sales_Tracker.Properties;
+using Sales_Tracker.Rentals;
 using Sales_Tracker.ReportGenerator;
 using Sales_Tracker.ReturnProduct;
 using Sales_Tracker.Startup.Menus;
@@ -23,6 +24,9 @@ using Timer = System.Windows.Forms.Timer;
 
 namespace Sales_Tracker
 {
+    /// <summary>
+    /// Main application form displaying transactions, charts, and analytics.
+    /// </summary>
     public partial class MainMenu_Form : BaseForm
     {
         // Admin mode can only be enabled by directly setting it to true here
@@ -159,6 +163,7 @@ namespace Sales_Tracker
         {
             CategoryPurchaseList.Clear();
             CategorySaleList.Clear();
+            CategoryRentalList.Clear();
             AccountantList.Clear();
             CompanyList.Clear();
             Purchase_DataGridView.Rows.Clear();
@@ -207,6 +212,7 @@ namespace Sales_Tracker
         {
             LoadCategoriesFromFile(Directories.CategoryPurchases_file, CategoryPurchaseList);
             LoadCategoriesFromFile(Directories.CategorySales_file, CategorySaleList);
+            LoadCategoriesFromFile(Directories.CategoryRentals_file, CategoryRentalList);
 
             AccountantList = Directories.ReadAllLinesInFile(Directories.Accountants_file).ToList();
             CompanyList = Directories.ReadAllLinesInFile(Directories.Companies_file).ToList();
@@ -1823,14 +1829,6 @@ namespace Sales_Tracker
         public List<Customer> CustomerList { get; private set; } = [];
 
         // List methods
-        public List<string> GetCategorySaleNames()
-        {
-            return CategorySaleList.Select(s => s.Name).ToList();
-        }
-        public List<string> GetCategoryPurchaseNames()
-        {
-            return CategoryPurchaseList.Select(p => p.Name).ToList();
-        }
         public static void AddProductToCategoryByName(List<Category> categoryList, string categoryName, Product product)
         {
             foreach (Category category in categoryList)
@@ -2005,13 +2003,14 @@ namespace Sales_Tracker
             {
                 Accountants_Form => SelectedOption.Accountants,
                 Companies_Form => SelectedOption.Companies,
-                Categories_Form => Categories_Form.Instance.Purchase_RadioButton.Checked ? SelectedOption.CategoryPurchases : SelectedOption.CategorySales,
+                Categories_Form => Categories_Form.Instance.Purchase_RadioButton.Checked ? SelectedOption.CategoryPurchases :
+                                   Categories_Form.Instance.Rent_RadioButton.Checked ? SelectedOption.CategoryRentals : SelectedOption.CategorySales,
                 Products_Form => Products_Form.Instance.Purchase_RadioButton.Checked ? SelectedOption.ProductPurchases : SelectedOption.ProductSales,
                 Receipts_Form => SelectedOption.Receipts,
                 ItemsInTransaction_Form => IsButtonSelected(Purchases_Button) ? SelectedOption.ItemsInPurchase : SelectedOption.ItemsInSale,
                 Customers_Form => SelectedOption.Customers,
                 AddCustomer_Form => SelectedOption.Customers,
-                AddRentalItem_Form => SelectedOption.Rentals,
+                Rentals_Form => SelectedOption.Rentals,
                 _ => GetButtonBasedOption()
             };
         }
@@ -2044,6 +2043,7 @@ namespace Sales_Tracker
             ProductSales,
             CategoryPurchases,
             CategorySales,
+            CategoryRentals,
             Accountants,
             Receipts,
             Companies,
@@ -2361,6 +2361,10 @@ namespace Sales_Tracker
             if (option == SelectedOption.CategoryPurchases || option == SelectedOption.ProductPurchases)
             {
                 categoryList = CategoryPurchaseList;
+            }
+            else if (option == SelectedOption.CategoryRentals)
+            {
+                categoryList = CategoryRentalList;
             }
             else
             {

@@ -9,6 +9,9 @@ using Timer = System.Windows.Forms.Timer;
 
 namespace Sales_Tracker
 {
+    /// <summary>
+    /// Form for viewing and previewing receipt images and PDFs.
+    /// </summary>
     public partial class ReceiptViewer_Form : BaseForm
     {
         // Properties

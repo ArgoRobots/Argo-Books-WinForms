@@ -3,6 +3,9 @@ using Sales_Tracker.UI;
 
 namespace Sales_Tracker
 {
+    /// <summary>
+    /// Loading screen form displayed during long-running operations.
+    /// </summary>
     public partial class Loading_Form : Form
     {
         // Static members to track form instance and operations

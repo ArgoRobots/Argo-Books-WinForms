@@ -7,6 +7,9 @@ using Sales_Tracker.UI;
 
 namespace Sales_Tracker
 {
+    /// <summary>
+    /// Form for selecting date range filters for transaction data.
+    /// </summary>
     public partial class DateRange_Form : BaseForm
     {
         // Properties
@@ -25,6 +28,7 @@ namespace Sales_Tracker
             UpdateTheme();
             SetAccessibleDescriptions();
             InitializeTimeSpanOptions();
+            AddEventHandlers();
             LanguageManager.UpdateLanguageForControl(this);
             AdjustLabels();
 
@@ -61,6 +65,21 @@ namespace Sales_Tracker
                 { TimeSpan.FromDays(365 * 2), Last2Years_RadioButton },
                 { TimeSpan.FromDays(365 * 5), Last5Years_RadioButton }
             };
+        }
+        private void AddEventHandlers()
+        {
+            AllTime_RadioButton.Click += (_, _) => AllTime_RadioButton.Checked = true;
+            Last24Hours_RadioButton.Click += (_, _) => Last24Hours_RadioButton.Checked = true;
+            Last48Hours_RadioButton.Click += (_, _) => Last48Hours_RadioButton.Checked = true;
+            Last3Days_RadioButton.Click += (_, _) => Last3Days_RadioButton.Checked = true;
+            Last5Days_RadioButton.Click += (_, _) => Last5Days_RadioButton.Checked = true;
+            Last10Days_RadioButton.Click += (_, _) => Last10Days_RadioButton.Checked = true;
+            Last30Days_RadioButton.Click += (_, _) => Last30Days_RadioButton.Checked = true;
+            Last100Days_RadioButton.Click += (_, _) => Last100Days_RadioButton.Checked = true;
+            LastYear_RadioButton.Click += (_, _) => LastYear_RadioButton.Checked = true;
+            Last2Years_RadioButton.Click += (_, _) => Last2Years_RadioButton.Checked = true;
+            Last5Years_RadioButton.Click += (_, _) => Last5Years_RadioButton.Checked = true;
+            Custom_RadioButton.Click += (_, _) => Custom_RadioButton.Checked = true;
         }
         public void AdjustLabels()
         {
@@ -146,56 +165,6 @@ namespace Sales_Tracker
         private void Custom_RadioButton_CheckedChanged(object sender, EventArgs e)
         {
             SetCustomRangeControls();
-        }
-
-        // Label event handlers
-        private void AllTime_Label_Click(object sender, EventArgs e)
-        {
-            AllTime_RadioButton.Checked = !AllTime_RadioButton.Checked;
-        }
-        private void Last24Hours_Label_Click(object sender, EventArgs e)
-        {
-            Last24Hours_RadioButton.Checked = !Last24Hours_RadioButton.Checked;
-        }
-        private void Last48Hours_Label_Click(object sender, EventArgs e)
-        {
-            Last48Hours_RadioButton.Checked = !Last48Hours_RadioButton.Checked;
-        }
-        private void Last3Days_Label_Click(object sender, EventArgs e)
-        {
-            Last3Days_RadioButton.Checked = !Last3Days_RadioButton.Checked;
-        }
-        private void Last5Days_Label_Click(object sender, EventArgs e)
-        {
-            Last5Days_RadioButton.Checked = !Last5Days_RadioButton.Checked;
-        }
-        private void Last10Days_Label_Click(object sender, EventArgs e)
-        {
-            Last10Days_RadioButton.Checked = !Last10Days_RadioButton.Checked;
-        }
-        private void Last30Days_Label_Click(object sender, EventArgs e)
-        {
-            Last30Days_RadioButton.Checked = !Last30Days_RadioButton.Checked;
-        }
-        private void Last100Days_Label_Click(object sender, EventArgs e)
-        {
-            Last100Days_RadioButton.Checked = !Last100Days_RadioButton.Checked;
-        }
-        private void LastYear_Label_Click(object sender, EventArgs e)
-        {
-            LastYear_RadioButton.Checked = !LastYear_RadioButton.Checked;
-        }
-        private void Last2Years_Label_Click(object sender, EventArgs e)
-        {
-            Last2Years_RadioButton.Checked = !Last2Years_RadioButton.Checked;
-        }
-        private void Last5Years_Label_Click(object sender, EventArgs e)
-        {
-            Last5Years_RadioButton.Checked = !Last5Years_RadioButton.Checked;
-        }
-        private void Custom_Label_Click(object sender, EventArgs e)
-        {
-            Custom_RadioButton.Checked = !Custom_RadioButton.Checked;
         }
 
         // DateTimePicker methods

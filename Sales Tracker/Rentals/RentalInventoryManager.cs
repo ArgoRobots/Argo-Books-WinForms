@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
-using Sales_Tracker.DataClasses;
+using Sales_Tracker.Classes;
 
-namespace Sales_Tracker.Classes
+namespace Sales_Tracker.Rentals
 {
     /// <summary>
     /// Manages rental inventory operations including tracking availability and quantities.

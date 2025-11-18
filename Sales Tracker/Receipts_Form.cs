@@ -9,6 +9,9 @@ using System.ComponentModel;
 
 namespace Sales_Tracker
 {
+    /// <summary>
+    /// Form for managing transaction receipts.
+    /// </summary>
     public partial class Receipts_Form : BaseForm
     {
         // Properties

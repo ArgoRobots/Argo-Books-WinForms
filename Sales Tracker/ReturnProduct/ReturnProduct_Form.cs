@@ -7,6 +7,9 @@ using Sales_Tracker.UI;
 
 namespace Sales_Tracker.ReturnProduct
 {
+    /// <summary>
+    /// Form for processing product return transactions.
+    /// </summary>
     public partial class ReturnProduct_Form : BaseForm
     {
         // Properties

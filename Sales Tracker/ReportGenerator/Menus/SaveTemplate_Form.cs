@@ -23,9 +23,15 @@ namespace Sales_Tracker.ReportGenerator.Menus
             InitializeComponent();
 
             UpdateTheme();
+            AddEventHandlers();
             TextBoxManager.Attach(TemplateName_TextBox);
             LanguageManager.UpdateLanguageForControl(this);
             LoadingPanel.ShowBlankLoadingPanel(this);
+        }
+        private void AddEventHandlers()
+        {
+            UpdateExisting_RadioButton.Click += (_, _) => UpdateExisting_RadioButton.Checked = true;
+            SaveAsNew_RadioButton.Click += (_, _) => SaveAsNew_RadioButton.Checked = true;
         }
         private void UpdateTheme()
         {
@@ -199,14 +205,6 @@ namespace Sales_Tracker.ReportGenerator.Menus
                 e.SuppressKeyPress = true;
                 Save_Button_Click(sender, e);
             }
-        }
-        private void UpdateExisting_Label_Click(object sender, EventArgs e)
-        {
-            UpdateExisting_RadioButton.Checked = !UpdateExisting_RadioButton.Checked;
-        }
-        private void SaveAsNew_Label_Click(object sender, EventArgs e)
-        {
-            SaveAsNew_RadioButton.Checked = !SaveAsNew_RadioButton.Checked;
         }
     }
 }

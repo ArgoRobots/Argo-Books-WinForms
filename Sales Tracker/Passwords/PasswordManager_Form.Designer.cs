@@ -220,7 +220,6 @@
             Modify_Label.Size = new Size(96, 41);
             Modify_Label.TabIndex = 70;
             Modify_Label.Text = "Modify";
-            Modify_Label.Click += Modify_Label_Click;
             // 
             // Remove_RadioButton
             // 
@@ -252,7 +251,6 @@
             Remove_Label.Size = new Size(105, 41);
             Remove_Label.TabIndex = 72;
             Remove_Label.Text = "Remove";
-            Remove_Label.Click += Remove_Label_Click;
             // 
             // PasswordManager_Form
             // 

@@ -8,6 +8,9 @@ using Sales_Tracker.UI;
 
 namespace Sales_Tracker.Settings.Menus
 {
+    /// <summary>
+    /// General settings form for application preferences.
+    /// </summary>
     public partial class General_Form : Form
     {
         // Properties

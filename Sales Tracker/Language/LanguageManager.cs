@@ -308,6 +308,11 @@ namespace Sales_Tracker.Language
                 Products_Form.Instance.BeginInvoke(new Action(Products_Form.Instance.AdjustRadioButtonPositions));
             }
 
+            if (Tools.IsFormOpen<Categories_Form>())
+            {
+                Categories_Form.Instance.BeginInvoke(new Action(Categories_Form.Instance.AdjustRadioButtonPositions));
+            }
+
             if (Tools.IsFormOpen<AddPurchase_Form>())
             {
                 AddPurchase_Form.Instance.BeginInvoke(new Action(AddPurchase_Form.Instance.RecalculateMultipleItemsLayout));

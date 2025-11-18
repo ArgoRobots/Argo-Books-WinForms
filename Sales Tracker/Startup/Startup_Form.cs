@@ -5,6 +5,9 @@ using Sales_Tracker.UI;
 
 namespace Sales_Tracker.Startup
 {
+    /// <summary>
+    /// Initial startup form for company selection and configuration.
+    /// </summary>
     public partial class Startup_Form : BaseForm
     {
         // Properties
