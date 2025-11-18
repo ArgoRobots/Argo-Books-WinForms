@@ -255,7 +255,7 @@ namespace Sales_Tracker.GridView
             };
 
             // Check if any selected categories already exist in the target list
-            List<string> duplicateCategories = new();
+            List<string> duplicateCategories = [];
             foreach (DataGridViewRow row in rowsToMove)
             {
                 string categoryName = row.Cells[0].Value.ToString();
@@ -283,7 +283,7 @@ namespace Sales_Tracker.GridView
                     CustomMessageBox.ShowWithFormat(
                         "Cannot move category",
                         "The category '{0}' already exists in {1}.",
-                        CustomMessageBoxIcon.Error,
+                        CustomMessageBoxIcon.Warning,
                         CustomMessageBoxButtons.Ok,
                         duplicateCategories[0], targetName);
                 }
@@ -293,7 +293,7 @@ namespace Sales_Tracker.GridView
                     CustomMessageBox.ShowWithFormat(
                         "Cannot move categories",
                         "The following categories already exist in {0}:\n\n• {1}",
-                        CustomMessageBoxIcon.Error,
+                        CustomMessageBoxIcon.Warning,
                         CustomMessageBoxButtons.Ok,
                         targetName, categoriesList);
                 }
@@ -751,6 +751,7 @@ namespace Sales_Tracker.GridView
 
                     case MainMenu_Form.SelectedOption.CategoryPurchases:
                     case MainMenu_Form.SelectedOption.CategorySales:
+                    case MainMenu_Form.SelectedOption.CategoryRentals:
                         itemType = "the category";
                         identifier = grid.SelectedRows[0].Cells[Categories_Form.Column.CategoryName.ToString()].Value?.ToString() ?? "Unknown";
                         break;
@@ -798,7 +799,7 @@ namespace Sales_Tracker.GridView
                 {
                     MainMenu_Form.SelectedOption.Accountants => "accountants",
                     MainMenu_Form.SelectedOption.Companies => "companies",
-                    MainMenu_Form.SelectedOption.CategoryPurchases or MainMenu_Form.SelectedOption.CategorySales => "categories",
+                    MainMenu_Form.SelectedOption.CategoryPurchases or MainMenu_Form.SelectedOption.CategorySales or MainMenu_Form.SelectedOption.CategoryRentals => "categories",
                     MainMenu_Form.SelectedOption.ProductPurchases or MainMenu_Form.SelectedOption.ProductSales => "products",
                     MainMenu_Form.SelectedOption.Customers => "customers",
                     MainMenu_Form.SelectedOption.Purchases or MainMenu_Form.SelectedOption.Sales => "transactions",

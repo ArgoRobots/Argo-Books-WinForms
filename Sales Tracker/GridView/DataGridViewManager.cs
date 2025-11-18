@@ -112,11 +112,9 @@ namespace Sales_Tracker.GridView
                     break;
 
                 case MainMenu_Form.SelectedOption.CategoryPurchases:
-                    HandleCategoryPurchasesDeletion(e);
-                    break;
-
                 case MainMenu_Form.SelectedOption.CategorySales:
-                    HandleCategorySalesDeletion(e);
+                case MainMenu_Form.SelectedOption.CategoryRentals:
+                    HandleCategoryDeletion(e);
                     break;
 
                 case MainMenu_Form.SelectedOption.Accountants:
@@ -416,43 +414,39 @@ namespace Sales_Tracker.GridView
             string message = $"Deleted {type} '{valueBeingRemoved}'";
             CustomMessage_Form.AddThingThatHasChangedAndLogMessage(MainMenu_Form.ThingsThatHaveChangedInFile, 2, message);
         }
-        private static void HandleCategoryPurchasesDeletion(DataGridViewRowCancelEventArgs e)
+        private static void HandleCategoryDeletion(DataGridViewRowCancelEventArgs e)
         {
             string type = "category";
             string columnName = Categories_Form.Column.CategoryName.ToString();
             string valueBeingRemoved = e.Row.Cells[columnName].Value?.ToString();
 
-            if (!CanCategoryBeMovedOrDeleted(valueBeingRemoved, MainMenu_Form.Instance.CategoryPurchaseList, _deleteAction))
+            List<Category>? categoryList = MainMenu_Form.Instance.Selected switch
+            {
+                MainMenu_Form.SelectedOption.CategoryPurchases => MainMenu_Form.Instance.CategoryPurchaseList,
+                MainMenu_Form.SelectedOption.CategorySales => MainMenu_Form.Instance.CategorySaleList,
+                MainMenu_Form.SelectedOption.CategoryRentals => MainMenu_Form.Instance.CategoryRentalList,
+                _ => null
+            };
+
+            if (categoryList == null)
+            {
+                CustomMessageBox.Show(
+                   "Cannot delete category",
+                   "Failed to delete the category",
+                   CustomMessageBoxIcon.Error,
+                   CustomMessageBoxButtons.Ok);
+                e.Cancel = true;
+                return;
+            }
+
+            if (!CanCategoryBeMovedOrDeleted(valueBeingRemoved, categoryList, _deleteAction))
             {
                 e.Cancel = true;
                 return;
             }
 
             // Remove category from list
-            MainMenu_Form.Instance.CategoryPurchaseList.Remove(
-                MainMenu_Form.Instance.CategoryPurchaseList.FirstOrDefault(c => c.Name == valueBeingRemoved));
-
-            // In case the category name that is being deleted is in the TextBox
-            Categories_Form.Instance.VaidateCategoryTextBox();
-
-            string message = $"Deleted {type} '{valueBeingRemoved}'";
-            CustomMessage_Form.AddThingThatHasChangedAndLogMessage(MainMenu_Form.ThingsThatHaveChangedInFile, 2, message);
-        }
-        private static void HandleCategorySalesDeletion(DataGridViewRowCancelEventArgs e)
-        {
-            string type = "category";
-            string columnName = Categories_Form.Column.CategoryName.ToString();
-            string valueBeingRemoved = e.Row.Cells[columnName].Value?.ToString();
-
-            if (!CanCategoryBeMovedOrDeleted(valueBeingRemoved, MainMenu_Form.Instance.CategorySaleList, _deleteAction))
-            {
-                e.Cancel = true;
-                return;
-            }
-
-            // Remove category from list
-            MainMenu_Form.Instance.CategorySaleList.Remove(
-                MainMenu_Form.Instance.CategorySaleList.FirstOrDefault(c => c.Name == valueBeingRemoved));
+            categoryList.Remove(categoryList.FirstOrDefault(c => c.Name == valueBeingRemoved));
 
             // In case the category name that is being deleted is in the TextBox
             Categories_Form.Instance.VaidateCategoryTextBox();
