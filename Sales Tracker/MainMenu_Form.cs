@@ -1825,14 +1825,6 @@ namespace Sales_Tracker
         public List<Customer> CustomerList { get; private set; } = [];
 
         // List methods
-        public List<string> GetCategorySaleNames()
-        {
-            return CategorySaleList.Select(s => s.Name).ToList();
-        }
-        public List<string> GetCategoryPurchaseNames()
-        {
-            return CategoryPurchaseList.Select(p => p.Name).ToList();
-        }
         public static void AddProductToCategoryByName(List<Category> categoryList, string categoryName, Product product)
         {
             foreach (Category category in categoryList)

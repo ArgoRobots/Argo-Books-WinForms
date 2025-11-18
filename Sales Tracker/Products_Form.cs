@@ -87,16 +87,25 @@ namespace Sales_Tracker
             int searchBoxMaxHeight = 300;
 
             SearchBox.Attach(ProductCategory_TextBox, this, GetSearchResultsForCategory, searchBoxMaxHeight, false, false, true, true);
-
             SearchBox.Attach(CountryOfOrigin_TextBox, this, () => Country.CountrySearchResults, searchBoxMaxHeight, false, true, true, false);
-
             SearchBox.Attach(CompanyOfOrigin_TextBox, this, GetSearchResultsForCompany, searchBoxMaxHeight, false, false, true, true);
         }
         private List<SearchResult> GetSearchResultsForCategory()
         {
-            List<string> categoryNames = Sale_RadioButton.Checked
-                ? MainMenu_Form.Instance.GetCategorySaleNames()
-                : MainMenu_Form.Instance.GetCategoryPurchaseNames();
+            List<string> categoryNames;
+
+            if (Purchase_RadioButton.Checked)
+            {
+                categoryNames = MainMenu_Form.Instance.CategoryPurchaseList.Select(p => p.Name).ToList();
+            }
+            else if (Sale_RadioButton.Checked)
+            {
+                categoryNames = MainMenu_Form.Instance.CategorySaleList.Select(s => s.Name).ToList();
+            }
+            else
+            {
+                categoryNames = MainMenu_Form.Instance.CategoryRentalList.Select(s => s.Name).ToList();
+            }
 
             return SearchBox.ConvertToSearchResults(categoryNames);
         }
