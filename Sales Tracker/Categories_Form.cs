@@ -135,15 +135,15 @@ namespace Sales_Tracker
                 MainMenu_Form.Instance.CategoryPurchaseList.Add(new Category(name));
                 newRowIndex = Purchase_DataGridView.Rows.Add(name);
             }
-            else if (Rent_RadioButton.Checked)
-            {
-                MainMenu_Form.Instance.CategoryRentalList.Add(new Category(name));
-                newRowIndex = Rent_DataGridView.Rows.Add(name);
-            }
-            else
+            else if (Sale_RadioButton.Checked)
             {
                 MainMenu_Form.Instance.CategorySaleList.Add(new Category(name));
                 newRowIndex = Sale_DataGridView.Rows.Add(name);
+            }
+            else
+            {
+                MainMenu_Form.Instance.CategoryRentalList.Add(new Category(name));
+                newRowIndex = Rent_DataGridView.Rows.Add(name);
             }
 
             DataGridViewManager.DataGridViewRowsAdded(selectedDataGridView, new DataGridViewRowsAddedEventArgs(newRowIndex, 1));

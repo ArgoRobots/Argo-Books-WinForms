@@ -59,9 +59,6 @@ namespace Sales_Tracker.Encryption
                     footer.Accountants = ExtractAccountants(accountantsLine, isEncrypted);
                 }
 
-                Log.WriteWithFormat(1, "Successfully read footer - Version: {0}, Accountants: {1}, Encrypted: {2}",
-                    footer.Version ?? "None", footer.Accountants.Count, footer.IsEncrypted);
-
                 return footer;
             }
             catch (Exception ex)

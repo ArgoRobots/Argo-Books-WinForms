@@ -68,7 +68,7 @@ namespace Sales_Tracker.Classes
             Purchases_file = TempCompany_dir + "purchases" + ArgoFiles.TxtFileExtension;
             Sales_file = TempCompany_dir + "sales" + ArgoFiles.TxtFileExtension;
             RentalInventory_file = TempCompany_dir + "rentalInventory" + ArgoFiles.TxtFileExtension;
-            Rentals_file = TempCompany_dir + "rental" + ArgoFiles.TxtFileExtension;
+            Rentals_file = TempCompany_dir + "rentals" + ArgoFiles.TxtFileExtension;
             CategoryPurchases_file = TempCompany_dir + "categoryPurchases" + ArgoFiles.JsonFileExtension;
             CategorySales_file = TempCompany_dir + "categorySales" + ArgoFiles.JsonFileExtension;
             CategoryRentals_file = TempCompany_dir + "categoryRentals" + ArgoFiles.JsonFileExtension;

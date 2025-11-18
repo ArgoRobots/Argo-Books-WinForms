@@ -48,7 +48,6 @@ namespace Sales_Tracker.Theme
                             _watcher.RegChanged += OnWindowsThemeChanged;
                             _watcher.Start();
                             _isListeningForThemeChanges = true;
-                            Log.Write(1, "Started listening for Windows theme changes");
                         }
                     }
                 }

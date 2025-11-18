@@ -177,8 +177,11 @@ namespace Sales_Tracker.GridView
                 MainMenu_Form.Instance.LoadOrRefreshMainCharts();
                 MainMenu_Form.SaveDataGridViewToFileAsJson(dataGridView, selected);
             }
-            else if (selected is MainMenu_Form.SelectedOption.CategoryPurchases or MainMenu_Form.SelectedOption.CategorySales or
-               MainMenu_Form.SelectedOption.ProductPurchases or MainMenu_Form.SelectedOption.ProductSales)
+            else if (selected is MainMenu_Form.SelectedOption.CategoryPurchases or
+                MainMenu_Form.SelectedOption.CategorySales or
+                MainMenu_Form.SelectedOption.CategoryRentals or
+                MainMenu_Form.SelectedOption.ProductPurchases or
+                MainMenu_Form.SelectedOption.ProductSales)
             {
                 MainMenu_Form.Instance.SaveCategoriesToFile(selected);
             }
