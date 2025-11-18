@@ -701,13 +701,16 @@ namespace Sales_Tracker.GridView
                 flowPanel.Controls.SetChildIndex(RightClickDataGridViewRowMenu.Modify_Button, currentIndex++);
             }
 
-            // Add Move_Button
+            // Add Move_Button and MoveTo_Button for categories
             if (selectedOption == MainMenu_Form.SelectedOption.CategoryPurchases)
             {
                 string text = LanguageManager.TranslateString("Move category to sales");
                 RightClickDataGridViewRowMenu.Move_Button.Visible = true;
                 RightClickDataGridViewRowMenu.Move_Button.Text = text;
                 flowPanel.Controls.SetChildIndex(RightClickDataGridViewRowMenu.Move_Button, currentIndex++);
+
+                RightClickDataGridViewRowMenu.MoveTo_Button.Visible = true;
+                flowPanel.Controls.SetChildIndex(RightClickDataGridViewRowMenu.MoveTo_Button, currentIndex++);
             }
             else if (selectedOption == MainMenu_Form.SelectedOption.CategorySales)
             {
@@ -715,6 +718,19 @@ namespace Sales_Tracker.GridView
                 RightClickDataGridViewRowMenu.Move_Button.Visible = true;
                 RightClickDataGridViewRowMenu.Move_Button.Text = text;
                 flowPanel.Controls.SetChildIndex(RightClickDataGridViewRowMenu.Move_Button, currentIndex++);
+
+                RightClickDataGridViewRowMenu.MoveTo_Button.Visible = true;
+                flowPanel.Controls.SetChildIndex(RightClickDataGridViewRowMenu.MoveTo_Button, currentIndex++);
+            }
+            else if (selectedOption == MainMenu_Form.SelectedOption.CategoryRentals)
+            {
+                string text = LanguageManager.TranslateString("Move category to purchases");
+                RightClickDataGridViewRowMenu.Move_Button.Visible = true;
+                RightClickDataGridViewRowMenu.Move_Button.Text = text;
+                flowPanel.Controls.SetChildIndex(RightClickDataGridViewRowMenu.Move_Button, currentIndex++);
+
+                RightClickDataGridViewRowMenu.MoveTo_Button.Visible = true;
+                flowPanel.Controls.SetChildIndex(RightClickDataGridViewRowMenu.MoveTo_Button, currentIndex++);
             }
 
             if (isPurchasesOrSales)

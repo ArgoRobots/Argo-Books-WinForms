@@ -14,7 +14,9 @@ namespace Sales_Tracker.GridView
         private enum CategoryMoveDirection
         {
             PurchaseToSale,
+            PurchaseToRental,
             SaleToPurchase,
+            SaleToRental,
             RentalToPurchase,
             RentalToSale
         }
@@ -23,6 +25,7 @@ namespace Sales_Tracker.GridView
         public static Guna2Panel Panel { get; private set; }
         public static Guna2Button Modify_Button { get; private set; }
         public static Guna2Button Move_Button { get; private set; }
+        public static Guna2Button MoveTo_Button { get; private set; }
         public static Guna2Button ViewReceipt_Button { get; private set; }
         public static Guna2Button ExportReceipt_Button { get; private set; }
         public static Guna2Button ShowItems_Button { get; private set; }
@@ -50,6 +53,9 @@ namespace Sales_Tracker.GridView
 
             Move_Button = CustomControls.ConstructBtnForMenu("Move", CustomControls.PanelBtnWidth, flowPanel);
             Move_Button.Click += MoveRows;
+
+            MoveTo_Button = CustomControls.ConstructBtnForMenu("Move to...", CustomControls.PanelBtnWidth, flowPanel);
+            MoveTo_Button.Click += MoveRowsTo;
 
             ViewReceipt_Button = CustomControls.ConstructBtnForMenu("View receipt", CustomControls.PanelBtnWidth, flowPanel);
             ViewReceipt_Button.Click += ViewReceipt;
@@ -100,7 +106,7 @@ namespace Sales_Tracker.GridView
             int scrollPosition = grid.FirstDisplayedScrollingRowIndex;
             int firstSelectedIndex = selectedRows[0].Index;
 
-            // Move rows based on current selection
+            // Move rows based on current selection (default direction)
             if (MainMenu_Form.Instance.Selected == MainMenu_Form.SelectedOption.CategoryPurchases)
             {
                 MoveCategoryRows(selectedRows, CategoryMoveDirection.PurchaseToSale);
@@ -111,24 +117,79 @@ namespace Sales_Tracker.GridView
             }
             else if (MainMenu_Form.Instance.Selected == MainMenu_Form.SelectedOption.CategoryRentals)
             {
-                // Ask user where to move rental categories
+                MoveCategoryRows(selectedRows, CategoryMoveDirection.RentalToPurchase);
+            }
+
+            RestoreSelectionAndScroll(grid, firstSelectedIndex, scrollPosition);
+        }
+        private static void MoveRowsTo(object sender, EventArgs e)
+        {
+            Guna2DataGridView grid = (Guna2DataGridView)Panel.Tag;
+            List<DataGridViewRow> selectedRows = grid.SelectedRows.Cast<DataGridViewRow>().ToList();
+            if (selectedRows.Count == 0) { return; }
+
+            // Save scroll position
+            int scrollPosition = grid.FirstDisplayedScrollingRowIndex;
+            int firstSelectedIndex = selectedRows[0].Index;
+
+            // Ask user where to move categories based on current selection
+            CategoryMoveDirection? direction = null;
+
+            if (MainMenu_Form.Instance.Selected == MainMenu_Form.SelectedOption.CategoryPurchases)
+            {
                 CustomMessageBoxResult result = CustomMessageBox.Show(
                     "Move to",
-                    "Move selected rental categories to Purchases or Sales?",
+                    "Move selected categories to Sales or Rentals?",
                     CustomMessageBoxIcon.Question,
                     CustomMessageBoxButtons.YesNoCancel);
 
                 if (result == CustomMessageBoxResult.Yes)
                 {
-                    // Yes = Move to Purchases
-                    MoveCategoryRows(selectedRows, CategoryMoveDirection.RentalToPurchase);
+                    direction = CategoryMoveDirection.PurchaseToSale;
                 }
                 else if (result == CustomMessageBoxResult.No)
                 {
-                    // No = Move to Sales
-                    MoveCategoryRows(selectedRows, CategoryMoveDirection.RentalToSale);
+                    direction = CategoryMoveDirection.PurchaseToRental;
                 }
-                // Cancel = do nothing
+            }
+            else if (MainMenu_Form.Instance.Selected == MainMenu_Form.SelectedOption.CategorySales)
+            {
+                CustomMessageBoxResult result = CustomMessageBox.Show(
+                    "Move to",
+                    "Move selected categories to Purchases or Rentals?",
+                    CustomMessageBoxIcon.Question,
+                    CustomMessageBoxButtons.YesNoCancel);
+
+                if (result == CustomMessageBoxResult.Yes)
+                {
+                    direction = CategoryMoveDirection.SaleToPurchase;
+                }
+                else if (result == CustomMessageBoxResult.No)
+                {
+                    direction = CategoryMoveDirection.SaleToRental;
+                }
+            }
+            else if (MainMenu_Form.Instance.Selected == MainMenu_Form.SelectedOption.CategoryRentals)
+            {
+                CustomMessageBoxResult result = CustomMessageBox.Show(
+                    "Move to",
+                    "Move selected categories to Purchases or Sales?",
+                    CustomMessageBoxIcon.Question,
+                    CustomMessageBoxButtons.YesNoCancel);
+
+                if (result == CustomMessageBoxResult.Yes)
+                {
+                    direction = CategoryMoveDirection.RentalToPurchase;
+                }
+                else if (result == CustomMessageBoxResult.No)
+                {
+                    direction = CategoryMoveDirection.RentalToSale;
+                }
+            }
+
+            if (direction.HasValue)
+            {
+                MoveCategoryRows(selectedRows, direction.Value);
             }
 
             RestoreSelectionAndScroll(grid, firstSelectedIndex, scrollPosition);
@@ -196,7 +257,9 @@ namespace Sales_Tracker.GridView
             Guna2DataGridView sourceGrid = direction switch
             {
                 CategoryMoveDirection.PurchaseToSale => Categories_Form.Instance.Purchase_DataGridView,
+                CategoryMoveDirection.PurchaseToRental => Categories_Form.Instance.Purchase_DataGridView,
                 CategoryMoveDirection.SaleToPurchase => Categories_Form.Instance.Sale_DataGridView,
+                CategoryMoveDirection.SaleToRental => Categories_Form.Instance.Sale_DataGridView,
                 CategoryMoveDirection.RentalToPurchase => Categories_Form.Instance.Rent_DataGridView,
                 CategoryMoveDirection.RentalToSale => Categories_Form.Instance.Rent_DataGridView,
                 _ => null
@@ -205,7 +268,9 @@ namespace Sales_Tracker.GridView
             Guna2DataGridView targetGrid = direction switch
             {
                 CategoryMoveDirection.PurchaseToSale => Categories_Form.Instance.Sale_DataGridView,
+                CategoryMoveDirection.PurchaseToRental => Categories_Form.Instance.Rent_DataGridView,
                 CategoryMoveDirection.SaleToPurchase => Categories_Form.Instance.Purchase_DataGridView,
+                CategoryMoveDirection.SaleToRental => Categories_Form.Instance.Rent_DataGridView,
                 CategoryMoveDirection.RentalToPurchase => Categories_Form.Instance.Purchase_DataGridView,
                 CategoryMoveDirection.RentalToSale => Categories_Form.Instance.Sale_DataGridView,
                 _ => null
@@ -214,7 +279,9 @@ namespace Sales_Tracker.GridView
             List<Category> sourceList = direction switch
             {
                 CategoryMoveDirection.PurchaseToSale => MainMenu_Form.Instance.CategoryPurchaseList,
+                CategoryMoveDirection.PurchaseToRental => MainMenu_Form.Instance.CategoryPurchaseList,
                 CategoryMoveDirection.SaleToPurchase => MainMenu_Form.Instance.CategorySaleList,
+                CategoryMoveDirection.SaleToRental => MainMenu_Form.Instance.CategorySaleList,
                 CategoryMoveDirection.RentalToPurchase => MainMenu_Form.Instance.CategoryRentalList,
                 CategoryMoveDirection.RentalToSale => MainMenu_Form.Instance.CategoryRentalList,
                 _ => null
@@ -223,7 +290,9 @@ namespace Sales_Tracker.GridView
             List<Category> targetList = direction switch
             {
                 CategoryMoveDirection.PurchaseToSale => MainMenu_Form.Instance.CategorySaleList,
+                CategoryMoveDirection.PurchaseToRental => MainMenu_Form.Instance.CategoryRentalList,
                 CategoryMoveDirection.SaleToPurchase => MainMenu_Form.Instance.CategoryPurchaseList,
+                CategoryMoveDirection.SaleToRental => MainMenu_Form.Instance.CategoryRentalList,
                 CategoryMoveDirection.RentalToPurchase => MainMenu_Form.Instance.CategoryPurchaseList,
                 CategoryMoveDirection.RentalToSale => MainMenu_Form.Instance.CategorySaleList,
                 _ => null
@@ -255,7 +324,9 @@ namespace Sales_Tracker.GridView
                     string targetName = direction switch
                     {
                         CategoryMoveDirection.PurchaseToSale => "Sales",
+                        CategoryMoveDirection.PurchaseToRental => "Rentals",
                         CategoryMoveDirection.SaleToPurchase => "Purchases",
+                        CategoryMoveDirection.SaleToRental => "Rentals",
                         CategoryMoveDirection.RentalToPurchase => "Purchases",
                         CategoryMoveDirection.RentalToSale => "Sales",
                         _ => ""
@@ -291,7 +362,9 @@ namespace Sales_Tracker.GridView
                     Guna2DataGridView sourceProductGrid = direction switch
                     {
                         CategoryMoveDirection.PurchaseToSale => productsForm?.Purchase_DataGridView,
+                        CategoryMoveDirection.PurchaseToRental => productsForm?.Purchase_DataGridView,
                         CategoryMoveDirection.SaleToPurchase => productsForm?.Sale_DataGridView,
+                        CategoryMoveDirection.SaleToRental => productsForm?.Sale_DataGridView,
                         CategoryMoveDirection.RentalToPurchase => productsForm?.Rentals_DataGridView,
                         CategoryMoveDirection.RentalToSale => productsForm?.Rentals_DataGridView,
                         _ => null
@@ -300,7 +373,9 @@ namespace Sales_Tracker.GridView
                     Guna2DataGridView targetProductGrid = direction switch
                     {
                         CategoryMoveDirection.PurchaseToSale => productsForm?.Sale_DataGridView,
+                        CategoryMoveDirection.PurchaseToRental => productsForm?.Rentals_DataGridView,
                         CategoryMoveDirection.SaleToPurchase => productsForm?.Purchase_DataGridView,
+                        CategoryMoveDirection.SaleToRental => productsForm?.Rentals_DataGridView,
                         CategoryMoveDirection.RentalToPurchase => productsForm?.Purchase_DataGridView,
                         CategoryMoveDirection.RentalToSale => productsForm?.Sale_DataGridView,
                         _ => null
@@ -356,7 +431,9 @@ namespace Sales_Tracker.GridView
                 string targetName = direction switch
                 {
                     CategoryMoveDirection.PurchaseToSale => "Sales",
+                    CategoryMoveDirection.PurchaseToRental => "Rentals",
                     CategoryMoveDirection.SaleToPurchase => "Purchases",
+                    CategoryMoveDirection.SaleToRental => "Rentals",
                     CategoryMoveDirection.RentalToPurchase => "Purchases",
                     CategoryMoveDirection.RentalToSale => "Sales",
                     _ => ""
@@ -376,7 +453,9 @@ namespace Sales_Tracker.GridView
             MainMenu_Form.SelectedOption sourceOption = direction switch
             {
                 CategoryMoveDirection.PurchaseToSale => MainMenu_Form.SelectedOption.CategoryPurchases,
+                CategoryMoveDirection.PurchaseToRental => MainMenu_Form.SelectedOption.CategoryPurchases,
                 CategoryMoveDirection.SaleToPurchase => MainMenu_Form.SelectedOption.CategorySales,
+                CategoryMoveDirection.SaleToRental => MainMenu_Form.SelectedOption.CategorySales,
                 CategoryMoveDirection.RentalToPurchase => MainMenu_Form.SelectedOption.CategoryRentals,
                 CategoryMoveDirection.RentalToSale => MainMenu_Form.SelectedOption.CategoryRentals,
                 _ => MainMenu_Form.SelectedOption.CategoryPurchases
@@ -385,7 +464,9 @@ namespace Sales_Tracker.GridView
             MainMenu_Form.SelectedOption targetOption = direction switch
             {
                 CategoryMoveDirection.PurchaseToSale => MainMenu_Form.SelectedOption.CategorySales,
+                CategoryMoveDirection.PurchaseToRental => MainMenu_Form.SelectedOption.CategoryRentals,
                 CategoryMoveDirection.SaleToPurchase => MainMenu_Form.SelectedOption.CategoryPurchases,
+                CategoryMoveDirection.SaleToRental => MainMenu_Form.SelectedOption.CategoryRentals,
                 CategoryMoveDirection.RentalToPurchase => MainMenu_Form.SelectedOption.CategoryPurchases,
                 CategoryMoveDirection.RentalToSale => MainMenu_Form.SelectedOption.CategorySales,
                 _ => MainMenu_Form.SelectedOption.CategorySales
