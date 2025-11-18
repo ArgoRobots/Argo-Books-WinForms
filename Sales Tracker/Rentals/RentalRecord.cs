@@ -1,4 +1,4 @@
-namespace Sales_Tracker.DataClasses
+namespace Sales_Tracker.Rentals
 {
     /// <summary>
     /// Defines the rental rate period types.
@@ -58,7 +58,7 @@ namespace Sales_Tracker.DataClasses
             Notes = notes;
 
             // Calculate total cost (rate * quantity + deposit)
-            TotalCost = (rate * quantity) + securityDeposit;
+            TotalCost = rate * quantity + securityDeposit;
             AmountPaid = 0;
 
             // Set due date based on rate type

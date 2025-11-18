@@ -1,4 +1,4 @@
-namespace Sales_Tracker.DataClasses
+namespace Sales_Tracker.Rentals
 {
     /// <summary>
     /// Represents a rental inventory item with availability tracking and quantity management.

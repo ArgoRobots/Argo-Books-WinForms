@@ -46,7 +46,7 @@
     <Compile Update="MainMenu_Form.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Rentals_Form.cs">
+    <Compile Update="Rentals\Rentals_Form.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Passwords\AddPassword_Form.cs">
@@ -55,7 +55,7 @@
     <Compile Update="ReceiptViewer_Form.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="RentOutItem_Form.cs">
+    <Compile Update="Rentals\RentOutItem_Form.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="ReportGenerator\Menus\CustomTemplateManager_Form.cs">

@@ -13,6 +13,7 @@ using Sales_Tracker.GridView;
 using Sales_Tracker.Language;
 using Sales_Tracker.LostProduct;
 using Sales_Tracker.Properties;
+using Sales_Tracker.Rentals;
 using Sales_Tracker.ReportGenerator;
 using Sales_Tracker.ReturnProduct;
 using Sales_Tracker.Startup.Menus;
