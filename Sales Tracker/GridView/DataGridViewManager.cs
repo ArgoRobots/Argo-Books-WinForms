@@ -670,6 +670,13 @@ namespace Sales_Tracker.GridView
                             RightClickDataGridViewRowMenu.RentOut_Button.Visible = true;
                             flowPanel.Controls.SetChildIndex(RightClickDataGridViewRowMenu.RentOut_Button, currentIndex++);
                         }
+
+                        // Check if item has rented quantity for returning
+                        if (rentalItem.QuantityRented > 0)
+                        {
+                            RightClickDataGridViewRowMenu.ReturnRental_Button.Visible = true;
+                            flowPanel.Controls.SetChildIndex(RightClickDataGridViewRowMenu.ReturnRental_Button, currentIndex++);
+                        }
                     }
 
                     RightClickDataGridViewRowMenu.Modify_Button.Visible = true;
