@@ -362,8 +362,17 @@ namespace Sales_Tracker.GridView
         }
         private static void HandleRentalsDeletion(DataGridViewRowCancelEventArgs e)
         {
-            string columnName = Rentals_Form.Column.ProductName.ToString();
-            string name = e.Row.Cells[columnName].Value?.ToString();
+            string rentalItemIDColumn = Rentals_Form.Column.RentalItemID.ToString();
+            string rentalItemID = e.Row.Cells[rentalItemIDColumn].Value?.ToString();
+
+            string productNameColumn = Rentals_Form.Column.ProductName.ToString();
+            string name = e.Row.Cells[productNameColumn].Value?.ToString();
+
+            // Actually remove the item from the rental inventory
+            if (!string.IsNullOrEmpty(rentalItemID))
+            {
+                RentalInventoryManager.RemoveRentalItem(rentalItemID);
+            }
 
             string message = $"Deleted rental '{name}'";
             CustomMessage_Form.AddThingThatHasChangedAndLogMessage(MainMenu_Form.ThingsThatHaveChangedInFile, 2, message);
