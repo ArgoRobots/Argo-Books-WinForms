@@ -140,10 +140,7 @@ namespace Sales_Tracker
 
                 // Update inventory quantities using the ReturnItem method
                 RentalItem rentalItem = RentalInventoryManager.GetRentalItem(_rentalRecord.RentalItemID);
-                if (rentalItem != null)
-                {
-                    rentalItem.ReturnItem(_rentalRecord.Quantity);
-                }
+                rentalItem?.ReturnItem(_rentalRecord.Quantity);
 
                 // Update customer rental status
                 _customer?.ReturnRental(_rentalRecord.RentalRecordID);

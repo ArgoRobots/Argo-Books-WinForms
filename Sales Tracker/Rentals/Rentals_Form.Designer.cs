@@ -40,13 +40,13 @@ namespace Sales_Tracker
             Title_Label.Text = "Rental Inventory";
             // 
             // AddRentalItem_Button
-            //
+            // 
             AddRentalItem_Button.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             AddRentalItem_Button.BorderRadius = 4;
             AddRentalItem_Button.CustomizableEdges = customizableEdges1;
             AddRentalItem_Button.Font = new Font("Segoe UI", 10F);
             AddRentalItem_Button.ForeColor = Color.White;
-            AddRentalItem_Button.Location = new Point(703, 33);
+            AddRentalItem_Button.Location = new Point(933, 33);
             AddRentalItem_Button.Margin = new Padding(4, 5, 4, 5);
             AddRentalItem_Button.Name = "AddRentalItem_Button";
             AddRentalItem_Button.ShadowDecoration.CustomizableEdges = customizableEdges2;
@@ -54,9 +54,9 @@ namespace Sales_Tracker
             AddRentalItem_Button.TabIndex = 1;
             AddRentalItem_Button.Text = "Add Rental Item";
             AddRentalItem_Button.Click += AddRentalItem_Button_Click;
-            //
+            // 
             // Search_TextBox
-            //
+            // 
             Search_TextBox.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             Search_TextBox.CustomizableEdges = customizableEdges3;
             Search_TextBox.DefaultText = "";
@@ -103,7 +103,7 @@ namespace Sales_Tracker
             Total_Label.Text = "Total:";
             // 
             // Rentals_Form
-            //
+            // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1478, 744);
