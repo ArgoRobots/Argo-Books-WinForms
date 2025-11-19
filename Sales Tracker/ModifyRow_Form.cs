@@ -146,6 +146,25 @@ namespace Sales_Tracker
             }
             return -1;
         }
+        private int GetEmailColumnIndex()
+        {
+            // Find the Email column index in _listOfOldValues for customers
+            if (_selectedTag != nameof(MainMenu_Form.DataGridViewTag.Customer))
+            {
+                return -1;
+            }
+
+            int index = 0;
+            foreach (DataGridViewColumn column in _selectedRow.DataGridView.Columns)
+            {
+                if (column.Name == nameof(Customers_Form.Column.Email))
+                {
+                    return index;
+                }
+                index++;
+            }
+            return -1;
+        }
 
         // Event handlers
         private void Save_Button_Click(object sender, EventArgs e)
@@ -1162,7 +1181,23 @@ namespace Sales_Tracker
 
                     bool isEmailField = gunaTextBox.Name == nameof(Customers_Form.Column.Email);
                     bool isValidEmail = !isEmailField || TextBoxValidation.IsValidEmail(gunaTextBox.Text);
-                    bool isUniqueEmail = !isEmailField || !TextBoxValidation.IsEmailDuplicate(gunaTextBox.Text);
+
+                    // For email uniqueness check, exclude the current customer's original email
+                    bool isUniqueEmail = true;
+                    if (isEmailField && !string.IsNullOrWhiteSpace(gunaTextBox.Text))
+                    {
+                        // Get the index of the Email column in _listOfOldValues
+                        int emailColumnIndex = GetEmailColumnIndex();
+                        string originalEmail = emailColumnIndex >= 0 && emailColumnIndex < _listOfOldValues.Count
+                            ? _listOfOldValues[emailColumnIndex]
+                            : "";
+
+                        // Only check for duplicates if the email has changed
+                        if (!gunaTextBox.Text.Trim().Equals(originalEmail, StringComparison.OrdinalIgnoreCase))
+                        {
+                            isUniqueEmail = !TextBoxValidation.IsEmailDuplicate(gunaTextBox.Text);
+                        }
+                    }
 
                     bool isEmpty = string.IsNullOrEmpty(gunaTextBox.Text) ||
                                    gunaTextBox.Text == ReadOnlyVariables.EmptyCell ||
