@@ -906,8 +906,8 @@ namespace Sales_Tracker.GridView
                 return;
             }
 
-            // Open the return rental form
-            Tools.OpenForm(new ReturnRental_Form(MainMenu_Form.Instance));
+            // Open the return rental form with the selected row
+            Tools.OpenForm(new ReturnRental_Form(MainMenu_Form.Instance, selectedRow));
             Hide();
         }
 

@@ -15,115 +15,78 @@ namespace Sales_Tracker
     {
         // Properties
         private readonly MainMenu_Form _mainMenuForm;
-        private Customer _selectedCustomer;
-        private List<RentalRecord> _activeRentals;
-        private CustomCheckListBox Rentals_CheckListBox;
+        private readonly Customer _customer;
+        private readonly RentalRecord _rentalRecord;
+        private readonly DataGridViewRow _dataGridViewRow;
 
         // Init.
-        public ReturnRental_Form(MainMenu_Form mainMenu)
+        public ReturnRental_Form(MainMenu_Form mainMenu, DataGridViewRow rentalRow)
         {
             InitializeComponent();
             _mainMenuForm = mainMenu;
-            _activeRentals = [];
+            _dataGridViewRow = rentalRow;
 
-            InitializeRentalsCheckListBox();
-            LoadCustomersWithActiveRentals();
+            // Get rental record ID from the row's tag
+            if (rentalRow.Tag is TagData tagData)
+            {
+                // Find the customer and rental record
+                _customer = MainMenu_Form.Instance.CustomerList.FirstOrDefault(c => c.CustomerID == tagData.CustomerID);
+                _rentalRecord = _customer?.GetActiveRentals().FirstOrDefault(r => r.RentalRecordID == tagData.RentalRecordID);
+
+                if (_customer == null || _rentalRecord == null)
+                {
+                    CustomMessageBox.Show("Error",
+                        "Could not find the rental information.",
+                        CustomMessageBoxIcon.Error,
+                        CustomMessageBoxButtons.Ok);
+                    Close();
+                    return;
+                }
+
+                LoadRentalDetails();
+            }
+            else
+            {
+                CustomMessageBox.Show("Error",
+                    "Invalid rental data.",
+                    CustomMessageBoxIcon.Error,
+                    CustomMessageBoxButtons.Ok);
+                Close();
+                return;
+            }
+
             UpdateTheme();
             LanguageManager.UpdateLanguageForControl(this);
             LoadingPanel.ShowBlankLoadingPanel(this);
         }
-        private void InitializeRentalsCheckListBox()
+        private void LoadRentalDetails()
         {
-            Rentals_CheckListBox = new CustomCheckListBox
+            // Display rental information
+            RentalItem rentalItem = RentalInventoryManager.GetRentalItem(_rentalRecord.RentalItemID);
+            if (rentalItem == null)
             {
-                Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
-                BackColor = Color.White,
-                BorderStyle = BorderStyle.FixedSingle,
-                CheckOnClick = true,
-                Font = new Font("Segoe UI", 9F),
-                ForeColor = Color.Black,
-                Location = new Point(38, 313),
-                Margin = new Padding(4, 5, 4, 5),
-                MinimumSize = new Size(100, 100),
-                Name = "Rentals_CheckListBox",
-                Padding = new Padding(10),
-                Size = new Size(673, 356),
-                TabIndex = 6
-            };
-
-            Controls.Add(Rentals_CheckListBox);
-        }
-        private void LoadCustomersWithActiveRentals()
-        {
-            Customer_ComboBox.Items.Clear();
-
-            List<Customer> customersWithRentals = MainMenu_Form.Instance.CustomerList
-                .Where(c => c.GetActiveRentals().Count > 0)
-                .OrderBy(c => c.LastName)
-                .ToList();
-
-            foreach (Customer customer in customersWithRentals)
-            {
-                int activeCount = customer.GetActiveRentals().Count;
-                Customer_ComboBox.Items.Add($"{customer.FullName} ({customer.CustomerID}) - {activeCount} active rental(s)");
-            }
-
-            if (Customer_ComboBox.Items.Count > 0)
-            {
-                Customer_ComboBox.SelectedIndex = 0;
-            }
-            else
-            {
-                NoActiveRentals_Label.Visible = true;
-                Return_Button.Enabled = false;
-            }
-        }
-        private void LoadActiveRentals()
-        {
-            if (_selectedCustomer == null) { return; }
-
-            // Clear previous rental checkboxes
-            Rentals_CheckListBox.Clear();
-            _activeRentals = _selectedCustomer.GetActiveRentals();
-
-            if (_activeRentals.Count == 0)
-            {
-                Label label = new()
-                {
-                    Text = "No active rentals for this customer.",
-                    Location = new Point(10, 10),
-                    Size = new Size(650, 30),
-                    Font = new Font("Segoe UI", 10F),
-                    BackColor = Color.Transparent,
-                    AccessibleDescription = AccessibleDescriptionManager.DoNotTranslate
-                };
-                Rentals_CheckListBox.ContainerPanel.Controls.Add(label);
+                RentalDetails_Label.Text = "Rental item not found.";
                 return;
             }
 
-            foreach (RentalRecord rental in _activeRentals)
-            {
-                RentalItem rentalItem = RentalInventoryManager.GetRentalItem(rental.RentalItemID);
-                if (rentalItem == null) { continue; }
+            string overdueText = _rentalRecord.IsOverdue ? " [OVERDUE]" : "";
+            string dueText = _rentalRecord.DueDate.HasValue ? $"\nDue Date: {_rentalRecord.DueDate.Value:MMM dd, yyyy}" : "";
+            decimal outstanding = _rentalRecord.TotalCost - _rentalRecord.AmountPaid;
 
-                // Build rental info text
-                string overdueText = rental.IsOverdue ? " [OVERDUE]" : "";
-                string dueText = rental.DueDate.HasValue ? $" (Due: {rental.DueDate.Value:MMM dd, yyyy})" : "";
-                decimal outstanding = rental.TotalCost - rental.AmountPaid;
-
-                string rentalText = $"Rental #{rental.RentalRecordID} - {rental.ProductName} | Qty: {rental.Quantity} | Rate: {rental.RateType}\n" +
-                    $"Start: {rental.StartDate:MMM dd, yyyy}{dueText}{overdueText} | " +
-                    $"Total: {MainMenu_Form.CurrencySymbol}{rental.TotalCost:N2} | Paid: {MainMenu_Form.CurrencySymbol}{rental.AmountPaid:N2} | Outstanding: {MainMenu_Form.CurrencySymbol}{outstanding:N2}";
-
-                // Add to checklist box
-                Rentals_CheckListBox.Add(rentalText, false);
-            }
+            RentalDetails_Label.Text = $"Customer: {_customer.FullName} ({_customer.CustomerID})\n" +
+                $"Rental ID: {_rentalRecord.RentalRecordID}\n" +
+                $"Product: {_rentalRecord.ProductName}\n" +
+                $"Quantity: {_rentalRecord.Quantity}\n" +
+                $"Rate: {_rentalRecord.RateType}\n" +
+                $"Start Date: {_rentalRecord.StartDate:MMM dd, yyyy}{dueText}{overdueText}\n" +
+                $"Total Cost: {MainMenu_Form.CurrencySymbol}{_rentalRecord.TotalCost:N2}\n" +
+                $"Amount Paid: {MainMenu_Form.CurrencySymbol}{_rentalRecord.AmountPaid:N2}\n" +
+                $"Outstanding: {MainMenu_Form.CurrencySymbol}{outstanding:N2}";
         }
         private void UpdateTheme()
         {
             ThemeManager.SetThemeForForm(this);
             ThemeManager.MakeGButtonBluePrimary(Return_Button);
-            ThemeManager.ApplyThemeToCustomCheckListBox(Rentals_CheckListBox);
         }
 
         // Form event handlers
@@ -133,70 +96,24 @@ namespace Sales_Tracker
         }
 
         // Event handlers
-        private void Customer_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (Customer_ComboBox.SelectedIndex < 0) { return; }
-
-            List<Customer> customersWithRentals = MainMenu_Form.Instance.CustomerList
-                .Where(c => c.GetActiveRentals().Count > 0)
-                .OrderBy(c => c.LastName)
-                .ToList();
-
-            _selectedCustomer = customersWithRentals[Customer_ComboBox.SelectedIndex];
-            LoadActiveRentals();
-        }
-        private void SelectAll_CheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            for (int i = 0; i < Rentals_CheckListBox.Count; i++)
-            {
-                Rentals_CheckListBox.SetItemChecked(i, SelectAll_CheckBox.Checked);
-            }
-        }
-        private void SelectAll_Label_Click(object sender, EventArgs e)
-        {
-            SelectAll_CheckBox.Checked = !SelectAll_CheckBox.Checked;
-        }
         private void Return_Button_Click(object sender, EventArgs e)
         {
-            if (_selectedCustomer == null)
-            {
-                CustomMessageBox.Show("No Customer Selected",
-                    "Please select a customer.",
-                    CustomMessageBoxIcon.Warning,
-                    CustomMessageBoxButtons.Ok);
-                return;
-            }
-
-            // Get selected rentals
-            List<RentalRecord> selectedRentals = [];
-            foreach (int index in Rentals_CheckListBox.CheckedIndices)
-            {
-                selectedRentals.Add(_activeRentals[index]);
-            }
-
-            if (selectedRentals.Count == 0)
-            {
-                CustomMessageBox.Show("No Rentals Selected",
-                    "Please select at least one rental to return.",
-                    CustomMessageBoxIcon.Warning,
-                    CustomMessageBoxButtons.Ok);
-                return;
-            }
-
             DateTime returnDate = ReturnDate_Picker.Value;
             string notes = Notes_TextBox.Text.Trim();
 
             // Confirm return
             CustomMessageBoxResult result = CustomMessageBox.Show("Confirm Return",
-                $"Are you sure you want to return {selectedRentals.Count} rental(s) for {_selectedCustomer.FullName}?\n\n" +
+                $"Are you sure you want to return this rental for {_customer.FullName}?\n\n" +
+                $"Rental ID: {_rentalRecord.RentalRecordID}\n" +
+                $"Product: {_rentalRecord.ProductName}\n" +
                 $"Return Date: {returnDate:MMM dd, yyyy}",
                 CustomMessageBoxIcon.Question,
                 CustomMessageBoxButtons.YesNo);
 
             if (result != CustomMessageBoxResult.Yes) { return; }
 
-            // Process returns
-            ProcessReturns(selectedRentals, returnDate, notes);
+            // Process return
+            ProcessReturn(returnDate, notes);
         }
         private void Cancel_Button_Click(object sender, EventArgs e)
         {
@@ -204,35 +121,34 @@ namespace Sales_Tracker
             Close();
         }
 
-        // Methods
-        private void ProcessReturns(List<RentalRecord> rentalsToReturn, DateTime returnDate, string notes)
+        // Business logic
+        private void ProcessReturn(DateTime returnDate, string notes)
         {
             try
             {
-                foreach (RentalRecord rental in rentalsToReturn)
+                // Update rental record
+                _rentalRecord.IsReturned = true;
+                _rentalRecord.ReturnDate = returnDate;
+                if (!string.IsNullOrWhiteSpace(notes))
                 {
-                    // Mark rental record as returned
-                    rental.ReturnDate = returnDate;
-                    rental.IsActive = false;
-                    rental.IsOverdue = false;
-
-                    if (!string.IsNullOrWhiteSpace(notes))
-                    {
-                        rental.Notes = string.IsNullOrWhiteSpace(rental.Notes)
-                            ? $"Return notes: {notes}"
-                            : $"{rental.Notes}\nReturn notes: {notes}";
-                    }
-
-                    // Update rental item inventory
-                    RentalItem rentalItem = RentalInventoryManager.GetRentalItem(rental.RentalItemID);
-                    rentalItem?.ReturnItem(rental.Quantity);
-
-                    // Update customer rental status
-                    _selectedCustomer?.ReturnRental(rental.RentalRecordID);
-
-                    // Update DataGridView row
-                    UpdateDataGridViewRow(rental, returnDate);
+                    _rentalRecord.Notes = string.IsNullOrWhiteSpace(_rentalRecord.Notes)
+                        ? $"Return Notes: {notes}"
+                        : $"{_rentalRecord.Notes}\nReturn Notes: {notes}";
                 }
+
+                // Update inventory quantities
+                RentalItem rentalItem = RentalInventoryManager.GetRentalItem(_rentalRecord.RentalItemID);
+                if (rentalItem != null)
+                {
+                    rentalItem.QuantityRented -= _rentalRecord.Quantity;
+                    rentalItem.QuantityAvailable += _rentalRecord.Quantity;
+                }
+
+                // Update customer rental status
+                _customer?.ReturnRental(_rentalRecord.RentalRecordID);
+
+                // Update DataGridView row
+                UpdateDataGridViewRow(returnDate);
 
                 // Refresh the grid to ensure visual changes are displayed
                 _mainMenuForm.Rental_DataGridView.Refresh();
@@ -251,11 +167,11 @@ namespace Sales_Tracker
                 Rentals_Form.Instance?.RefreshDataGridView();
 
                 // Log the action
-                string message = $"Returned {rentalsToReturn.Count} rental(s) for customer {_selectedCustomer?.FullName}";
+                string message = $"Returned rental {_rentalRecord.RentalRecordID} for customer {_customer?.FullName}";
                 CustomMessage_Form.AddThingThatHasChangedAndLogMessage(AddRentalItem_Form.ThingsThatHaveChangedInFile, 2, message);
 
                 CustomMessageBox.Show("Return Successful",
-                    $"Successfully returned {rentalsToReturn.Count} rental(s) for {_selectedCustomer?.FullName}.",
+                    $"Successfully returned rental {_rentalRecord.RentalRecordID} for {_customer?.FullName}.",
                     CustomMessageBoxIcon.Success,
                     CustomMessageBoxButtons.Ok);
 
@@ -265,48 +181,42 @@ namespace Sales_Tracker
             catch (Exception ex)
             {
                 CustomMessageBox.Show("Error",
-                    $"An error occurred while processing returns: {ex.Message}",
+                    $"An error occurred while processing the return: {ex.Message}",
                     CustomMessageBoxIcon.Error,
                     CustomMessageBoxButtons.Ok);
             }
         }
-        private void UpdateDataGridViewRow(RentalRecord rental, DateTime returnDate)
+        private void UpdateDataGridViewRow(DateTime returnDate)
         {
-            // Find the row in the DataGridView that matches this rental
-            foreach (DataGridViewRow row in _mainMenuForm.Rental_DataGridView.Rows)
+            // Update the tag data
+            if (_dataGridViewRow.Tag is TagData tagData)
             {
-                if (row.Tag is TagData tagData && tagData.RentalRecordID == rental.RentalRecordID)
+                tagData.IsReturned = true;
+                tagData.ReturnDate = returnDate;
+                _dataGridViewRow.Tag = tagData;
+            }
+
+            // Apply visual indicator (strikethrough and color)
+            foreach (DataGridViewCell cell in _dataGridViewRow.Cells)
+            {
+                cell.Style.Font = new Font(cell.Style.Font ?? _dataGridViewRow.DataGridView.DefaultCellStyle.Font, FontStyle.Strikeout);
+                cell.Style.ForeColor = Color.Gray;
+            }
+
+            // Add return date to notes column if exists
+            DataGridViewCell noteCell = _dataGridViewRow.Cells[ReadOnlyVariables.Note_column];
+            if (noteCell != null)
+            {
+                string currentNote = noteCell.Value?.ToString() ?? "";
+                string returnNote = $"[RETURNED: {returnDate:MMM dd, yyyy}]";
+
+                if (string.IsNullOrWhiteSpace(currentNote))
                 {
-                    // Update the tag data
-                    tagData.IsReturned = true;
-                    tagData.ReturnDate = returnDate;
-                    row.Tag = tagData;
-
-                    // Apply visual indicator (strikethrough and color)
-                    foreach (DataGridViewCell cell in row.Cells)
-                    {
-                        cell.Style.Font = new Font(cell.Style.Font ?? row.DataGridView.DefaultCellStyle.Font, FontStyle.Strikeout);
-                        cell.Style.ForeColor = Color.Gray;
-                    }
-
-                    // Add return date to notes column if exists
-                    DataGridViewCell noteCell = row.Cells[ReadOnlyVariables.Note_column];
-                    if (noteCell != null)
-                    {
-                        string currentNote = noteCell.Value?.ToString() ?? "";
-                        string returnNote = $"[RETURNED: {returnDate:MMM dd, yyyy}]";
-
-                        if (string.IsNullOrWhiteSpace(currentNote))
-                        {
-                            noteCell.Value = returnNote;
-                        }
-                        else if (!currentNote.Contains("RETURNED"))
-                        {
-                            noteCell.Value = $"{currentNote}\n{returnNote}";
-                        }
-                    }
-
-                    break;
+                    noteCell.Value = returnNote;
+                }
+                else if (!currentNote.Contains("RETURNED"))
+                {
+                    noteCell.Value = $"{currentNote}\n{returnNote}";
                 }
             }
         }

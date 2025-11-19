@@ -114,8 +114,7 @@ namespace Sales_Tracker
 
             // Align controls
             Search_TextBox.Left = RentalInventory_DataGridView.Right - Search_TextBox.Width;
-            ReturnRental_Button.Left = Search_TextBox.Left - ReturnRental_Button.Width - CustomControls.SpaceBetweenControls;
-            AddRentalItem_Button.Left = ReturnRental_Button.Left - AddRentalItem_Button.Width - CustomControls.SpaceBetweenControls;
+            AddRentalItem_Button.Left = Search_TextBox.Left - AddRentalItem_Button.Width - CustomControls.SpaceBetweenControls;
         }
         private void DataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
@@ -209,10 +208,6 @@ namespace Sales_Tracker
         private void AddRentalItem_Button_Click(object sender, EventArgs e)
         {
             Tools.OpenForm(new AddRentalItem_Form());
-        }
-        private void ReturnRental_Button_Click(object sender, EventArgs e)
-        {
-            Tools.OpenForm(new ReturnRental_Form(MainMenu_Form.Instance));
         }
         private void Search_TextBox_TextChanged(object sender, EventArgs e)
         {
