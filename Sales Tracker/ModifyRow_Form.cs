@@ -311,16 +311,7 @@ namespace Sales_Tracker
                 return;
             }
 
-            // Get list
-            List<Category> categoriesList;
-            if (Categories_Form.Instance.Purchase_RadioButton.Checked)
-            {
-                categoriesList = MainMenu_Form.Instance.CategoryPurchaseList;
-            }
-            else
-            {
-                categoriesList = MainMenu_Form.Instance.CategorySaleList;
-            }
+            List<Category> categoriesList = GetCategoryList();
 
             bool containsCategory = categoriesList.Any(category => category.Name.Equals(textBox.Text.Trim(), StringComparison.OrdinalIgnoreCase));
             bool isOldValueDifferent = !string.Equals(_listOfOldValues[0], textBox.Text.Trim(), StringComparison.OrdinalIgnoreCase);
@@ -380,7 +371,7 @@ namespace Sales_Tracker
         {
             int left = 0;
             int searchBoxMaxHeight = 100;
-            int productIDLeft = 0; // Store ProductID position for Rentable checkbox
+            int productIDLeft = 0;  // Store ProductID position for Rentable checkbox
 
             foreach (DataGridViewColumn column in _selectedRow.DataGridView.Columns)
             {
@@ -409,9 +400,7 @@ namespace Sales_Tracker
                         ConstructLabel(Products_Form.ColumnHeaders[Products_Form.Column.ProductCategory], left, Panel);
                         Guna2TextBox textBox = ConstructTextBox(left, columnName, cellValue, 50, CustomControls.KeyPressValidation.None, false, Panel);
                         // Attach SearchBox for categories
-                        List<Category> categoryList = Products_Form.Instance.Purchase_RadioButton.Checked
-                            ? MainMenu_Form.Instance.CategoryPurchaseList
-                            : MainMenu_Form.Instance.CategorySaleList;
+                        List<Category> categoryList = GetCategoryList();
                         List<SearchResult> categorySearchResults = SearchBox.ConvertToSearchResults(categoryList.Select(c => c.Name).ToList());
                         SearchBox.Attach(textBox, this, () => categorySearchResults, searchBoxMaxHeight, false, false, false, true);
                         textBox.TextChanged += ValidateInputs;
@@ -1300,7 +1289,7 @@ namespace Sales_Tracker
 
             if (string.IsNullOrWhiteSpace(newProductName) || string.IsNullOrWhiteSpace(newCategory) || string.IsNullOrWhiteSpace(newCompany))
             {
-                return false; // Can't check for duplicates if values are missing
+                return false;  // Can't check for duplicates if values are missing
             }
 
             // Get old values
@@ -1314,16 +1303,12 @@ namespace Sales_Tracker
                 return false;
             }
 
-            // Get the appropriate category list
-            List<Category> categoryList = Products_Form.Instance.Purchase_RadioButton.Checked
-                ? MainMenu_Form.Instance.CategoryPurchaseList
-                : MainMenu_Form.Instance.CategorySaleList;
-
             // Find the category
+            List<Category> categoryList = GetCategoryList();
             Category category = categoryList.FirstOrDefault(c => c.Name == newCategory);
             if (category == null)
             {
-                return false; // Category doesn't exist, can't be a duplicate
+                return false;  // Category doesn't exist, can't be a duplicate
             }
 
             // Check if a product with this name and company already exists in this category
@@ -1541,9 +1526,13 @@ namespace Sales_Tracker
             {
                 category = MainMenu_Form.Instance.CategoryPurchaseList.FirstOrDefault(c => c.Name == _listOfOldValues[0]);
             }
-            else
+            else if (Categories_Form.Instance.Sale_RadioButton.Checked)
             {
                 category = MainMenu_Form.Instance.CategorySaleList.FirstOrDefault(c => c.Name == _listOfOldValues[0]);
+            }
+            else
+            {
+                category = MainMenu_Form.Instance.CategoryRentalList.FirstOrDefault(c => c.Name == _listOfOldValues[0]);
             }
 
             string oldCategory = category.Name;
@@ -1568,22 +1557,32 @@ namespace Sales_Tracker
                 nameof(Products_Form.Column.ProductCategory), oldCategory, newCategory, false);
             UpdateRowsInDataGridView(Products_Form.Instance.Sale_DataGridView,
                 nameof(Products_Form.Column.ProductCategory), oldCategory, newCategory, false);
+            UpdateRowsInDataGridView(Products_Form.Instance.Rentals_DataGridView,
+                nameof(Products_Form.Column.ProductCategory), oldCategory, newCategory, false);
         }
         private void UpdateProduct()
         {
             Category oldCategory;
-            bool isProductPurchase = Products_Form.Instance.Purchase_RadioButton.Checked;
             List<Category> categoryList;
+            MainMenu_Form.SelectedOption optionToSave;
 
-            if (isProductPurchase)
+            if (Products_Form.Instance.Purchase_RadioButton.Checked)
             {
                 categoryList = MainMenu_Form.Instance.CategoryPurchaseList;
                 oldCategory = categoryList.FirstOrDefault(c => c.Name == _listOfOldValues[2]);
+                optionToSave = MainMenu_Form.SelectedOption.CategoryPurchases;
             }
-            else
+            else if (Products_Form.Instance.Sale_RadioButton.Checked)
             {
                 categoryList = MainMenu_Form.Instance.CategorySaleList;
                 oldCategory = categoryList.FirstOrDefault(c => c.Name == _listOfOldValues[2]);
+                optionToSave = MainMenu_Form.SelectedOption.CategorySales;
+            }
+            else
+            {
+                categoryList = MainMenu_Form.Instance.CategoryRentalList;
+                oldCategory = categoryList.FirstOrDefault(c => c.Name == _listOfOldValues[2]);
+                optionToSave = MainMenu_Form.SelectedOption.CategoryRentals;
             }
 
             Product product = oldCategory.ProductList.FirstOrDefault(p => p.Name == _listOfOldValues[1]);
@@ -1608,10 +1607,7 @@ namespace Sales_Tracker
                 UpdateProductDetails(product);
                 UpdateProductInDataGridViews(product);
 
-                // Save the correct category list based on the product type
-                MainMenu_Form.SelectedOption optionToSave = isProductPurchase
-                    ? MainMenu_Form.SelectedOption.CategoryPurchases
-                    : MainMenu_Form.SelectedOption.CategorySales;
+                // Save the correct category list
                 MainMenu_Form.Instance.SaveCategoriesToFile(optionToSave);
 
                 // Log the change
@@ -1740,8 +1736,10 @@ namespace Sales_Tracker
 
             UpdateCompanyInProducts(oldCompany, newCompany, MainMenu_Form.Instance.CategoryPurchaseList);
             UpdateCompanyInProducts(oldCompany, newCompany, MainMenu_Form.Instance.CategorySaleList);
+            UpdateCompanyInProducts(oldCompany, newCompany, MainMenu_Form.Instance.CategoryRentalList);
             MainMenu_Form.Instance.SaveCategoriesToFile(MainMenu_Form.SelectedOption.CategoryPurchases);
             MainMenu_Form.Instance.SaveCategoriesToFile(MainMenu_Form.SelectedOption.CategorySales);
+            MainMenu_Form.Instance.SaveCategoriesToFile(MainMenu_Form.SelectedOption.CategoryRentals);
 
             UpdateAllDataGridViewRows(ReadOnlyVariables.Company_column, oldCompany, newCompany, true);
         }
@@ -2089,6 +2087,21 @@ namespace Sales_Tracker
         }
 
         // Misc.
+        private static List<Category> GetCategoryList()
+        {
+            if (Categories_Form.Instance.Purchase_RadioButton.Checked)
+            {
+                return MainMenu_Form.Instance.CategoryPurchaseList;
+            }
+            else if (Categories_Form.Instance.Sale_RadioButton.Checked)
+            {
+                return MainMenu_Form.Instance.CategorySaleList;
+            }
+            else
+            {
+                return MainMenu_Form.Instance.CategoryRentalList;
+            }
+        }
         private void DisableSaveButton()
         {
             Save_Button.Enabled = false;

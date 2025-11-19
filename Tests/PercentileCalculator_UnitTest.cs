@@ -56,7 +56,7 @@ namespace Tests
             List<decimal> values = [10, 20, 30];
 
             // Act & Assert
-            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => PercentileCalculator.CalculatePercentile(values, 150)); // Invalid percentile
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => PercentileCalculator.CalculatePercentile(values, 150));  // Invalid percentile
         }
 
         [TestMethod]
@@ -304,10 +304,10 @@ namespace Tests
             // Act
             DynamicThresholds thresholds = PercentileCalculator.CalculateAllThresholds(dataGridView);
 
-            // Assert - Total should be calculated, others should use defaults
-            Assert.IsTrue(thresholds.HighTotal > 0); // Calculated from data
-            Assert.AreEqual(100, thresholds.HighPrice); // Default value
-            Assert.AreEqual(5, thresholds.HighDiscount); // Default value
+            // Assert
+            Assert.IsTrue(thresholds.HighTotal > 0);
+            Assert.AreEqual(100, thresholds.HighPrice);
+            Assert.AreEqual(5, thresholds.HighDiscount);
         }
 
         [TestMethod]

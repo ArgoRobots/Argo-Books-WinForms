@@ -50,7 +50,7 @@ namespace Sales_Tracker.AISearch
                 catch (Exception thresholdEx)
                 {
                     Log.WriteWithFormat(1, "Failed to calculate dynamic thresholds, using defaults: {0}", thresholdEx.Message);
-                    thresholds = null; // Will use defaults in translator
+                    thresholds = null;  // Will use defaults in translator
                 }
 
                 Stopwatch stopwatch = Stopwatch.StartNew();

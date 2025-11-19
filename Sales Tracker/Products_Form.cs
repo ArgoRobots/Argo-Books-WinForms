@@ -142,10 +142,10 @@ namespace Sales_Tracker
             {
                 foreach (Product product in category.ProductList)
                 {
-                    Sale_DataGridView.Rows.Add(product.ProductID, product.Name, category.Name, product.CountryOfOrigin, product.CompanyOfOrigin);
+                    Rentals_DataGridView.Rows.Add(product.ProductID, product.Name, category.Name, product.CountryOfOrigin, product.CompanyOfOrigin);
                 }
             }
-            DataGridViewManager.ScrollToTopOfDataGridView(Sale_DataGridView);
+            DataGridViewManager.ScrollToTopOfDataGridView(Rentals_DataGridView);
         }
         private void CheckRadioButton(bool selectPurchaseRadioButton)
         {

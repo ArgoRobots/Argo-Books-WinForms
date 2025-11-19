@@ -184,7 +184,7 @@ namespace Sales_Tracker.AISearch
 
             // Determine the appropriate percentile based on data size
             double highPercentile = GetDynamicPercentileThreshold(values.Count);
-            double lowPercentile = 100 - highPercentile; // Mirror: if high is 90th, low is 10th
+            double lowPercentile = 100 - highPercentile;  // Mirror: if high is 90th, low is 10th
 
             // Calculate thresholds
             highThreshold = CalculatePercentile(values, highPercentile);

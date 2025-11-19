@@ -629,7 +629,6 @@ namespace Sales_Tracker
         private LinkLabel WarningCompany_LinkLabel;
         private LinkLabel ProductsRemaining_LinkLabel;
         private Label ForSale_Label;
-        private Guna.UI2.WinForms.Guna2CustomRadioButton Sale_RadioButton;
         private Label ForPurchase_Label;
         public Label Total_Label;
         public Guna.UI2.WinForms.Guna2ComboBox Type_ComboBox;
@@ -638,5 +637,6 @@ namespace Sales_Tracker
         public Guna.UI2.WinForms.Guna2CustomRadioButton Purchase_RadioButton;
         private Guna.UI2.WinForms.Guna2CustomRadioButton Rent_RadioButton;
         private Label ForRent_Label;
+        public Guna.UI2.WinForms.Guna2CustomRadioButton Sale_RadioButton;
     }
 }
