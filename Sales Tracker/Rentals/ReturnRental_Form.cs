@@ -5,11 +5,6 @@ using Sales_Tracker.Language;
 using Sales_Tracker.Rentals;
 using Sales_Tracker.Theme;
 using Sales_Tracker.UI;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Windows.Forms;
 
 namespace Sales_Tracker
 {
@@ -22,7 +17,7 @@ namespace Sales_Tracker
         private readonly MainMenu_Form _mainMenuForm;
         private Customer _selectedCustomer;
         private List<RentalRecord> _activeRentals;
-        private List<CheckBox> _rentalCheckBoxes;
+        private readonly List<CheckBox> _rentalCheckBoxes;
 
         // Init.
         public ReturnRental_Form(MainMenu_Form mainMenu)
@@ -34,7 +29,6 @@ namespace Sales_Tracker
 
             LoadCustomersWithActiveRentals();
             UpdateTheme();
-            SetAccessibleDescriptions();
             LanguageManager.UpdateLanguageForControl(this);
             LoadingPanel.ShowBlankLoadingPanel(this);
         }
@@ -126,10 +120,6 @@ namespace Sales_Tracker
             ThemeManager.SetThemeForForm(this);
             ThemeManager.MakeGButtonBluePrimary(Return_Button);
         }
-        private void SetAccessibleDescriptions()
-        {
-            // Add accessible descriptions if needed
-        }
 
         // Form event handlers
         private void ReturnRental_Form_Shown(object sender, EventArgs e)
@@ -215,7 +205,7 @@ namespace Sales_Tracker
             {
                 foreach (RentalRecord rental in rentalsToReturn)
                 {
-                    // 1. Mark rental record as returned
+                    // Mark rental record as returned
                     rental.ReturnDate = returnDate;
                     rental.IsActive = false;
                     rental.IsOverdue = false;
@@ -227,31 +217,31 @@ namespace Sales_Tracker
                             : $"{rental.Notes}\nReturn notes: {notes}";
                     }
 
-                    // 2. Update rental item inventory
+                    // Update rental item inventory
                     RentalItem rentalItem = RentalInventoryManager.GetRentalItem(rental.RentalItemID);
                     rentalItem?.ReturnItem(rental.Quantity);
 
-                    // 3. Update customer rental status
+                    // Update customer rental status
                     _selectedCustomer?.ReturnRental(rental.RentalRecordID);
 
-                    // 4. Update DataGridView row
+                    // Update DataGridView row
                     UpdateDataGridViewRow(rental, returnDate);
                 }
 
-                // 5. Save all changes
+                // Save all changes
                 RentalInventoryManager.SaveInventory();
                 MainMenu_Form.Instance.SaveCustomersToFile();
 
-                // 6. Save rental data
+                // Save rental data
                 DataGridViewManager.DataGridViewRowChanged(_mainMenuForm.Rental_DataGridView);
 
-                // 7. Refresh charts and UI
+                // Refresh charts and UI
                 _mainMenuForm.LoadOrRefreshMainCharts();
 
-                // 8. Refresh rental inventory form if open
+                // Refresh rental inventory form if open
                 Rentals_Form.Instance?.RefreshDataGridView();
 
-                // 9. Log the action
+                // Log the action
                 string message = $"Returned {rentalsToReturn.Count} rental(s) for customer {_selectedCustomer?.FullName}";
                 CustomMessage_Form.AddThingThatHasChangedAndLogMessage(AddRentalItem_Form.ThingsThatHaveChangedInFile, 2, message);
 
