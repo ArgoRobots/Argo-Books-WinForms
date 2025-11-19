@@ -44,7 +44,7 @@ namespace Sales_Tracker
 
             List<Customer> customersWithRentals = MainMenu_Form.Instance.CustomerList
                 .Where(c => c.GetActiveRentals().Count > 0)
-                .OrderBy(c => c.Name)
+                .OrderBy(c => c.LastName)
                 .ToList();
 
             foreach (Customer customer in customersWithRentals)
@@ -144,7 +144,7 @@ namespace Sales_Tracker
 
             List<Customer> customersWithRentals = MainMenu_Form.Instance.CustomerList
                 .Where(c => c.GetActiveRentals().Count > 0)
-                .OrderBy(c => c.Name)
+                .OrderBy(c => c.LastName)
                 .ToList();
 
             _selectedCustomer = customersWithRentals[CustomerComboBox.SelectedIndex];
@@ -240,10 +240,10 @@ namespace Sales_Tracker
 
                 // 5. Save all changes
                 RentalInventoryManager.SaveInventory();
-                Customer.SaveCustomers();
+                MainMenu_Form.Instance.SaveCustomersToFile();
 
                 // 6. Save rental data
-                DataGridViewManager.DataGridViewRowsAdded(_mainMenuForm.Rental_DataGridView, ReadOnlyVariables.Rentals_file);
+                DataGridViewManager.DataGridViewRowChanged(_mainMenuForm.Rental_DataGridView);
 
                 // 7. Refresh charts and UI
                 _mainMenuForm.LoadOrRefreshMainCharts();
@@ -291,19 +291,19 @@ namespace Sales_Tracker
                     }
 
                     // Add return date to notes column if exists
-                    int noteColumnIndex = ReadOnlyVariables.Note_column;
-                    if (noteColumnIndex >= 0 && noteColumnIndex < row.Cells.Count)
+                    DataGridViewCell noteCell = row.Cells[ReadOnlyVariables.Note_column];
+                    if (noteCell != null)
                     {
-                        string currentNote = row.Cells[noteColumnIndex].Value?.ToString() ?? "";
+                        string currentNote = noteCell.Value?.ToString() ?? "";
                         string returnNote = $"[RETURNED: {returnDate:MMM dd, yyyy}]";
 
                         if (string.IsNullOrWhiteSpace(currentNote))
                         {
-                            row.Cells[noteColumnIndex].Value = returnNote;
+                            noteCell.Value = returnNote;
                         }
                         else if (!currentNote.Contains("RETURNED"))
                         {
-                            row.Cells[noteColumnIndex].Value = $"{currentNote}\n{returnNote}";
+                            noteCell.Value = $"{currentNote}\n{returnNote}";
                         }
                     }
 
