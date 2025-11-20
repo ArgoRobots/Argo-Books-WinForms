@@ -124,6 +124,7 @@ namespace Sales_Tracker.Rentals
 
             // Create rental record
             RentalRecord record = new(
+                customerID: _selectedCustomer.CustomerID,
                 rentalItemID: _rentalItem.RentalItemID,
                 productName: _rentalItem.ProductName,
                 quantity: quantity,
@@ -142,10 +143,11 @@ namespace Sales_Tracker.Rentals
                 return;
             }
 
+            // Add rental record to rental item (single source of truth)
             _rentalItem.RentalRecords.Add(record);
 
-            // Add rental record to customer
-            _selectedCustomer.AddRentalRecord(record);
+            // Update customer metadata
+            _selectedCustomer.OnRentalCreated(record);
             _selectedCustomer.UpdatePaymentStatus();
 
             CreateRentalTransaction(_selectedCustomer, record, quantity, rate, totalCost);

@@ -16,6 +16,7 @@ namespace Sales_Tracker.Rentals
     public class RentalRecord
     {
         public string RentalRecordID { get; set; }
+        public string CustomerID { get; set; }
         public string RentalItemID { get; set; }
         public string ProductName { get; set; }
         public int Quantity { get; set; }
@@ -38,6 +39,7 @@ namespace Sales_Tracker.Rentals
         }
 
         public RentalRecord(
+            string customerID,
             string rentalItemID,
             string productName,
             int quantity,
@@ -48,6 +50,7 @@ namespace Sales_Tracker.Rentals
             string notes = "")
         {
             RentalRecordID = Guid.NewGuid().ToString();
+            CustomerID = customerID;
             RentalItemID = rentalItemID;
             ProductName = productName;
             Quantity = quantity;
