@@ -8,6 +8,13 @@ using Sales_Tracker.UI;
 
 namespace Sales_Tracker
 {
+    public enum ProductType
+    {
+        Purchase,
+        Sale,
+        Rent
+    }
+
     /// <summary>
     /// Form for managing product inventory and information.
     /// </summary>
@@ -22,8 +29,7 @@ namespace Sales_Tracker
         public static Products_Form Instance => _instance;
 
         // Init.
-        public Products_Form() : this(false) { }  // This is needed for TranslationGenerator.GenerateAllLanguageTranslationFiles()
-        public Products_Form(bool checkPurchaseRadioButton)
+        public Products_Form(ProductType productType = ProductType.Purchase)
         {
             InitializeComponent();
             _instance = this;
@@ -38,7 +44,7 @@ namespace Sales_Tracker
 
             ValidateCompanyTextBox();
             ThemeManager.SetThemeForForm(this);
-            CheckRadioButton(checkPurchaseRadioButton);
+            CheckRadioButton(productType);
             Guna2TextBoxIconHoverEffect.Initialize(Search_TextBox);
             SetAccessibleDescriptions();
             ShowingResultsFor_Label.Visible = false;
@@ -147,15 +153,19 @@ namespace Sales_Tracker
             }
             DataGridViewManager.ScrollToTopOfDataGridView(Rentals_DataGridView);
         }
-        private void CheckRadioButton(bool selectPurchaseRadioButton)
+        private void CheckRadioButton(ProductType productType)
         {
-            if (selectPurchaseRadioButton)
+            switch (productType)
             {
-                Purchase_RadioButton.Checked = true;
-            }
-            else
-            {
-                Sale_RadioButton.Checked = true;
+                case ProductType.Purchase:
+                    Purchase_RadioButton.Checked = true;
+                    break;
+                case ProductType.Sale:
+                    Sale_RadioButton.Checked = true;
+                    break;
+                case ProductType.Rent:
+                    Rent_RadioButton.Checked = true;
+                    break;
             }
         }
         private void SetAccessibleDescriptions()
@@ -344,7 +354,11 @@ namespace Sales_Tracker
         }
         private void CategoryWarning_LinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Tools.OpenForm(new Categories_Form(Purchase_RadioButton.Checked));
+            CategoryType categoryType = Purchase_RadioButton.Checked ? CategoryType.Purchase :
+                                        Sale_RadioButton.Checked ? CategoryType.Sale :
+                                        CategoryType.Rent;
+
+            Tools.OpenForm(new Categories_Form(categoryType));
             ValidateCategoryTextBox();
         }
         private void WarningCompany_LinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

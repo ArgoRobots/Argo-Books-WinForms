@@ -7,7 +7,7 @@ using Sales_Tracker.Rentals;
 using Sales_Tracker.Theme;
 using Sales_Tracker.UI;
 
-namespace Sales_Tracker
+namespace Sales_Tracker.Rentals
 {
     /// <summary>
     /// Form for viewing and managing rental transactions.

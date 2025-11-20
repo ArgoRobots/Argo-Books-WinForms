@@ -1,6 +1,6 @@
 using System.Windows.Forms;
 
-namespace Sales_Tracker
+namespace Sales_Tracker.Rentals
 {
     partial class RentOutItem_Form
     {

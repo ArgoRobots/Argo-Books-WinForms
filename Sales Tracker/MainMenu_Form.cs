@@ -1394,7 +1394,7 @@ namespace Sales_Tracker
         }
         private void ManageProducts_Button_Click(object sender, EventArgs e)
         {
-            Tools.OpenForm(new Products_Form(true));
+            Tools.OpenForm(new Products_Form(ProductType.Purchase));
         }
         private void ManageCompanies_Button_Click(object sender, EventArgs e)
         {
@@ -1402,7 +1402,7 @@ namespace Sales_Tracker
         }
         private void ManageCategories_Button_Click(object sender, EventArgs e)
         {
-            Tools.OpenForm(new Categories_Form(true));
+            Tools.OpenForm(new Categories_Form());
         }
         private void Customers_Button_Click(object sender, EventArgs e)
         {
@@ -2364,13 +2364,13 @@ namespace Sales_Tracker
             {
                 categoryList = CategoryPurchaseList;
             }
-            else if (option == SelectedOption.CategoryRentals)
+            else if (option == SelectedOption.CategorySales || option == SelectedOption.ProductSales)
             {
-                categoryList = CategoryRentalList;
+                categoryList = CategorySaleList;
             }
             else
             {
-                categoryList = CategorySaleList;
+                categoryList = CategoryRentalList;
             }
 
             string json = JsonConvert.SerializeObject(categoryList, Formatting.Indented);

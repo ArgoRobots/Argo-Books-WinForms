@@ -1,11 +1,10 @@
 using Sales_Tracker.Classes;
 using Sales_Tracker.DataClasses;
 using Sales_Tracker.Language;
-using Sales_Tracker.Rentals;
 using Sales_Tracker.Theme;
 using Sales_Tracker.UI;
 
-namespace Sales_Tracker
+namespace Sales_Tracker.Rentals
 {
     /// <summary>
     /// Form for adding new rental items to inventory.
@@ -124,7 +123,7 @@ namespace Sales_Tracker
         }
         private void WarningProduct_LinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Tools.OpenForm(new Products_Form(true));
+            Tools.OpenForm(new Products_Form(ProductType.Rent));
             CheckIfProductsExist();
         }
 
@@ -233,7 +232,7 @@ namespace Sales_Tracker
         }
         private void CheckIfProductsExist()
         {
-            if (MainMenu_Form.Instance.GetProductPurchaseNames().Count == 0)
+            if (MainMenu_Form.Instance.GetFormattedRentableProductNames().Count == 0)
             {
                 WarningProduct_PictureBox.Visible = true;
                 WarningProduct_LinkLabel.Visible = true;

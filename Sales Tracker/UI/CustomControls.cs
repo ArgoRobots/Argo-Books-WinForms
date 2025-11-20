@@ -6,6 +6,7 @@ using Sales_Tracker.GridView;
 using Sales_Tracker.ImportSpreadsheet;
 using Sales_Tracker.Language;
 using Sales_Tracker.Properties;
+using Sales_Tracker.Rentals;
 using Sales_Tracker.ReportGenerator;
 using Sales_Tracker.Settings;
 using Sales_Tracker.Startup;
@@ -587,7 +588,7 @@ namespace Sales_Tracker.UI
             menuBtn.Click += (_, _) =>
             {
                 MainMenu_Form.Instance.Controls.Remove(ControlDropDown_Panel);
-                Tools.OpenForm(new Categories_Form(true));
+                Tools.OpenForm(new Categories_Form());
             };
 
             ConstructSeparator(btnWidth, flowPanel);
@@ -597,7 +598,7 @@ namespace Sales_Tracker.UI
             menuBtn.Click += (_, _) =>
             {
                 MainMenu_Form.Instance.Controls.Remove(ControlDropDown_Panel);
-                Tools.OpenForm(new Products_Form(true));
+                Tools.OpenForm(new Products_Form(ProductType.Purchase));
             };
 
             ConstructSeparator(btnWidth, flowPanel);

@@ -1,5 +1,6 @@
 ﻿using Sales_Tracker.GridView;
 using Sales_Tracker.Passwords;
+using Sales_Tracker.Rentals;
 using Sales_Tracker.Startup.Menus;
 using Sales_Tracker.UI;
 using System.Text;

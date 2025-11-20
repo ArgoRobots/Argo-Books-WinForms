@@ -103,11 +103,9 @@ namespace Sales_Tracker.GridView
                     break;
 
                 case MainMenu_Form.SelectedOption.ProductPurchases:
-                    HandleProductPurchasesDeletion(e);
-                    break;
-
                 case MainMenu_Form.SelectedOption.ProductSales:
-                    HandleProductSalesDeletion(e);
+                case MainMenu_Form.SelectedOption.ProductRentals:
+                    HandleProductDeletion(e);
                     break;
 
                 case MainMenu_Form.SelectedOption.CategoryPurchases:
@@ -178,7 +176,8 @@ namespace Sales_Tracker.GridView
                 MainMenu_Form.SelectedOption.CategorySales or
                 MainMenu_Form.SelectedOption.CategoryRentals or
                 MainMenu_Form.SelectedOption.ProductPurchases or
-                MainMenu_Form.SelectedOption.ProductSales)
+                MainMenu_Form.SelectedOption.ProductSales or
+                MainMenu_Form.SelectedOption.ProductRentals)
             {
                 MainMenu_Form.Instance.SaveCategoriesToFile(selected);
             }
@@ -375,11 +374,24 @@ namespace Sales_Tracker.GridView
             string message = $"Deleted rental '{name}'";
             CustomMessage_Form.AddThingThatHasChangedAndLogMessage(MainMenu_Form.ThingsThatHaveChangedInFile, 2, message);
         }
-        private static void HandleProductPurchasesDeletion(DataGridViewRowCancelEventArgs e)
+        private static void HandleProductDeletion(DataGridViewRowCancelEventArgs e)
         {
             string type = "product";
             string columnName = Products_Form.Column.ProductName.ToString();
             string valueBeingRemoved = e.Row.Cells[columnName].Value?.ToString();
+
+            List<Category>? categoryList = GetCategoryList();
+
+            if (categoryList == null)
+            {
+                CustomMessageBox.Show(
+                   "Cannot delete category",
+                   "Failed to delete the product",
+                   CustomMessageBoxIcon.Error,
+                   CustomMessageBoxButtons.Ok);
+                e.Cancel = true;
+                return;
+            }
 
             if (IsThisBeingUsedByDataGridView(type, ReadOnlyVariables.Product_column, valueBeingRemoved, _deleteAction))
             {
@@ -388,30 +400,7 @@ namespace Sales_Tracker.GridView
             }
 
             // Remove product from list
-            MainMenu_Form.Instance.CategoryPurchaseList.ForEach(c =>
-                c.ProductList.Remove(c.ProductList.FirstOrDefault(p => p.Name == valueBeingRemoved)));
-
-            // In case the product name that is being deleted is in the TextBox
-            Products_Form.Instance.ValidateProductNameTextBox();
-
-            string message = $"Deleted {type} '{valueBeingRemoved}'";
-            CustomMessage_Form.AddThingThatHasChangedAndLogMessage(MainMenu_Form.ThingsThatHaveChangedInFile, 2, message);
-        }
-        private static void HandleProductSalesDeletion(DataGridViewRowCancelEventArgs e)
-        {
-            string type = "product";
-            string columnName = Products_Form.Column.ProductName.ToString();
-            string valueBeingRemoved = e.Row.Cells[columnName].Value?.ToString();
-
-            if (IsThisBeingUsedByDataGridView(type, ReadOnlyVariables.Product_column, valueBeingRemoved, _deleteAction))
-            {
-                e.Cancel = true;
-                return;
-            }
-
-            // Remove product from list
-            MainMenu_Form.Instance.CategorySaleList.ForEach(c =>
-                c.ProductList.Remove(c.ProductList.FirstOrDefault(p => p.Name == valueBeingRemoved)));
+            categoryList.ForEach(c => c.ProductList.Remove(c.ProductList.FirstOrDefault(p => p.Name == valueBeingRemoved)));
 
             // In case the product name that is being deleted is in the TextBox
             Products_Form.Instance.ValidateProductNameTextBox();
@@ -424,13 +413,7 @@ namespace Sales_Tracker.GridView
             string columnName = Categories_Form.Column.CategoryName.ToString();
             string valueBeingRemoved = e.Row.Cells[columnName].Value?.ToString();
 
-            List<Category>? categoryList = MainMenu_Form.Instance.Selected switch
-            {
-                MainMenu_Form.SelectedOption.CategoryPurchases => MainMenu_Form.Instance.CategoryPurchaseList,
-                MainMenu_Form.SelectedOption.CategorySales => MainMenu_Form.Instance.CategorySaleList,
-                MainMenu_Form.SelectedOption.CategoryRentals => MainMenu_Form.Instance.CategoryRentalList,
-                _ => null
-            };
+            List<Category>? categoryList = GetCategoryList();
 
             if (categoryList == null)
             {
@@ -564,6 +547,19 @@ namespace Sales_Tracker.GridView
 
             string message = $"Deleted item '{productName}' in {transactionType}";
             CustomMessage_Form.AddThingThatHasChangedAndLogMessage(MainMenu_Form.ThingsThatHaveChangedInFile, 2, message);
+        }
+        private static List<Category>? GetCategoryList()
+        {
+            return MainMenu_Form.Instance.Selected switch
+            {
+                MainMenu_Form.SelectedOption.CategoryPurchases => MainMenu_Form.Instance.CategoryPurchaseList,
+                MainMenu_Form.SelectedOption.CategorySales => MainMenu_Form.Instance.CategorySaleList,
+                MainMenu_Form.SelectedOption.CategoryRentals => MainMenu_Form.Instance.CategoryRentalList,
+                MainMenu_Form.SelectedOption.ProductPurchases => MainMenu_Form.Instance.CategoryPurchaseList,
+                MainMenu_Form.SelectedOption.ProductSales => MainMenu_Form.Instance.CategorySaleList,
+                MainMenu_Form.SelectedOption.ProductRentals => MainMenu_Form.Instance.CategoryRentalList,
+                _ => null
+            };
         }
 
         // Methods for DataGridView for event handlers
@@ -1054,6 +1050,7 @@ namespace Sales_Tracker.GridView
                 MainMenu_Form.SelectedOption.CategoryRentals => Directories.CategoryRentals_file,
                 MainMenu_Form.SelectedOption.ProductPurchases => Directories.CategoryPurchases_file,
                 MainMenu_Form.SelectedOption.ProductSales => Directories.CategorySales_file,
+                MainMenu_Form.SelectedOption.ProductRentals => Directories.CategoryRentals_file,
                 MainMenu_Form.SelectedOption.Accountants => Directories.Accountants_file,
                 MainMenu_Form.SelectedOption.Companies => Directories.Companies_file,
                 _ => ""

@@ -1,6 +1,6 @@
 using Sales_Tracker.Classes;
 
-namespace Sales_Tracker
+namespace Sales_Tracker.Rentals
 {
     partial class AddRentalItem_Form
     {

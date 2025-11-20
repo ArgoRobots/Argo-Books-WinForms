@@ -745,31 +745,31 @@ namespace Sales_Tracker.GridView
                 switch (MainMenu_Form.Instance.Selected)
                 {
                     case MainMenu_Form.SelectedOption.Accountants:
-                        itemType = "the accountant";
+                        itemType = "accountant";
                         identifier = grid.SelectedRows[0].Cells[Accountants_Form.Column.AccountantName.ToString()].Value?.ToString() ?? "Unknown";
                         break;
 
                     case MainMenu_Form.SelectedOption.Companies:
-                        itemType = "the company";
+                        itemType = "company";
                         identifier = grid.SelectedRows[0].Cells[Companies_Form.Column.Company.ToString()].Value?.ToString() ?? "Unknown";
                         break;
 
                     case MainMenu_Form.SelectedOption.CategoryPurchases:
                     case MainMenu_Form.SelectedOption.CategorySales:
                     case MainMenu_Form.SelectedOption.CategoryRentals:
-                        itemType = "the category";
+                        itemType = "category";
                         identifier = grid.SelectedRows[0].Cells[Categories_Form.Column.CategoryName.ToString()].Value?.ToString() ?? "Unknown";
                         break;
 
                     case MainMenu_Form.SelectedOption.ProductPurchases:
                     case MainMenu_Form.SelectedOption.ProductSales:
                     case MainMenu_Form.SelectedOption.ProductRentals:
-                        itemType = "the product";
+                        itemType = "product";
                         identifier = grid.SelectedRows[0].Cells[Products_Form.Column.ProductName.ToString()].Value?.ToString() ?? "Unknown";
                         break;
 
                     case MainMenu_Form.SelectedOption.Customers:
-                        itemType = "the customer";
+                        itemType = "customer";
                         string firstName = grid.SelectedRows[0].Cells[Customers_Form.Column.FirstName.ToString()].Value?.ToString() ?? "";
                         string lastName = grid.SelectedRows[0].Cells[Customers_Form.Column.LastName.ToString()].Value?.ToString() ?? "";
                         identifier = $"{firstName} {lastName}".Trim();
@@ -780,7 +780,7 @@ namespace Sales_Tracker.GridView
                         break;
 
                     case MainMenu_Form.SelectedOption.Rentals:
-                        itemType = "the rental item";
+                        itemType = "rental item";
                         identifier = grid.SelectedRows[0].Cells[Rentals_Form.Column.ProductName.ToString()].Value?.ToString() ?? "Unknown";
                         break;
 
@@ -796,7 +796,7 @@ namespace Sales_Tracker.GridView
 
                 result = CustomMessageBox.ShowWithFormat(
                     "Confirm Deletion",
-                    "Are you sure you want to delete {0} '{1}'?",
+                    "Are you sure you want to delete the {0} '{1}'?",
                     CustomMessageBoxIcon.Question,
                     CustomMessageBoxButtons.YesNo,
                     itemType,
