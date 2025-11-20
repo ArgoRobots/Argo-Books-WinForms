@@ -30,8 +30,7 @@ namespace Sales_Tracker
         public static List<string> ThingsThatHaveChangedInFile { get; } = [];
 
         // Init.
-        public Categories_Form() : this(CategoryType.Purchase) { }  // This is needed for TranslationGenerator.GenerateAllLanguageTranslationFiles()
-        public Categories_Form(CategoryType categoryType)
+        public Categories_Form(CategoryType categoryType = CategoryType.Purchase)
         {
             InitializeComponent();
             _instance = this;

@@ -188,7 +188,7 @@ namespace Sales_Tracker
         }
         private void WarningProduct_LinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Tools.OpenForm(new Products_Form(false));
+            Tools.OpenForm(new Products_Form(ProductType.Sale));
             CheckIfProductsExist();
         }
         private void Receipt_Button_Click(object sender, EventArgs e)
