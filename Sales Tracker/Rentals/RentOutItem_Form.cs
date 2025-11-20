@@ -16,7 +16,7 @@ namespace Sales_Tracker
         // Properties
         private readonly RentalItem _rentalItem;
         private readonly DataGridViewRow _inventoryRow;
-        private Customer _selectedCustomer;
+        private  Customer _selectedCustomer;
 
         // Init.
         public RentOutItem_Form(RentalItem rentalItem, DataGridViewRow inventoryRow)
@@ -95,21 +95,18 @@ namespace Sales_Tracker
             float scale = DpiHelper.GetRelativeDpiScale();
             int searchBoxMaxHeight = (int)(255 * scale);
             SearchBox.Attach(Customer_TextBox, this, GetCustomerSearchResults, searchBoxMaxHeight, false, false, false, false);
-
-            // Wire up event handler for customer selection
-            Customer_TextBox.TextChanged += Customer_TextBox_TextChanged;
         }
 
-        private List<SearchBoxResult> GetCustomerSearchResults(string searchText)
+        private  List<SearchResult> GetCustomerSearchResults()
         {
-            List<SearchBoxResult> results = [];
+            List<SearchResult> results = [];
 
             foreach (Customer customer in MainMenu_Form.Instance.CustomerList)
             {
                 string displayText = $"{customer.FullName} ({customer.CustomerID})";
-                if (displayText.Contains(searchText, StringComparison.OrdinalIgnoreCase))
+                if (displayText.Contains(Customer_TextBox.Text, StringComparison.OrdinalIgnoreCase))
                 {
-                    results.Add(new SearchBoxResult(displayText, customer));
+                    results.Add(new SearchResult(displayText,null,0));
                 }
             }
 
@@ -245,7 +242,7 @@ namespace Sales_Tracker
         private void Customer_TextBox_TextChanged(object sender, EventArgs e)
         {
             // Check if a valid customer is selected from SearchBox
-            _selectedCustomer = SearchBox.SelectedObject as Customer;
+            _selectedCustomer = Customer_TextBox.Text as Customer;
             ValidateInputs();
         }
         private void Quantity_NumericUpDown_ValueChanged(object sender, EventArgs e)

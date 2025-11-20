@@ -239,8 +239,8 @@ namespace Sales_Tracker
                 rentalItem.CompanyName) ?? "";
 
             // Determine the rental rate based on rate type
-            string rateTypeLower = _rentalRecord.RateType?.ToLower() ?? "";
-            decimal rate = rateTypeLower switch
+            string rateTypeLower = _rentalRecord.RateType.ToString();
+            decimal? rate = rateTypeLower switch
             {
                 "daily" => rentalItem.DailyRate,
                 "weekly" => rentalItem.WeeklyRate,
@@ -271,7 +271,7 @@ namespace Sales_Tracker
                 rentalItem.CompanyName,                          // Company of origin
                 _rentalRecord.StartDate.ToString("yyyy-MM-dd"),  // Date
                 _rentalRecord.Quantity,                          // Total items
-                rate.ToString("N2"),                             // Price per unit (rental rate)
+                rate.ToString(),                                 // Price per unit (rental rate)
                 "0.00",                                          // Shipping
                 "0.00",                                          // Tax
                 "0.00",                                          // Fee
