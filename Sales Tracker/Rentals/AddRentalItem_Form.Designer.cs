@@ -48,8 +48,6 @@ namespace Sales_Tracker.Rentals
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges16 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges17 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges18 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges19 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges20 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             RentalItemID_TextBox = new Guna.UI2.WinForms.Guna2TextBox();
             RentalItemID_Label = new Label();
             ProductName_Label = new Label();
@@ -184,7 +182,7 @@ namespace Sales_Tracker.Rentals
             DailyRate_Label.Anchor = AnchorStyles.Top;
             DailyRate_Label.AutoSize = true;
             DailyRate_Label.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            DailyRate_Label.Location = new Point(434, 256);
+            DailyRate_Label.Location = new Point(280, 256);
             DailyRate_Label.Name = "DailyRate_Label";
             DailyRate_Label.Size = new Size(111, 31);
             DailyRate_Label.TabIndex = 0;
@@ -202,7 +200,7 @@ namespace Sales_Tracker.Rentals
             DailyRate_TextBox.FocusedState.BorderColor = Color.FromArgb(94, 148, 255);
             DailyRate_TextBox.Font = new Font("Segoe UI", 9F);
             DailyRate_TextBox.HoverState.BorderColor = Color.FromArgb(94, 148, 255);
-            DailyRate_TextBox.Location = new Point(434, 292);
+            DailyRate_TextBox.Location = new Point(280, 292);
             DailyRate_TextBox.Margin = new Padding(4, 5, 4, 5);
             DailyRate_TextBox.MaxLength = 8;
             DailyRate_TextBox.Name = "DailyRate_TextBox";
@@ -219,7 +217,7 @@ namespace Sales_Tracker.Rentals
             WeeklyRate_Label.Anchor = AnchorStyles.Top;
             WeeklyRate_Label.AutoSize = true;
             WeeklyRate_Label.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            WeeklyRate_Label.Location = new Point(592, 253);
+            WeeklyRate_Label.Location = new Point(438, 253);
             WeeklyRate_Label.Name = "WeeklyRate_Label";
             WeeklyRate_Label.Size = new Size(138, 31);
             WeeklyRate_Label.TabIndex = 0;
@@ -237,7 +235,7 @@ namespace Sales_Tracker.Rentals
             WeeklyRate_TextBox.FocusedState.BorderColor = Color.FromArgb(94, 148, 255);
             WeeklyRate_TextBox.Font = new Font("Segoe UI", 9F);
             WeeklyRate_TextBox.HoverState.BorderColor = Color.FromArgb(94, 148, 255);
-            WeeklyRate_TextBox.Location = new Point(592, 292);
+            WeeklyRate_TextBox.Location = new Point(438, 292);
             WeeklyRate_TextBox.Margin = new Padding(4, 5, 4, 5);
             WeeklyRate_TextBox.MaxLength = 8;
             WeeklyRate_TextBox.Name = "WeeklyRate_TextBox";
@@ -254,7 +252,7 @@ namespace Sales_Tracker.Rentals
             MonthlyRate_Label.Anchor = AnchorStyles.Top;
             MonthlyRate_Label.AutoSize = true;
             MonthlyRate_Label.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            MonthlyRate_Label.Location = new Point(750, 255);
+            MonthlyRate_Label.Location = new Point(596, 255);
             MonthlyRate_Label.Name = "MonthlyRate_Label";
             MonthlyRate_Label.Size = new Size(151, 31);
             MonthlyRate_Label.TabIndex = 0;
@@ -272,7 +270,7 @@ namespace Sales_Tracker.Rentals
             MonthlyRate_TextBox.FocusedState.BorderColor = Color.FromArgb(94, 148, 255);
             MonthlyRate_TextBox.Font = new Font("Segoe UI", 9F);
             MonthlyRate_TextBox.HoverState.BorderColor = Color.FromArgb(94, 148, 255);
-            MonthlyRate_TextBox.Location = new Point(750, 292);
+            MonthlyRate_TextBox.Location = new Point(596, 292);
             MonthlyRate_TextBox.Margin = new Padding(4, 5, 4, 5);
             MonthlyRate_TextBox.MaxLength = 8;
             MonthlyRate_TextBox.Name = "MonthlyRate_TextBox";
@@ -304,7 +302,7 @@ namespace Sales_Tracker.Rentals
             AddRentalItem_Button.Tag = "";
             AddRentalItem_Button.Text = "Add rental item";
             AddRentalItem_Button.Click += AddRentalItem_Button_Click;
-            //
+            // 
             // WarningProduct_LinkLabel
             // 
             WarningProduct_LinkLabel.Anchor = AnchorStyles.Top;
@@ -336,7 +334,7 @@ namespace Sales_Tracker.Rentals
             SecurityDeposit_Label.Anchor = AnchorStyles.Top;
             SecurityDeposit_Label.AutoSize = true;
             SecurityDeposit_Label.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            SecurityDeposit_Label.Location = new Point(908, 256);
+            SecurityDeposit_Label.Location = new Point(754, 256);
             SecurityDeposit_Label.Name = "SecurityDeposit_Label";
             SecurityDeposit_Label.Size = new Size(178, 31);
             SecurityDeposit_Label.TabIndex = 0;
@@ -345,7 +343,7 @@ namespace Sales_Tracker.Rentals
             // SecurityDeposit_TextBox
             // 
             SecurityDeposit_TextBox.Anchor = AnchorStyles.Top;
-            SecurityDeposit_TextBox.CustomizableEdges = customizableEdges17;
+            SecurityDeposit_TextBox.CustomizableEdges = customizableEdges15;
             SecurityDeposit_TextBox.DefaultText = "";
             SecurityDeposit_TextBox.DisabledState.BorderColor = Color.FromArgb(208, 208, 208);
             SecurityDeposit_TextBox.DisabledState.FillColor = Color.FromArgb(226, 226, 226);
@@ -354,13 +352,13 @@ namespace Sales_Tracker.Rentals
             SecurityDeposit_TextBox.FocusedState.BorderColor = Color.FromArgb(94, 148, 255);
             SecurityDeposit_TextBox.Font = new Font("Segoe UI", 9F);
             SecurityDeposit_TextBox.HoverState.BorderColor = Color.FromArgb(94, 148, 255);
-            SecurityDeposit_TextBox.Location = new Point(908, 292);
+            SecurityDeposit_TextBox.Location = new Point(754, 292);
             SecurityDeposit_TextBox.Margin = new Padding(4, 5, 4, 5);
             SecurityDeposit_TextBox.MaxLength = 8;
             SecurityDeposit_TextBox.Name = "SecurityDeposit_TextBox";
             SecurityDeposit_TextBox.PlaceholderText = "";
             SecurityDeposit_TextBox.SelectedText = "";
-            SecurityDeposit_TextBox.ShadowDecoration.CustomizableEdges = customizableEdges18;
+            SecurityDeposit_TextBox.ShadowDecoration.CustomizableEdges = customizableEdges16;
             SecurityDeposit_TextBox.ShortcutsEnabled = false;
             SecurityDeposit_TextBox.Size = new Size(150, 50);
             SecurityDeposit_TextBox.TabIndex = 9;
@@ -381,7 +379,7 @@ namespace Sales_Tracker.Rentals
             // 
             Notes_TextBox.Anchor = AnchorStyles.Top;
             Notes_TextBox.AutoSize = true;
-            Notes_TextBox.CustomizableEdges = customizableEdges19;
+            Notes_TextBox.CustomizableEdges = customizableEdges17;
             Notes_TextBox.DefaultText = "";
             Notes_TextBox.DisabledState.BorderColor = Color.FromArgb(208, 208, 208);
             Notes_TextBox.DisabledState.FillColor = Color.FromArgb(226, 226, 226);
@@ -397,7 +395,7 @@ namespace Sales_Tracker.Rentals
             Notes_TextBox.Name = "Notes_TextBox";
             Notes_TextBox.PlaceholderText = "";
             Notes_TextBox.SelectedText = "";
-            Notes_TextBox.ShadowDecoration.CustomizableEdges = customizableEdges20;
+            Notes_TextBox.ShadowDecoration.CustomizableEdges = customizableEdges18;
             Notes_TextBox.ShortcutsEnabled = false;
             Notes_TextBox.Size = new Size(525, 105);
             Notes_TextBox.TabIndex = 10;

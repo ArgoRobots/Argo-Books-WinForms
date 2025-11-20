@@ -171,7 +171,7 @@ namespace Sales_Tracker
         /// <summary>
         /// Gets the original email from the old values list, or null if not available.
         /// </summary>
-        private string GetOriginalEmail()
+        private string? GetOriginalEmail()
         {
             int emailColumnIndex = GetEmailColumnIndex();
             return emailColumnIndex >= 0 && emailColumnIndex < _listOfOldValues.Count

@@ -3,7 +3,6 @@ using Sales_Tracker.Classes;
 using Sales_Tracker.DataClasses;
 using Sales_Tracker.GridView;
 using Sales_Tracker.Language;
-using Sales_Tracker.Rentals;
 using Sales_Tracker.Theme;
 using Sales_Tracker.UI;
 
@@ -176,9 +175,8 @@ namespace Sales_Tracker.Rentals
         private void ShowContextMenu(int rowIndex)
         {
             DataGridViewRow row = CurrentRentals_DataGridView.Rows[rowIndex];
-            RentalRecord rentalRecord = row.Tag as RentalRecord;
 
-            if (rentalRecord == null) return;
+            if (row.Tag is not RentalRecord rentalRecord) { return; }
 
             Customer customer = MainMenu_Form.Instance.CustomerList.FirstOrDefault(c => c.CustomerID == rentalRecord.CustomerID);
 
@@ -287,7 +285,7 @@ namespace Sales_Tracker.Rentals
         // Methods
         private void ReturnRental(RentalRecord record, Customer customer)
         {
-            if (record == null || customer == null) return;
+            if (record == null || customer == null) { return; }
 
             ReturnRental_Form returnForm = new(customer, record);
             if (returnForm.ShowDialog() == DialogResult.OK)
@@ -296,9 +294,9 @@ namespace Sales_Tracker.Rentals
                 Rentals_Form.Instance?.RefreshDataGridView();
             }
         }
-        private void ViewCustomerDetails(Customer customer)
+        private static void ViewCustomerDetails(Customer customer)
         {
-            if (customer == null) return;
+            if (customer == null) { return; }
 
             // Open Customers_Form if not already open
             if (Customers_Form.Instance == null)

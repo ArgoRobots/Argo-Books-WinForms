@@ -28,7 +28,7 @@ namespace Sales_Tracker.DataClasses
         public List<RentalRecord> RentalRecords =>
             RentalInventoryManager.RentalInventory
                 .SelectMany(item => item.RentalRecords)
-                .Where(record => record.CustomerID == this.CustomerID)
+                .Where(record => record.CustomerID == CustomerID)
                 .ToList();
 
         public PaymentStatus CurrentPaymentStatus { get; set; } = PaymentStatus.Current;
@@ -59,7 +59,6 @@ namespace Sales_Tracker.DataClasses
 
         /// <summary>
         /// Updates customer metadata when a rental is created for them.
-        /// Note: The rental record itself is stored in RentalItem.RentalRecords.
         /// </summary>
         public void OnRentalCreated(RentalRecord record)
         {
