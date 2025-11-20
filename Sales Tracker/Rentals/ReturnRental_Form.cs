@@ -237,10 +237,10 @@ namespace Sales_Tracker.Rentals
                 _rentalRecord.StartDate.ToString("yyyy-MM-dd"),  // Date
                 _rentalRecord.Quantity,                          // Total items
                 rate.ToString(),                                 // Price per unit (rental rate)
-                "0.00",                                          // Shipping
-                "0.00",                                          // Tax
-                "0.00",                                          // Fee
-                "0.00",                                          // Discount
+                _rentalRecord.Shipping.ToString("0.00"),         // Shipping
+                _rentalRecord.Tax.ToString("0.00"),              // Tax
+                _rentalRecord.Fee.ToString("0.00"),              // Fee
+                _rentalRecord.Discount.ToString("0.00"),         // Discount
                 "0.00",                                          // Charged difference
                 _rentalRecord.TotalCost.ToString("N2"),          // Total rental revenue
                 "-",                                             // Notes placeholder
