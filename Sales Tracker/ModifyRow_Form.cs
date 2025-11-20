@@ -1026,27 +1026,11 @@ namespace Sales_Tracker
                         secondLeft += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
                         break;
 
-                    case nameof(Rentals_Form.Column.DailyRate):
-                        ConstructLabel(Rentals_Form.ColumnHeaders[Rentals_Form.Column.DailyRate], secondLeft, _secondPanel);
-                        Guna2TextBox dailyRateTextBox = ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbersAndDecimal, false, _secondPanel);
-                        dailyRateTextBox.Text = ExtractNumericValue(cellValue);
-                        dailyRateTextBox.Width = ScaledSmallWidth;
-                        secondLeft += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
-                        break;
-
-                    case nameof(Rentals_Form.Column.WeeklyRate):
-                        ConstructLabel(Rentals_Form.ColumnHeaders[Rentals_Form.Column.WeeklyRate], secondLeft, _secondPanel);
-                        Guna2TextBox weeklyRateTextBox = ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbersAndDecimal, false, _secondPanel);
-                        weeklyRateTextBox.Text = ExtractNumericValue(cellValue);
-                        weeklyRateTextBox.Width = ScaledSmallWidth;
-                        secondLeft += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
-                        break;
-
-                    case nameof(Rentals_Form.Column.MonthlyRate):
-                        ConstructLabel(Rentals_Form.ColumnHeaders[Rentals_Form.Column.MonthlyRate], secondLeft, _secondPanel);
-                        Guna2TextBox monthlyRateTextBox = ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbersAndDecimal, false, _secondPanel);
-                        monthlyRateTextBox.Text = ExtractNumericValue(cellValue);
-                        monthlyRateTextBox.Width = ScaledSmallWidth;
+                    case nameof(Rentals_Form.Column.RentalRate):
+                        ConstructLabel(Rentals_Form.ColumnHeaders[Rentals_Form.Column.RentalRate], secondLeft, _secondPanel);
+                        Guna2TextBox rentalRateTextBox = ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.None, false, _secondPanel);
+                        rentalRateTextBox.ReadOnly = true; // Display only - rate is calculated from item properties
+                        rentalRateTextBox.Width = ScaledSmallWidth;
                         secondLeft += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
                         break;
 
@@ -1225,10 +1209,7 @@ namespace Sales_Tracker
                         }
                     }
                     // Handle rental inventory currency fields
-                    else if (column == nameof(Rentals_Form.Column.DailyRate) ||
-                             column == nameof(Rentals_Form.Column.WeeklyRate) ||
-                             column == nameof(Rentals_Form.Column.MonthlyRate) ||
-                             column == nameof(Rentals_Form.Column.SecurityDeposit))
+                    else if (column == nameof(Rentals_Form.Column.SecurityDeposit))
                     {
                         if (decimal.TryParse(textBox.Text.Trim(), out decimal value))
                         {
@@ -1238,6 +1219,11 @@ namespace Sales_Tracker
                         {
                             _selectedRow.Cells[column].Value = 0m;
                         }
+                    }
+                    // Skip RentalRate - it's read-only and calculated
+                    else if (column == nameof(Rentals_Form.Column.RentalRate))
+                    {
+                        // Do nothing - this is display-only
                     }
                     // All other columns
                     else if (column != "Notes_TextBox" && column != "CountryCode_TextBox" && !processedColumns.Contains(column))
@@ -2125,23 +2111,9 @@ namespace Sales_Tracker
                                 rentalItem.QuantityInMaintenance = maintenance;
                             }
                             break;
-                        case nameof(Rentals_Form.Column.DailyRate):
-                            if (decimal.TryParse(textBox.Text.Trim(), out decimal dailyRate))
-                            {
-                                rentalItem.DailyRate = dailyRate;
-                            }
-                            break;
-                        case nameof(Rentals_Form.Column.WeeklyRate):
-                            if (decimal.TryParse(textBox.Text.Trim(), out decimal weeklyRate))
-                            {
-                                rentalItem.WeeklyRate = weeklyRate == 0 ? null : weeklyRate;
-                            }
-                            break;
-                        case nameof(Rentals_Form.Column.MonthlyRate):
-                            if (decimal.TryParse(textBox.Text.Trim(), out decimal monthlyRate))
-                            {
-                                rentalItem.MonthlyRate = monthlyRate == 0 ? null : monthlyRate;
-                            }
+                        case nameof(Rentals_Form.Column.RentalRate):
+                            // RentalRate is display-only and calculated from the item's rate properties
+                            // Actual rate editing would need to be done through item properties
                             break;
                         case nameof(Rentals_Form.Column.SecurityDeposit):
                             if (decimal.TryParse(textBox.Text.Trim(), out decimal deposit))
