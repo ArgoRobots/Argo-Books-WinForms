@@ -61,7 +61,6 @@ namespace Sales_Tracker.Rentals
         private void UpdateTheme()
         {
             ThemeManager.SetThemeForForm(this);
-            ThemeManager.MakeGButtonBluePrimary(FilterOverdue_Button);
         }
 
         // DataGridView properties
@@ -116,7 +115,7 @@ namespace Sales_Tracker.Rentals
 
             // Align controls
             Search_TextBox.Left = CurrentRentals_DataGridView.Right - Search_TextBox.Width;
-            FilterOverdue_Button.Left = Search_TextBox.Left - FilterOverdue_Button.Width - CustomControls.SpaceBetweenControls;
+            FilterOverdue_CheckBox.Left = Search_TextBox.Left - FilterOverdue_CheckBox.Width - CustomControls.SpaceBetweenControls;
         }
         private void DataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
@@ -259,10 +258,9 @@ namespace Sales_Tracker.Rentals
         }
 
         // Event handlers
-        private void FilterOverdue_Button_Click(object sender, EventArgs e)
+        private void FilterOverdue_CheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            _showOverdueOnly = !_showOverdueOnly;
-            FilterOverdue_Button.Text = _showOverdueOnly ? "Show All Rentals" : "Show Overdue Only";
+            _showOverdueOnly = FilterOverdue_CheckBox.Checked;
             RefreshDataGridView();
         }
         private void Search_TextBox_TextChanged(object sender, EventArgs e)
