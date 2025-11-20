@@ -28,6 +28,10 @@ namespace Sales_Tracker.Rentals
         public decimal SecurityDeposit { get; set; }
         public decimal TotalCost { get; set; }
         public decimal AmountPaid { get; set; }
+        public decimal Tax { get; set; }
+        public decimal Fee { get; set; }
+        public decimal Shipping { get; set; }
+        public decimal Discount { get; set; }
         public string Notes { get; set; } = "";
         public bool IsActive { get; set; } = true;
         public bool IsOverdue { get; set; }

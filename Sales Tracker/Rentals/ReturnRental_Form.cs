@@ -35,9 +35,26 @@ namespace Sales_Tracker.Rentals
             }
 
             LoadRentalDetails();
+            AddEventHandlersToTextBoxes();
             UpdateTheme();
             LanguageManager.UpdateLanguageForControl(this);
             LoadingPanel.ShowBlankLoadingPanel(this);
+        }
+        private void AddEventHandlersToTextBoxes()
+        {
+            TextBoxValidation.OnlyAllowNumbersAndOneDecimal(Tax_TextBox);
+            TextBoxManager.Attach(Tax_TextBox);
+
+            TextBoxValidation.OnlyAllowNumbersAndOneDecimal(Fee_TextBox);
+            TextBoxManager.Attach(Fee_TextBox);
+
+            TextBoxValidation.OnlyAllowNumbersAndOneDecimal(Shipping_TextBox);
+            TextBoxManager.Attach(Shipping_TextBox);
+
+            TextBoxValidation.OnlyAllowNumbersAndOneDecimal(Discount_TextBox);
+            TextBoxManager.Attach(Discount_TextBox);
+
+            TextBoxManager.Attach(Notes_TextBox);
         }
         private void LoadRentalDetails()
         {
@@ -84,8 +101,14 @@ namespace Sales_Tracker.Rentals
             DateTime returnDate = ReturnDate_Picker.Value;
             string notes = Notes_TextBox.Text.Trim();
 
+            // Parse optional fee fields
+            decimal tax = string.IsNullOrWhiteSpace(Tax_TextBox.Text) ? 0 : decimal.Parse(Tax_TextBox.Text);
+            decimal fee = string.IsNullOrWhiteSpace(Fee_TextBox.Text) ? 0 : decimal.Parse(Fee_TextBox.Text);
+            decimal shipping = string.IsNullOrWhiteSpace(Shipping_TextBox.Text) ? 0 : decimal.Parse(Shipping_TextBox.Text);
+            decimal discount = string.IsNullOrWhiteSpace(Discount_TextBox.Text) ? 0 : decimal.Parse(Discount_TextBox.Text);
+
             // Process return
-            ProcessReturn(returnDate, notes);
+            ProcessReturn(returnDate, notes, tax, fee, shipping, discount);
         }
         private void Cancel_Button_Click(object sender, EventArgs e)
         {
@@ -94,7 +117,7 @@ namespace Sales_Tracker.Rentals
         }
 
         // Business logic
-        private void ProcessReturn(DateTime returnDate, string notes)
+        private void ProcessReturn(DateTime returnDate, string notes, decimal tax, decimal fee, decimal shipping, decimal discount)
         {
             try
             {
@@ -102,6 +125,10 @@ namespace Sales_Tracker.Rentals
                 _rentalRecord.ReturnDate = returnDate;
                 _rentalRecord.IsActive = false;
                 _rentalRecord.IsOverdue = false;
+                _rentalRecord.Tax = tax;
+                _rentalRecord.Fee = fee;
+                _rentalRecord.Shipping = shipping;
+                _rentalRecord.Discount = discount;
 
                 if (!string.IsNullOrWhiteSpace(notes))
                 {
