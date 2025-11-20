@@ -49,18 +49,18 @@ namespace Sales_Tracker.ReportGenerator.Menus
         }
         private void AddEventHandlers()
         {
-            Today_RadioButton.Click += (_, _) => Today_RadioButton.Checked = true;
-            Yesterday_RadioButton.Click += (_, _) => Yesterday_RadioButton.Checked = true;
-            Last7Days_RadioButton.Click += (_, _) => Last7Days_RadioButton.Checked = true;
-            Last30Days_RadioButton.Click += (_, _) => Last30Days_RadioButton.Checked = true;
-            ThisMonth_RadioButton.Click += (_, _) => ThisMonth_RadioButton.Checked = true;
-            LastMonth_RadioButton.Click += (_, _) => LastMonth_RadioButton.Checked = true;
-            ThisQuarter_RadioButton.Click += (_, _) => ThisQuarter_RadioButton.Checked = true;
-            LastQuarter_RadioButton.Click += (_, _) => LastQuarter_RadioButton.Checked = true;
-            YearToDate_RadioButton.Click += (_, _) => YearToDate_RadioButton.Checked = true;
-            LastYear_RadioButton.Click += (_, _) => LastYear_RadioButton.Checked = true;
-            AllTime_RadioButton.Click += (_, _) => AllTime_RadioButton.Checked = true;
-            Custom_RadioButton.Click += (_, _) => Custom_RadioButton.Checked = true;
+            Today_Label.Click += (_, _) => Today_RadioButton.Checked = true;
+            Yesterday_Label.Click += (_, _) => Yesterday_RadioButton.Checked = true;
+            Last7Days_Label.Click += (_, _) => Last7Days_RadioButton.Checked = true;
+            Last30Days_Label.Click += (_, _) => Last30Days_RadioButton.Checked = true;
+            ThisMonth_Label.Click += (_, _) => ThisMonth_RadioButton.Checked = true;
+            LastMonth_Label.Click += (_, _) => LastMonth_RadioButton.Checked = true;
+            ThisQuarter_Label.Click += (_, _) => ThisQuarter_RadioButton.Checked = true;
+            LastQuarter_Label.Click += (_, _) => LastQuarter_RadioButton.Checked = true;
+            YearToDate_Label.Click += (_, _) => YearToDate_RadioButton.Checked = true;
+            LastYear_Label.Click += (_, _) => LastYear_RadioButton.Checked = true;
+            AllTime_Label.Click += (_, _) => AllTime_RadioButton.Checked = true;
+            Custom_Label.Click += (_, _) => Custom_RadioButton.Checked = true;
         }
         private void InitChartSelectionControl()
         {

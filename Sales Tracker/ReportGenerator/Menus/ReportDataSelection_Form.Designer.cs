@@ -267,7 +267,6 @@
             // 
             Today_Label.AutoSize = true;
             Today_Label.BackColor = Color.Transparent;
-            Today_Label.Cursor = Cursors.Hand;
             Today_Label.Font = new Font("Segoe UI", 10.5F);
             Today_Label.ForeColor = SystemColors.ControlText;
             Today_Label.Location = new Point(49, 71);
@@ -298,7 +297,6 @@
             // 
             Yesterday_Label.AutoSize = true;
             Yesterday_Label.BackColor = Color.Transparent;
-            Yesterday_Label.Cursor = Cursors.Hand;
             Yesterday_Label.Font = new Font("Segoe UI", 10.5F);
             Yesterday_Label.ForeColor = SystemColors.ControlText;
             Yesterday_Label.Location = new Point(49, 101);
@@ -329,7 +327,6 @@
             // 
             Last7Days_Label.AutoSize = true;
             Last7Days_Label.BackColor = Color.Transparent;
-            Last7Days_Label.Cursor = Cursors.Hand;
             Last7Days_Label.Font = new Font("Segoe UI", 10.5F);
             Last7Days_Label.ForeColor = SystemColors.ControlText;
             Last7Days_Label.Location = new Point(49, 131);
@@ -360,7 +357,6 @@
             // 
             Last30Days_Label.AutoSize = true;
             Last30Days_Label.BackColor = Color.Transparent;
-            Last30Days_Label.Cursor = Cursors.Hand;
             Last30Days_Label.Font = new Font("Segoe UI", 10.5F);
             Last30Days_Label.ForeColor = SystemColors.ControlText;
             Last30Days_Label.Location = new Point(49, 161);
@@ -391,7 +387,6 @@
             // 
             ThisMonth_Label.AutoSize = true;
             ThisMonth_Label.BackColor = Color.Transparent;
-            ThisMonth_Label.Cursor = Cursors.Hand;
             ThisMonth_Label.Font = new Font("Segoe UI", 10.5F);
             ThisMonth_Label.ForeColor = SystemColors.ControlText;
             ThisMonth_Label.Location = new Point(49, 191);
@@ -422,7 +417,6 @@
             // 
             LastMonth_Label.AutoSize = true;
             LastMonth_Label.BackColor = Color.Transparent;
-            LastMonth_Label.Cursor = Cursors.Hand;
             LastMonth_Label.Font = new Font("Segoe UI", 10.5F);
             LastMonth_Label.ForeColor = SystemColors.ControlText;
             LastMonth_Label.Location = new Point(49, 221);
@@ -453,7 +447,6 @@
             // 
             ThisQuarter_Label.AutoSize = true;
             ThisQuarter_Label.BackColor = Color.Transparent;
-            ThisQuarter_Label.Cursor = Cursors.Hand;
             ThisQuarter_Label.Font = new Font("Segoe UI", 10.5F);
             ThisQuarter_Label.ForeColor = SystemColors.ControlText;
             ThisQuarter_Label.Location = new Point(242, 71);
@@ -484,7 +477,6 @@
             // 
             LastQuarter_Label.AutoSize = true;
             LastQuarter_Label.BackColor = Color.Transparent;
-            LastQuarter_Label.Cursor = Cursors.Hand;
             LastQuarter_Label.Font = new Font("Segoe UI", 10.5F);
             LastQuarter_Label.ForeColor = SystemColors.ControlText;
             LastQuarter_Label.Location = new Point(242, 101);
@@ -515,7 +507,6 @@
             // 
             YearToDate_Label.AutoSize = true;
             YearToDate_Label.BackColor = Color.Transparent;
-            YearToDate_Label.Cursor = Cursors.Hand;
             YearToDate_Label.Font = new Font("Segoe UI", 10.5F);
             YearToDate_Label.ForeColor = SystemColors.ControlText;
             YearToDate_Label.Location = new Point(242, 131);
@@ -546,7 +537,6 @@
             // 
             LastYear_Label.AutoSize = true;
             LastYear_Label.BackColor = Color.Transparent;
-            LastYear_Label.Cursor = Cursors.Hand;
             LastYear_Label.Font = new Font("Segoe UI", 10.5F);
             LastYear_Label.ForeColor = SystemColors.ControlText;
             LastYear_Label.Location = new Point(242, 161);
@@ -577,7 +567,6 @@
             // 
             AllTime_Label.AutoSize = true;
             AllTime_Label.BackColor = Color.Transparent;
-            AllTime_Label.Cursor = Cursors.Hand;
             AllTime_Label.Font = new Font("Segoe UI", 10.5F);
             AllTime_Label.ForeColor = SystemColors.ControlText;
             AllTime_Label.Location = new Point(242, 191);
@@ -608,7 +597,6 @@
             // 
             Custom_Label.AutoSize = true;
             Custom_Label.BackColor = Color.Transparent;
-            Custom_Label.Cursor = Cursors.Hand;
             Custom_Label.Font = new Font("Segoe UI", 10.5F);
             Custom_Label.ForeColor = SystemColors.ControlText;
             Custom_Label.Location = new Point(242, 221);
