@@ -2085,8 +2085,15 @@ namespace Sales_Tracker
                 return;
             }
 
+            // Collect all controls from both panels
+            IEnumerable<Control> allControls = Panel.Controls.Cast<Control>();
+            if (_secondPanel != null)
+            {
+                allControls = allControls.Concat(_secondPanel.Controls.Cast<Control>());
+            }
+
             // Update rental item object with new values from controls
-            foreach (Control control in Panel.Controls)
+            foreach (Control control in allControls)
             {
                 if (control is Guna2TextBox textBox)
                 {
@@ -2170,12 +2177,6 @@ namespace Sales_Tracker
 
             // Save the updated inventory
             RentalInventoryManager.SaveInventory();
-
-            // Refresh the Rentals_Form if it's open
-            if (Rentals_Form.Instance != null)
-            {
-                Rentals_Form.Instance.RefreshDataGridView();
-            }
         }
 
         // Validate TextBoxes in other forms
