@@ -33,23 +33,11 @@ namespace Sales_Tracker
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges7 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges9 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges11 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges12 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges13 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges14 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             ProductName_Label = new Label();
             AvailableQuantity_Label = new Label();
             Customer_TextBox = new Guna.UI2.WinForms.Guna2TextBox();
             Quantity_NumericUpDown = new Guna.UI2.WinForms.Guna2NumericUpDown();
             RentalStartDate_DateTimePicker = new Guna.UI2.WinForms.Guna2DateTimePicker();
-            DailyRate_RadioButton = new Guna.UI2.WinForms.Guna2CustomRadioButton();
-            DailyRate_Label = new Label();
-            WeeklyRate_RadioButton = new Guna.UI2.WinForms.Guna2CustomRadioButton();
-            WeeklyRate_Label = new Label();
-            MonthlyRate_RadioButton = new Guna.UI2.WinForms.Guna2CustomRadioButton();
-            MonthlyRate_Label = new Label();
             Notes_TextBox = new Guna.UI2.WinForms.Guna2TextBox();
             RentOut_Button = new Guna.UI2.WinForms.Guna2Button();
             Cancel_Button = new Guna.UI2.WinForms.Guna2Button();
@@ -58,7 +46,6 @@ namespace Sales_Tracker
             SelectCustomer_Label = new Label();
             Quantity_Label = new Label();
             StartDate_Label = new Label();
-            RateType_Label = new Label();
             Notes_Label = new Label();
             ((System.ComponentModel.ISupportInitialize)Quantity_NumericUpDown).BeginInit();
             SuspendLayout();
@@ -134,157 +121,64 @@ namespace Sales_Tracker
             RentalStartDate_DateTimePicker.Size = new Size(250, 56);
             RentalStartDate_DateTimePicker.TabIndex = 8;
             RentalStartDate_DateTimePicker.Value = new DateTime(2025, 11, 9, 17, 21, 22, 428);
-            // 
-            // DailyRate_RadioButton
-            // 
-            DailyRate_RadioButton.Animated = true;
-            DailyRate_RadioButton.CheckedState.BorderColor = Color.FromArgb(94, 148, 255);
-            DailyRate_RadioButton.CheckedState.BorderThickness = 0;
-            DailyRate_RadioButton.CheckedState.FillColor = Color.FromArgb(94, 148, 255);
-            DailyRate_RadioButton.CheckedState.InnerColor = Color.White;
-            DailyRate_RadioButton.Location = new Point(38, 477);
-            DailyRate_RadioButton.Margin = new Padding(4, 5, 4, 5);
-            DailyRate_RadioButton.Name = "DailyRate_RadioButton";
-            DailyRate_RadioButton.ShadowDecoration.CustomizableEdges = customizableEdges7;
-            DailyRate_RadioButton.Size = new Size(25, 31);
-            DailyRate_RadioButton.TabIndex = 10;
-            DailyRate_RadioButton.UncheckedState.BorderColor = Color.FromArgb(125, 137, 149);
-            DailyRate_RadioButton.UncheckedState.BorderThickness = 2;
-            DailyRate_RadioButton.UncheckedState.FillColor = Color.Transparent;
-            DailyRate_RadioButton.UncheckedState.InnerColor = Color.Transparent;
-            DailyRate_RadioButton.CheckedChanged += RateType_CheckedChanged;
-            // 
-            // DailyRate_Label
-            // 
-            DailyRate_Label.AutoSize = true;
-            DailyRate_Label.Cursor = Cursors.Hand;
-            DailyRate_Label.Font = new Font("Segoe UI", 10F);
-            DailyRate_Label.Location = new Point(69, 478);
-            DailyRate_Label.Margin = new Padding(4, 0, 4, 0);
-            DailyRate_Label.Name = "DailyRate_Label";
-            DailyRate_Label.Size = new Size(113, 28);
-            DailyRate_Label.TabIndex = 11;
-            DailyRate_Label.Text = "Daily: $0.00";
-            // 
-            // WeeklyRate_RadioButton
-            // 
-            WeeklyRate_RadioButton.Animated = true;
-            WeeklyRate_RadioButton.CheckedState.BorderColor = Color.FromArgb(94, 148, 255);
-            WeeklyRate_RadioButton.CheckedState.BorderThickness = 0;
-            WeeklyRate_RadioButton.CheckedState.FillColor = Color.FromArgb(94, 148, 255);
-            WeeklyRate_RadioButton.CheckedState.InnerColor = Color.White;
-            WeeklyRate_RadioButton.Location = new Point(250, 477);
-            WeeklyRate_RadioButton.Margin = new Padding(4, 5, 4, 5);
-            WeeklyRate_RadioButton.Name = "WeeklyRate_RadioButton";
-            WeeklyRate_RadioButton.ShadowDecoration.CustomizableEdges = customizableEdges8;
-            WeeklyRate_RadioButton.Size = new Size(25, 31);
-            WeeklyRate_RadioButton.TabIndex = 12;
-            WeeklyRate_RadioButton.UncheckedState.BorderColor = Color.FromArgb(125, 137, 149);
-            WeeklyRate_RadioButton.UncheckedState.BorderThickness = 2;
-            WeeklyRate_RadioButton.UncheckedState.FillColor = Color.Transparent;
-            WeeklyRate_RadioButton.UncheckedState.InnerColor = Color.Transparent;
-            WeeklyRate_RadioButton.CheckedChanged += RateType_CheckedChanged;
-            // 
-            // WeeklyRate_Label
-            // 
-            WeeklyRate_Label.AutoSize = true;
-            WeeklyRate_Label.Cursor = Cursors.Hand;
-            WeeklyRate_Label.Font = new Font("Segoe UI", 10F);
-            WeeklyRate_Label.Location = new Point(281, 478);
-            WeeklyRate_Label.Margin = new Padding(4, 0, 4, 0);
-            WeeklyRate_Label.Name = "WeeklyRate_Label";
-            WeeklyRate_Label.Size = new Size(132, 28);
-            WeeklyRate_Label.TabIndex = 13;
-            WeeklyRate_Label.Text = "Weekly: $0.00";
-            // 
-            // MonthlyRate_RadioButton
-            // 
-            MonthlyRate_RadioButton.Animated = true;
-            MonthlyRate_RadioButton.CheckedState.BorderColor = Color.FromArgb(94, 148, 255);
-            MonthlyRate_RadioButton.CheckedState.BorderThickness = 0;
-            MonthlyRate_RadioButton.CheckedState.FillColor = Color.FromArgb(94, 148, 255);
-            MonthlyRate_RadioButton.CheckedState.InnerColor = Color.White;
-            MonthlyRate_RadioButton.Location = new Point(475, 477);
-            MonthlyRate_RadioButton.Margin = new Padding(4, 5, 4, 5);
-            MonthlyRate_RadioButton.Name = "MonthlyRate_RadioButton";
-            MonthlyRate_RadioButton.ShadowDecoration.CustomizableEdges = customizableEdges9;
-            MonthlyRate_RadioButton.Size = new Size(25, 31);
-            MonthlyRate_RadioButton.TabIndex = 14;
-            MonthlyRate_RadioButton.UncheckedState.BorderColor = Color.FromArgb(125, 137, 149);
-            MonthlyRate_RadioButton.UncheckedState.BorderThickness = 2;
-            MonthlyRate_RadioButton.UncheckedState.FillColor = Color.Transparent;
-            MonthlyRate_RadioButton.UncheckedState.InnerColor = Color.Transparent;
-            MonthlyRate_RadioButton.CheckedChanged += RateType_CheckedChanged;
-            // 
-            // MonthlyRate_Label
-            // 
-            MonthlyRate_Label.AutoSize = true;
-            MonthlyRate_Label.Cursor = Cursors.Hand;
-            MonthlyRate_Label.Font = new Font("Segoe UI", 10F);
-            MonthlyRate_Label.Location = new Point(506, 478);
-            MonthlyRate_Label.Margin = new Padding(4, 0, 4, 0);
-            MonthlyRate_Label.Name = "MonthlyRate_Label";
-            MonthlyRate_Label.Size = new Size(143, 28);
-            MonthlyRate_Label.TabIndex = 15;
-            MonthlyRate_Label.Text = "Monthly: $0.00";
-            // 
+            //
             // Notes_TextBox
             // 
             Notes_TextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             Notes_TextBox.Cursor = Cursors.IBeam;
-            Notes_TextBox.CustomizableEdges = customizableEdges10;
+            Notes_TextBox.CustomizableEdges = customizableEdges7;
             Notes_TextBox.DefaultText = "";
             Notes_TextBox.Font = new Font("Segoe UI", 10F);
-            Notes_TextBox.Location = new Point(38, 586);
+            Notes_TextBox.Location = new Point(38, 444);
             Notes_TextBox.Margin = new Padding(5, 8, 5, 8);
             Notes_TextBox.Multiline = true;
             Notes_TextBox.Name = "Notes_TextBox";
             Notes_TextBox.PlaceholderText = "Enter any additional notes...";
             Notes_TextBox.SelectedText = "";
-            Notes_TextBox.ShadowDecoration.CustomizableEdges = customizableEdges11;
+            Notes_TextBox.ShadowDecoration.CustomizableEdges = customizableEdges8;
             Notes_TextBox.Size = new Size(673, 125);
-            Notes_TextBox.TabIndex = 17;
+            Notes_TextBox.TabIndex = 10;
             // 
             // RentOut_Button
-            // 
+            //
             RentOut_Button.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            RentOut_Button.CustomizableEdges = customizableEdges12;
+            RentOut_Button.CustomizableEdges = customizableEdges7;
             RentOut_Button.Font = new Font("Segoe UI", 11F);
             RentOut_Button.ForeColor = Color.White;
-            RentOut_Button.Location = new Point(510, 791);
+            RentOut_Button.Location = new Point(510, 649);
             RentOut_Button.Margin = new Padding(4, 5, 4, 5);
             RentOut_Button.Name = "RentOut_Button";
-            RentOut_Button.ShadowDecoration.CustomizableEdges = customizableEdges13;
+            RentOut_Button.ShadowDecoration.CustomizableEdges = customizableEdges8;
             RentOut_Button.Size = new Size(200, 50);
-            RentOut_Button.TabIndex = 19;
+            RentOut_Button.TabIndex = 12;
             RentOut_Button.Text = "Rent Out";
             RentOut_Button.Click += RentOut_Button_Click;
-            // 
+            //
             // Cancel_Button
-            // 
+            //
             Cancel_Button.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            Cancel_Button.CustomizableEdges = customizableEdges14;
+            Cancel_Button.CustomizableEdges = customizableEdges8;
             Cancel_Button.Font = new Font("Segoe UI", 11F);
             Cancel_Button.ForeColor = Color.White;
-            Cancel_Button.Location = new Point(302, 791);
+            Cancel_Button.Location = new Point(302, 649);
             Cancel_Button.Margin = new Padding(4, 5, 4, 5);
             Cancel_Button.Name = "Cancel_Button";
-            Cancel_Button.ShadowDecoration.CustomizableEdges = customizableEdges14;
+            Cancel_Button.ShadowDecoration.CustomizableEdges = customizableEdges8;
             Cancel_Button.Size = new Size(200, 50);
-            Cancel_Button.TabIndex = 20;
+            Cancel_Button.TabIndex = 13;
             Cancel_Button.Text = "Cancel";
             Cancel_Button.Click += Cancel_Button_Click;
             // 
             // TotalCost_Label
-            // 
+            //
             TotalCost_Label.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             TotalCost_Label.AutoSize = true;
             TotalCost_Label.Font = new Font("Segoe UI", 13F, FontStyle.Bold);
-            TotalCost_Label.Location = new Point(555, 734);
+            TotalCost_Label.Location = new Point(555, 592);
             TotalCost_Label.Margin = new Padding(4, 0, 4, 0);
             TotalCost_Label.Name = "TotalCost_Label";
             TotalCost_Label.Size = new Size(156, 36);
-            TotalCost_Label.TabIndex = 18;
+            TotalCost_Label.TabIndex = 11;
             TotalCost_Label.Text = "Total: $0.00";
             TotalCost_Label.TextAlign = ContentAlignment.MiddleRight;
             // 
@@ -324,7 +218,7 @@ namespace Sales_Tracker
             Quantity_Label.Text = "Quantity";
             // 
             // StartDate_Label
-            // 
+            //
             StartDate_Label.AutoSize = true;
             StartDate_Label.Font = new Font("Segoe UI", 11F);
             StartDate_Label.Location = new Point(275, 306);
@@ -333,34 +227,23 @@ namespace Sales_Tracker
             StartDate_Label.Size = new Size(108, 30);
             StartDate_Label.TabIndex = 7;
             StartDate_Label.Text = "Start Date";
-            // 
-            // RateType_Label
-            // 
-            RateType_Label.AutoSize = true;
-            RateType_Label.Font = new Font("Segoe UI", 11F);
-            RateType_Label.Location = new Point(38, 422);
-            RateType_Label.Margin = new Padding(4, 0, 4, 0);
-            RateType_Label.Name = "RateType_Label";
-            RateType_Label.Size = new Size(121, 30);
-            RateType_Label.TabIndex = 9;
-            RateType_Label.Text = "Rental Rate";
-            // 
+            //
             // Notes_Label
-            // 
+            //
             Notes_Label.AutoSize = true;
             Notes_Label.Font = new Font("Segoe UI", 11F);
-            Notes_Label.Location = new Point(38, 548);
+            Notes_Label.Location = new Point(38, 406);
             Notes_Label.Margin = new Padding(4, 0, 4, 0);
             Notes_Label.Name = "Notes_Label";
             Notes_Label.Size = new Size(169, 30);
-            Notes_Label.TabIndex = 16;
+            Notes_Label.TabIndex = 9;
             Notes_Label.Text = "Notes (optional)";
             // 
             // RentOutItem_Form
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(748, 869);
+            ClientSize = new Size(748, 727);
             Controls.Add(ProductName_Label);
             Controls.Add(AvailableQuantity_Label);
             Controls.Add(SelectCustomer_Label);
@@ -370,13 +253,6 @@ namespace Sales_Tracker
             Controls.Add(Quantity_NumericUpDown);
             Controls.Add(StartDate_Label);
             Controls.Add(RentalStartDate_DateTimePicker);
-            Controls.Add(RateType_Label);
-            Controls.Add(DailyRate_RadioButton);
-            Controls.Add(DailyRate_Label);
-            Controls.Add(WeeklyRate_RadioButton);
-            Controls.Add(WeeklyRate_Label);
-            Controls.Add(MonthlyRate_RadioButton);
-            Controls.Add(MonthlyRate_Label);
             Controls.Add(Notes_Label);
             Controls.Add(Notes_TextBox);
             Controls.Add(TotalCost_Label);
@@ -386,7 +262,7 @@ namespace Sales_Tracker
             Margin = new Padding(4, 5, 4, 5);
             MaximizeBox = false;
             MinimizeBox = false;
-            MinimumSize = new Size(770, 925);
+            MinimumSize = new Size(770, 783);
             Name = "RentOutItem_Form";
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;
@@ -408,13 +284,6 @@ namespace Sales_Tracker
         private Guna.UI2.WinForms.Guna2NumericUpDown Quantity_NumericUpDown;
         private Label StartDate_Label;
         private Guna.UI2.WinForms.Guna2DateTimePicker RentalStartDate_DateTimePicker;
-        private Label RateType_Label;
-        private Guna.UI2.WinForms.Guna2CustomRadioButton DailyRate_RadioButton;
-        private Label DailyRate_Label;
-        private Guna.UI2.WinForms.Guna2CustomRadioButton WeeklyRate_RadioButton;
-        private Label WeeklyRate_Label;
-        private Guna.UI2.WinForms.Guna2CustomRadioButton MonthlyRate_RadioButton;
-        private Label MonthlyRate_Label;
         private Label Notes_Label;
         private Guna.UI2.WinForms.Guna2TextBox Notes_TextBox;
         private Label TotalCost_Label;

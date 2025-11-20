@@ -47,43 +47,6 @@ namespace Sales_Tracker
             Quantity_NumericUpDown.Value = 1;
             RentalStartDate_DateTimePicker.Value = DateTime.Today;
 
-            // Enable/disable rate radio buttons based on what's configured
-            DailyRate_RadioButton.Enabled = _rentalItem.DailyRate > 0;
-            WeeklyRate_RadioButton.Enabled = _rentalItem.WeeklyRate.HasValue && _rentalItem.WeeklyRate.Value > 0;
-            MonthlyRate_RadioButton.Enabled = _rentalItem.MonthlyRate.HasValue && _rentalItem.MonthlyRate.Value > 0;
-
-            // Select first available rate
-            if (DailyRate_RadioButton.Enabled)
-            {
-                DailyRate_RadioButton.Checked = true;
-                DailyRate_Label.Text = $"Daily: {MainMenu_Form.CurrencySymbol}{_rentalItem.DailyRate:N2}";
-            }
-            else if (WeeklyRate_RadioButton.Enabled)
-            {
-                WeeklyRate_RadioButton.Checked = true;
-                WeeklyRate_Label.Text = $"Weekly: {MainMenu_Form.CurrencySymbol}{_rentalItem.WeeklyRate:N2}";
-            }
-            else if (MonthlyRate_RadioButton.Enabled)
-            {
-                MonthlyRate_RadioButton.Checked = true;
-                MonthlyRate_Label.Text = $"Monthly: {MainMenu_Form.CurrencySymbol}{_rentalItem.MonthlyRate:N2}";
-            }
-
-            if (_rentalItem.WeeklyRate.HasValue)
-            {
-                WeeklyRate_Label.Text = $"Weekly: {MainMenu_Form.CurrencySymbol}{_rentalItem.WeeklyRate.Value:N2}";
-            }
-
-            if (_rentalItem.MonthlyRate.HasValue)
-            {
-                MonthlyRate_Label.Text = $"Monthly: {MainMenu_Form.CurrencySymbol}{_rentalItem.MonthlyRate.Value:N2}";
-            }
-
-            // Add event handlers to RadioButton labels
-            DailyRate_Label.Click += (s, e) => DailyRate_RadioButton.Checked = true;
-            WeeklyRate_Label.Click += (s, e) => WeeklyRate_RadioButton.Checked = true;
-            MonthlyRate_Label.Click += (s, e) => MonthlyRate_RadioButton.Checked = true;
-
             UpdateTotalCost();
         }
         private void InitializeCustomerSearchBox()
@@ -101,16 +64,16 @@ namespace Sales_Tracker
             SearchBox.Attach(Customer_TextBox, this, GetCustomerSearchResults, searchBoxMaxHeight, false, false, false, false);
         }
 
-        private  List<SearchResult> GetCustomerSearchResults()
+        private List<SearchBoxResult> GetCustomerSearchResults(string searchText)
         {
-            List<SearchResult> results = [];
+            List<SearchBoxResult> results = [];
 
             foreach (Customer customer in MainMenu_Form.Instance.CustomerList)
             {
                 string displayText = $"{customer.FullName} ({customer.CustomerID})";
-                if (displayText.Contains(Customer_TextBox.Text, StringComparison.OrdinalIgnoreCase))
+                if (displayText.Contains(searchText, StringComparison.OrdinalIgnoreCase))
                 {
-                    results.Add(new SearchResult(displayText,null,0));
+                    results.Add(new SearchBoxResult(displayText, customer));
                 }
             }
 
@@ -118,44 +81,10 @@ namespace Sales_Tracker
         }
         private void UpdateTotalCost()
         {
-            decimal rate = GetSelectedRate();
+            decimal rate = _rentalItem.DailyRate;
             int quantity = (int)Quantity_NumericUpDown.Value;
             decimal totalCost = rate * quantity;
             TotalCost_Label.Text = $"Total: {MainMenu_Form.CurrencySymbol}{totalCost:N2}";
-        }
-        private decimal GetSelectedRate()
-        {
-            if (DailyRate_RadioButton.Checked)
-            {
-                return _rentalItem.DailyRate;
-            }
-            if (WeeklyRate_RadioButton.Checked && _rentalItem.WeeklyRate.HasValue)
-            {
-                return _rentalItem.WeeklyRate.Value;
-            }
-            if (MonthlyRate_RadioButton.Checked && _rentalItem.MonthlyRate.HasValue)
-            {
-                return _rentalItem.MonthlyRate.Value;
-            }
-
-            return 0;
-        }
-        private RentalRateType GetSelectedRateType()
-        {
-            if (DailyRate_RadioButton.Checked)
-            {
-                return RentalRateType.Daily;
-            }
-            if (WeeklyRate_RadioButton.Checked)
-            {
-                return RentalRateType.Weekly;
-            }
-            if (MonthlyRate_RadioButton.Checked)
-            {
-                return RentalRateType.Monthly;
-            }
-
-            return RentalRateType.Daily;
         }
         private void UpdateTheme()
         {
@@ -189,7 +118,7 @@ namespace Sales_Tracker
             // Get rental details
             int quantity = (int)Quantity_NumericUpDown.Value;
             decimal deposit = _rentalItem.SecurityDeposit;
-            decimal rate = GetSelectedRate();
+            decimal rate = _rentalItem.DailyRate;
             decimal totalCost = (rate * quantity) + deposit;
 
             // Create rental record
@@ -197,7 +126,7 @@ namespace Sales_Tracker
                 rentalItemID: _rentalItem.RentalItemID,
                 productName: _rentalItem.ProductName,
                 quantity: quantity,
-                rateType: GetSelectedRateType(),
+                rateType: RentalRateType.Daily,
                 rate: rate,
                 startDate: RentalStartDate_DateTimePicker.Value,
                 securityDeposit: deposit,
@@ -246,14 +175,10 @@ namespace Sales_Tracker
         private void Customer_TextBox_TextChanged(object sender, EventArgs e)
         {
             // Check if a valid customer is selected from SearchBox
-            _selectedCustomer = Customer_TextBox.Text as Customer;
+            _selectedCustomer = SearchBox.SelectedObject as Customer;
             ValidateInputs();
         }
         private void Quantity_NumericUpDown_ValueChanged(object sender, EventArgs e)
-        {
-            UpdateTotalCost();
-        }
-        private void RateType_CheckedChanged(object sender, EventArgs e)
         {
             UpdateTotalCost();
         }
