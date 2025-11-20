@@ -23,6 +23,7 @@ namespace Sales_Tracker
         // Form Width/Height properties
         private static int ScaledLargeWidth => (int)(350 * DpiHelper.GetRelativeDpiScale());
         private static int ScaledStandardWidth => (int)(250 * DpiHelper.GetRelativeDpiScale());
+        private static int ScaledSmallWidth => (int)(150 * DpiHelper.GetRelativeDpiScale());
         private static int ScaledDatePickerWidth => (int)(300 * DpiHelper.GetRelativeDpiScale());
         private static int ScaledControlHeight => (int)(50 * DpiHelper.GetRelativeDpiScale());
 
@@ -598,40 +599,46 @@ namespace Sales_Tracker
                         if (productName == ReadOnlyVariables.MultipleItems_text) { continue; }
 
                         ConstructLabel(MainMenu_Form.Instance.PurchaseColumnHeaders[MainMenu_Form.Column.TotalItems], secondLeft, _secondPanel);
-                        ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbers, false, _secondPanel);
-                        secondLeft += ScaledStandardWidth + CustomControls.SpaceBetweenControls;
+                        Guna2TextBox totalItemsTextBox = ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbers, false, _secondPanel);
+                        totalItemsTextBox.Width = ScaledSmallWidth;
+                        secondLeft += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
                         break;
 
                     case nameof(MainMenu_Form.Column.PricePerUnit):
                         if (cellValue == ReadOnlyVariables.EmptyCell) { continue; }
 
                         ConstructLabel(MainMenu_Form.Instance.PurchaseColumnHeaders[MainMenu_Form.Column.PricePerUnit], secondLeft, _secondPanel);
-                        ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbersAndDecimal, false, _secondPanel);
-                        secondLeft += ScaledStandardWidth + CustomControls.SpaceBetweenControls;
+                        Guna2TextBox pricePerUnitTextBox = ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbersAndDecimal, false, _secondPanel);
+                        pricePerUnitTextBox.Width = ScaledSmallWidth;
+                        secondLeft += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
                         break;
 
                     case nameof(MainMenu_Form.Column.Shipping):
                         ConstructLabel(MainMenu_Form.Instance.PurchaseColumnHeaders[MainMenu_Form.Column.Shipping], secondLeft, _secondPanel);
-                        ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbersAndDecimal, true, _secondPanel);
-                        secondLeft += ScaledStandardWidth + CustomControls.SpaceBetweenControls;
+                        Guna2TextBox shippingTextBox = ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbersAndDecimal, true, _secondPanel);
+                        shippingTextBox.Width = ScaledSmallWidth;
+                        secondLeft += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
                         break;
 
                     case nameof(MainMenu_Form.Column.Tax):
                         ConstructLabel(MainMenu_Form.Instance.PurchaseColumnHeaders[MainMenu_Form.Column.Tax], secondLeft, _secondPanel);
-                        ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbersAndDecimal, false, _secondPanel);
-                        secondLeft += ScaledStandardWidth + CustomControls.SpaceBetweenControls;
+                        Guna2TextBox taxTextBox = ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbersAndDecimal, false, _secondPanel);
+                        taxTextBox.Width = ScaledSmallWidth;
+                        secondLeft += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
                         break;
 
                     case nameof(MainMenu_Form.Column.Fee):
                         ConstructLabel(MainMenu_Form.Instance.PurchaseColumnHeaders[MainMenu_Form.Column.Fee], secondLeft, _secondPanel);
-                        ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbersAndDecimal, false, _secondPanel);
-                        secondLeft += ScaledStandardWidth + CustomControls.SpaceBetweenControls;
+                        Guna2TextBox feeTextBox = ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbersAndDecimal, false, _secondPanel);
+                        feeTextBox.Width = ScaledSmallWidth;
+                        secondLeft += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
                         break;
 
                     case nameof(MainMenu_Form.Column.Discount):
                         ConstructLabel(MainMenu_Form.Instance.PurchaseColumnHeaders[MainMenu_Form.Column.Discount], secondLeft, _secondPanel);
-                        ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbersAndDecimal, false, _secondPanel);
-                        secondLeft += ScaledStandardWidth + CustomControls.SpaceBetweenControls;
+                        Guna2TextBox discountTextBox = ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbersAndDecimal, false, _secondPanel);
+                        discountTextBox.Width = ScaledSmallWidth;
+                        secondLeft += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
                         break;
 
                     case nameof(MainMenu_Form.Column.Total):
@@ -642,8 +649,9 @@ namespace Sales_Tracker
                         else { text = MainMenu_Form.Instance.PurchaseColumnHeaders[MainMenu_Form.Column.Total]; }
 
                         ConstructLabel(text, secondLeft, _secondPanel);
-                        ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbersAndDecimal, false, _secondPanel);
-                        secondLeft += ScaledStandardWidth;
+                        Guna2TextBox totalTextBox = ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbersAndDecimal, false, _secondPanel);
+                        totalTextBox.Width = ScaledSmallWidth;
+                        secondLeft += ScaledSmallWidth;
                         break;
 
                     case nameof(MainMenu_Form.Column.Note):
@@ -698,20 +706,23 @@ namespace Sales_Tracker
 
                     case nameof(MainMenu_Form.Column.TotalItems):
                         ConstructLabel(MainMenu_Form.Instance.PurchaseColumnHeaders[MainMenu_Form.Column.TotalItems], left, Panel);
-                        ConstructTextBox(left, columnName, cellValue, 50, CustomControls.KeyPressValidation.OnlyNumbers, true, Panel);
-                        left += ScaledStandardWidth + CustomControls.SpaceBetweenControls;
+                        Guna2TextBox totalItemsItemsTextBox = ConstructTextBox(left, columnName, cellValue, 50, CustomControls.KeyPressValidation.OnlyNumbers, true, Panel);
+                        totalItemsItemsTextBox.Width = ScaledSmallWidth;
+                        left += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
                         break;
 
                     case nameof(MainMenu_Form.Column.PricePerUnit):
                         ConstructLabel(MainMenu_Form.Instance.PurchaseColumnHeaders[MainMenu_Form.Column.PricePerUnit], left, Panel);
-                        ConstructTextBox(left, columnName, cellValue, 50, CustomControls.KeyPressValidation.OnlyNumbersAndDecimal, true, Panel);
-                        left += ScaledStandardWidth + CustomControls.SpaceBetweenControls;
+                        Guna2TextBox pricePerUnitItemsTextBox = ConstructTextBox(left, columnName, cellValue, 50, CustomControls.KeyPressValidation.OnlyNumbersAndDecimal, true, Panel);
+                        pricePerUnitItemsTextBox.Width = ScaledSmallWidth;
+                        left += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
                         break;
 
                     case nameof(MainMenu_Form.Column.Total):
                         ConstructLabel(MainMenu_Form.Instance.PurchaseColumnHeaders[MainMenu_Form.Column.Total], left, Panel);
-                        ConstructTextBox(left, columnName, cellValue, 50, CustomControls.KeyPressValidation.OnlyNumbersAndDecimal, true, Panel);
-                        left += ScaledStandardWidth;
+                        Guna2TextBox totalItemsTransactionTextBox = ConstructTextBox(left, columnName, cellValue, 50, CustomControls.KeyPressValidation.OnlyNumbersAndDecimal, true, Panel);
+                        totalItemsTransactionTextBox.Width = ScaledSmallWidth;
+                        left += ScaledSmallWidth;
                         break;
                 }
             }
@@ -981,8 +992,9 @@ namespace Sales_Tracker
 
                     case nameof(Rentals_Form.Column.TotalQuantity):
                         ConstructLabel(Rentals_Form.ColumnHeaders[Rentals_Form.Column.TotalQuantity], left, Panel);
-                        ConstructTextBox(left, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbers, false, Panel);
-                        left += ScaledStandardWidth + CustomControls.SpaceBetweenControls;
+                        Guna2TextBox totalQtyTextBox = ConstructTextBox(left, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbers, false, Panel);
+                        totalQtyTextBox.Width = ScaledSmallWidth;
+                        left += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
                         break;
 
                     case nameof(Rentals_Form.Column.Available):
@@ -991,42 +1003,48 @@ namespace Sales_Tracker
 
                     case nameof(Rentals_Form.Column.Rented):
                         ConstructLabel(Rentals_Form.ColumnHeaders[Rentals_Form.Column.Rented], secondLeft, _secondPanel);
-                        ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbers, false, _secondPanel);
-                        secondLeft += ScaledStandardWidth + CustomControls.SpaceBetweenControls;
+                        Guna2TextBox rentedTextBox = ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbers, false, _secondPanel);
+                        rentedTextBox.Width = ScaledSmallWidth;
+                        secondLeft += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
                         break;
 
                     case nameof(Rentals_Form.Column.Maintenance):
                         ConstructLabel(Rentals_Form.ColumnHeaders[Rentals_Form.Column.Maintenance], secondLeft, _secondPanel);
-                        ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbers, false, _secondPanel);
-                        secondLeft += ScaledStandardWidth + CustomControls.SpaceBetweenControls;
+                        Guna2TextBox maintenanceTextBox = ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbers, false, _secondPanel);
+                        maintenanceTextBox.Width = ScaledSmallWidth;
+                        secondLeft += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
                         break;
 
                     case nameof(Rentals_Form.Column.DailyRate):
                         ConstructLabel(Rentals_Form.ColumnHeaders[Rentals_Form.Column.DailyRate], secondLeft, _secondPanel);
                         Guna2TextBox dailyRateTextBox = ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbersAndDecimal, false, _secondPanel);
                         dailyRateTextBox.Text = ExtractNumericValue(cellValue);
-                        secondLeft += ScaledStandardWidth + CustomControls.SpaceBetweenControls;
+                        dailyRateTextBox.Width = ScaledSmallWidth;
+                        secondLeft += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
                         break;
 
                     case nameof(Rentals_Form.Column.WeeklyRate):
                         ConstructLabel(Rentals_Form.ColumnHeaders[Rentals_Form.Column.WeeklyRate], secondLeft, _secondPanel);
                         Guna2TextBox weeklyRateTextBox = ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbersAndDecimal, false, _secondPanel);
                         weeklyRateTextBox.Text = ExtractNumericValue(cellValue);
-                        secondLeft += ScaledStandardWidth + CustomControls.SpaceBetweenControls;
+                        weeklyRateTextBox.Width = ScaledSmallWidth;
+                        secondLeft += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
                         break;
 
                     case nameof(Rentals_Form.Column.MonthlyRate):
                         ConstructLabel(Rentals_Form.ColumnHeaders[Rentals_Form.Column.MonthlyRate], secondLeft, _secondPanel);
                         Guna2TextBox monthlyRateTextBox = ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbersAndDecimal, false, _secondPanel);
                         monthlyRateTextBox.Text = ExtractNumericValue(cellValue);
-                        secondLeft += ScaledStandardWidth + CustomControls.SpaceBetweenControls;
+                        monthlyRateTextBox.Width = ScaledSmallWidth;
+                        secondLeft += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
                         break;
 
                     case nameof(Rentals_Form.Column.SecurityDeposit):
                         ConstructLabel(Rentals_Form.ColumnHeaders[Rentals_Form.Column.SecurityDeposit], secondLeft, _secondPanel);
                         Guna2TextBox depositTextBox = ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbersAndDecimal, false, _secondPanel);
                         depositTextBox.Text = ExtractNumericValue(cellValue);
-                        secondLeft += ScaledStandardWidth + CustomControls.SpaceBetweenControls;
+                        depositTextBox.Width = ScaledSmallWidth;
+                        secondLeft += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
                         break;
 
                     case nameof(Rentals_Form.Column.DateAdded):
