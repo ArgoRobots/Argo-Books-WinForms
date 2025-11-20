@@ -1053,6 +1053,20 @@ namespace Sales_Tracker
                             monthlyRateTextBox.TextChanged += ValidateInputs;
                             monthlyRateTextBox.TextChanged += HandleRateTextBoxChanged;
                             secondLeft += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
+
+                            // Trigger mutual exclusion logic for initial state
+                            if (!string.IsNullOrWhiteSpace(dailyRateTextBox.Text) && dailyRateTextBox.Text != "0" && dailyRateTextBox.Text != "0.00")
+                            {
+                                HandleRateTextBoxChanged(dailyRateTextBox, EventArgs.Empty);
+                            }
+                            else if (!string.IsNullOrWhiteSpace(weeklyRateTextBox.Text) && weeklyRateTextBox.Text != "0" && weeklyRateTextBox.Text != "0.00")
+                            {
+                                HandleRateTextBoxChanged(weeklyRateTextBox, EventArgs.Empty);
+                            }
+                            else if (!string.IsNullOrWhiteSpace(monthlyRateTextBox.Text) && monthlyRateTextBox.Text != "0" && monthlyRateTextBox.Text != "0.00")
+                            {
+                                HandleRateTextBoxChanged(monthlyRateTextBox, EventArgs.Empty);
+                            }
                         }
                         break;
 
