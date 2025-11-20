@@ -212,7 +212,20 @@ namespace Sales_Tracker.Rentals
             // Generate a unique rental ID
             string rentalID = GenerateNextRentalID();
 
-            // Prepare the row values
+            // Format rental rate display
+            string ratePeriod = record.RateType switch
+            {
+                RentalRateType.Daily => "day",
+                RentalRateType.Weekly => "week",
+                RentalRateType.Monthly => "month",
+                _ => "day"
+            };
+            string formattedRate = $"{MainMenu_Form.CurrencySymbol}{rate:N2}/{ratePeriod}";
+
+            // End date is empty for active rentals (will be set when returned)
+            string endDate = "-";
+
+            // Prepare the row values (matching RentalColumnHeaders structure)
             object[] rowValues =
             [
                 rentalID,                                 // Rental #
@@ -221,9 +234,10 @@ namespace Sales_Tracker.Rentals
                 categoryName,                             // Category
                 product.CountryOfOrigin ?? "-",           // Country of destination (using origin for rental)
                 _rentalItem.CompanyName,                  // Company of origin
-                record.StartDate.ToString("yyyy-MM-dd"),  // Date
+                record.StartDate.ToString("yyyy-MM-dd"),  // Start date
+                endDate,                                  // End date (empty for active rentals)
                 quantity,                                 // Total items
-                rate.ToString("N2"),                      // Price per unit (rental rate)
+                formattedRate,                            // Rental rate
                 "0.00",                                   // Shipping (not applicable for rentals)
                 "0.00",                                   // Tax
                 "0.00",                                   // Fee

@@ -220,7 +220,7 @@ namespace Sales_Tracker.Rentals
                 rentalItem.CompanyName) ?? "";
 
             // Determine the rental rate based on rate type
-            string rateTypeLower = _rentalRecord.RateType.ToString();
+            string rateTypeLower = _rentalRecord.RateType.ToString().ToLower();
             decimal? rate = rateTypeLower switch
             {
                 "daily" => rentalItem.DailyRate,
@@ -228,6 +228,16 @@ namespace Sales_Tracker.Rentals
                 "monthly" => rentalItem.MonthlyRate,
                 _ => 0
             };
+
+            // Format rental rate display
+            string ratePeriod = rateTypeLower switch
+            {
+                "daily" => "day",
+                "weekly" => "week",
+                "monthly" => "month",
+                _ => "day"
+            };
+            string formattedRate = $"{MainMenu_Form.CurrencySymbol}{rate:N2}/{ratePeriod}";
 
             // Format the notes with return date
             string notes = _rentalRecord.Notes ?? "";
@@ -246,7 +256,7 @@ namespace Sales_Tracker.Rentals
             decimal expectedAmount = _rentalRecord.TotalCost + _rentalRecord.Tax + _rentalRecord.Fee + _rentalRecord.Shipping - _rentalRecord.Discount;
             decimal chargedDifference = _rentalRecord.AmountCharged - expectedAmount;
 
-            // Prepare the row values (matching structure from RentOutItem_Form)
+            // Prepare the row values (matching RentalColumnHeaders structure)
             object[] rowValues =
             [
                 _rentalRecord.RentalRecordID,                    // Rental #
@@ -255,9 +265,10 @@ namespace Sales_Tracker.Rentals
                 categoryName,                                    // Category
                 product.CountryOfOrigin ?? "-",                  // Country of destination
                 rentalItem.CompanyName,                          // Company of origin
-                _rentalRecord.StartDate.ToString("yyyy-MM-dd"),  // Date
+                _rentalRecord.StartDate.ToString("yyyy-MM-dd"),  // Start date
+                returnDate.ToString("yyyy-MM-dd"),               // End date
                 _rentalRecord.Quantity,                          // Total items
-                rate.ToString(),                                 // Price per unit (rental rate)
+                formattedRate,                                   // Rental rate
                 _rentalRecord.Shipping.ToString("0.00"),         // Shipping
                 _rentalRecord.Tax.ToString("0.00"),              // Tax
                 _rentalRecord.Fee.ToString("0.00"),              // Fee
