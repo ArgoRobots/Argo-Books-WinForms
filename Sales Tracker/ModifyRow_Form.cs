@@ -1249,13 +1249,7 @@ namespace Sales_Tracker
                         // Here we need to update the display RentalRate column
                         if (_selectedTag == MainMenu_Form.DataGridViewTag.RentalInventory.ToString() && _selectedRow.Tag is RentalItem item)
                         {
-                            // Get rate values from textboxes
-                            IEnumerable<Control> allControls = Panel.Controls.Cast<Control>();
-                            if (_secondPanel != null)
-                            {
-                                allControls = allControls.Concat(_secondPanel.Controls.Cast<Control>());
-                            }
-
+                            // Get rate values from textboxes (using allControls from outer scope)
                             string dailyRate = allControls.OfType<Guna2TextBox>().FirstOrDefault(tb => tb.Name == "DailyRate")?.Text ?? "";
                             string weeklyRate = allControls.OfType<Guna2TextBox>().FirstOrDefault(tb => tb.Name == "WeeklyRate")?.Text ?? "";
                             string monthlyRate = allControls.OfType<Guna2TextBox>().FirstOrDefault(tb => tb.Name == "MonthlyRate")?.Text ?? "";
