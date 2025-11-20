@@ -300,13 +300,23 @@ namespace Sales_Tracker.Rentals
         {
             if (customer == null) return;
 
-            // Find the customer row in the Customers_Form DataGridView
-            foreach (DataGridViewRow row in MainMenu_Form.Instance.Customer_DataGridView.Rows)
+            // Open Customers_Form if not already open
+            if (Customers_Form.Instance == null)
             {
-                if (row.Cells[Customers_Form.Column.CustomerID.ToString()].Value?.ToString() == customer.CustomerID)
+                Tools.OpenForm(new Customers_Form());
+            }
+
+            // Find the customer row in the Customers_Form DataGridView
+            if (Customers_Form.Instance != null)
+            {
+                foreach (DataGridViewRow row in Customers_Form.Instance.Customers_DataGridView.Rows)
                 {
-                    RightClickDataGridViewRowMenu.OpenModifyRowForm(row, MainMenu_Form.Instance.Customer_DataGridView);
-                    break;
+                    if (row.Cells[Customers_Form.Column.CustomerID.ToString()].Value?.ToString() == customer.CustomerID)
+                    {
+                        // Open ModifyRow_Form for this customer
+                        Tools.OpenForm(new ModifyRow_Form(row));
+                        break;
+                    }
                 }
             }
         }
