@@ -1013,17 +1013,11 @@ namespace Sales_Tracker
                         break;
 
                     case nameof(Rentals_Form.Column.Rented):
-                        ConstructLabel(Rentals_Form.ColumnHeaders[Rentals_Form.Column.Rented], secondLeft, _secondPanel);
-                        Guna2TextBox rentedTextBox = ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbers, false, _secondPanel);
-                        rentedTextBox.Width = ScaledSmallWidth;
-                        secondLeft += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
+                        // Skip Rented - it's calculated and managed by the system
                         break;
 
                     case nameof(Rentals_Form.Column.Maintenance):
-                        ConstructLabel(Rentals_Form.ColumnHeaders[Rentals_Form.Column.Maintenance], secondLeft, _secondPanel);
-                        Guna2TextBox maintenanceTextBox = ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbers, false, _secondPanel);
-                        maintenanceTextBox.Width = ScaledSmallWidth;
-                        secondLeft += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
+                        // Skip Maintenance - it's calculated and managed by the system
                         break;
 
                     case nameof(Rentals_Form.Column.RentalRate):
@@ -1448,6 +1442,10 @@ namespace Sales_Tracker
                                                     gunaTextBox.Name == nameof(Customers_Form.Column.Address) ||
                                                     gunaTextBox.Name == nameof(Customers_Form.Column.PhoneNumber));
 
+                    // RentalItemID is optional for rental inventory
+                    bool isRentalItemID = _selectedTag == MainMenu_Form.DataGridViewTag.RentalInventory.ToString() &&
+                                          gunaTextBox.Name == nameof(Rentals_Form.Column.RentalItemID);
+
                     bool isEmailField = gunaTextBox.Name == nameof(Customers_Form.Column.Email);
                     bool isValidEmail = !isEmailField || TextBoxValidation.IsValidEmail(gunaTextBox.Text);
 
@@ -1472,7 +1470,7 @@ namespace Sales_Tracker
                         gunaTextBox.BorderColor = CustomColors.AccentRed;
                         isValid = false;
                     }
-                    else if (isEmpty && !isProductID && !isOptionalCustomerField)
+                    else if (isEmpty && !isProductID && !isOptionalCustomerField && !isRentalItemID)
                     {
                         ShowValidationMessage(gunaTextBox, LanguageManager.TranslateString("This field is required"));
                         gunaTextBox.BorderColor = CustomColors.AccentRed;
