@@ -136,6 +136,16 @@ namespace Sales_Tracker.Rentals
             );
             record.Accountant = MainMenu_Form.SelectedAccountant;
 
+            // Convert values to USD for currency conversion
+            string defaultCurrency = DataFileManager.GetValue(AppDataSettings.DefaultCurrencyType);
+            record.OriginalCurrency = defaultCurrency;
+            decimal exchangeRateToUSD = Currency.GetExchangeRate(defaultCurrency, "USD", record.StartDate);
+            if (exchangeRateToUSD != -1)
+            {
+                record.RateUSD = Math.Round(rate * exchangeRateToUSD, 2);
+                // Other USD fields will be set when returning (tax, fee, shipping, discount, amountCharged)
+            }
+
             // Rent out the item
             if (!_rentalItem.RentOut(quantity, _selectedCustomer.CustomerID))
             {
@@ -151,10 +161,16 @@ namespace Sales_Tracker.Rentals
             _selectedCustomer.OnRentalCreated(record);
             _selectedCustomer.UpdatePaymentStatus();
 
-            CreateRentalTransaction(_selectedCustomer, record, quantity, rate, totalCost);
-
             // Save changes
             RentalInventoryManager.SaveInventory();
+            MainMenu_Form.Instance.SaveCustomersToFile();
+
+            // Refresh rental DataGridView from inventory (single source of truth)
+            MainMenu_Form.Instance.Rental_DataGridView.Rows.Clear();
+            MainMenu_Form.Instance.LoadRentalsFromInventory();
+
+            // Refresh charts and UI
+            MainMenu_Form.Instance.LoadOrRefreshMainCharts();
 
             // Update the inventory row
             _inventoryRow.Cells[Rentals_Form.Column.Available.ToString()].Value = _rentalItem.QuantityAvailable;
@@ -162,7 +178,7 @@ namespace Sales_Tracker.Rentals
             _inventoryRow.Cells[Rentals_Form.Column.Status.ToString()].Value = _rentalItem.Status.ToString();
             _inventoryRow.Cells[Rentals_Form.Column.LastRentalDate.ToString()].Value = _rentalItem.LastRentalDate?.ToString("yyyy-MM-dd") ?? "-";
 
-            // Refresh the form
+            // Refresh the rental inventory form
             Rentals_Form.Instance?.RefreshDataGridView();
 
             string message = $"Rented out {quantity} unit(s) of '{_rentalItem.ProductName}' to {_selectedCustomer.FullName}";

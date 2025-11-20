@@ -224,7 +224,7 @@ namespace Sales_Tracker
             AddRowsFromFile(Sale_DataGridView, SelectedOption.Sales);
             LoadRentalsFromInventory();
         }
-        private void LoadRentalsFromInventory()
+        public void LoadRentalsFromInventory()
         {
             foreach (RentalItem rentalItem in RentalInventoryManager.RentalInventory)
             {
@@ -301,9 +301,29 @@ namespace Sales_Tracker
                     // Get customer information
                     Customer customer = CustomerList.FirstOrDefault(c => c.CustomerID == record.CustomerID);
 
-                    // Create and attach TagData
+                    // Create and attach TagData with USD values for currency conversion
                     TagData tagData = new()
                     {
+                        // USD values
+                        PricePerUnitUSD = record.RateUSD,
+                        ShippingUSD = record.ShippingUSD,
+                        TaxUSD = record.TaxUSD,
+                        FeeUSD = record.FeeUSD,
+                        DiscountUSD = record.DiscountUSD,
+                        ChargedDifferenceUSD = Math.Round((record.AmountChargedUSD - (record.RateUSD * record.Quantity + record.TaxUSD + record.FeeUSD + record.ShippingUSD - record.DiscountUSD)), 2),
+                        ChargedOrCreditedUSD = record.AmountChargedUSD,
+                        OriginalCurrency = record.OriginalCurrency ?? "USD",
+
+                        // Original values
+                        OriginalPricePerUnit = record.Rate,
+                        OriginalShipping = record.Shipping,
+                        OriginalTax = record.Tax,
+                        OriginalFee = record.Fee,
+                        OriginalDiscount = record.Discount,
+                        OriginalChargedDifference = chargedDifference,
+                        OriginalChargedOrCredited = record.AmountCharged,
+
+                        // Rental specific
                         IsReturned = record.ReturnDate.HasValue,
                         ReturnDate = record.ReturnDate,
                         CustomerID = record.CustomerID,
@@ -321,7 +341,8 @@ namespace Sales_Tracker
                 }
             }
 
-            bool hasVisibleRows = DataGridViewManager.HasVisibleRowsExcludingReturnedOrLost(Rental_DataGridView);
+            // Check if there are any rows (including returned rentals)
+            bool hasVisibleRows = Rental_DataGridView.Rows.Count > 0;
             LabelManager.ManageNoDataLabelOnControl(hasVisibleRows, Rental_DataGridView);
         }
         private void LoadCustomColumnHeaders()

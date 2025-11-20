@@ -39,6 +39,15 @@ namespace Sales_Tracker.Rentals
         public bool IsActive { get; set; } = true;
         public bool IsOverdue { get; set; }
 
+        // USD values for currency conversion
+        public decimal RateUSD { get; set; }
+        public decimal TaxUSD { get; set; }
+        public decimal FeeUSD { get; set; }
+        public decimal ShippingUSD { get; set; }
+        public decimal DiscountUSD { get; set; }
+        public decimal AmountChargedUSD { get; set; }
+        public string OriginalCurrency { get; set; } = "USD";
+
         public RentalRecord()
         {
             RentalRecordID = Guid.NewGuid().ToString();

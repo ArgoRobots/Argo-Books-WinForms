@@ -151,6 +151,22 @@ namespace Sales_Tracker.Rentals
                 _rentalRecord.Discount = discount;
                 _rentalRecord.AmountCharged = amountCharged;
 
+                // Convert values to USD for currency conversion
+                string defaultCurrency = DataFileManager.GetValue(AppDataSettings.DefaultCurrencyType);
+                if (string.IsNullOrEmpty(_rentalRecord.OriginalCurrency))
+                {
+                    _rentalRecord.OriginalCurrency = defaultCurrency;
+                }
+                decimal exchangeRateToUSD = Currency.GetExchangeRate(defaultCurrency, "USD", returnDate);
+                if (exchangeRateToUSD != -1)
+                {
+                    _rentalRecord.TaxUSD = Math.Round(tax * exchangeRateToUSD, 2);
+                    _rentalRecord.FeeUSD = Math.Round(fee * exchangeRateToUSD, 2);
+                    _rentalRecord.ShippingUSD = Math.Round(shipping * exchangeRateToUSD, 2);
+                    _rentalRecord.DiscountUSD = Math.Round(discount * exchangeRateToUSD, 2);
+                    _rentalRecord.AmountChargedUSD = Math.Round(amountCharged * exchangeRateToUSD, 2);
+                }
+
                 if (!string.IsNullOrWhiteSpace(notes))
                 {
                     _rentalRecord.Notes = string.IsNullOrWhiteSpace(_rentalRecord.Notes)
@@ -165,12 +181,13 @@ namespace Sales_Tracker.Rentals
                 // Update customer rental status
                 _customer?.ReturnRental(_rentalRecord.RentalRecordID);
 
-                // Add DataGridView row for the return
-                AddRentalRowToDataGridView(returnDate);
-
                 // Save all changes
                 RentalInventoryManager.SaveInventory();
                 MainMenu_Form.Instance.SaveCustomersToFile();
+
+                // Refresh rental DataGridView from inventory (single source of truth)
+                MainMenu_Form.Instance.Rental_DataGridView.Rows.Clear();
+                MainMenu_Form.Instance.LoadRentalsFromInventory();
 
                 // Refresh charts and UI
                 MainMenu_Form.Instance.LoadOrRefreshMainCharts();
