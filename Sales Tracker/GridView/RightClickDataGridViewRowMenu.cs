@@ -957,8 +957,22 @@ namespace Sales_Tracker.GridView
                     return;
                 }
 
-                // Open the return rental form with the selected row
-                Tools.OpenForm(new ReturnRental_Form(MainMenu_Form.Instance, selectedRow));
+                // Find the customer and rental record
+                Customer customer = MainMenu_Form.Instance.CustomerList.FirstOrDefault(c => c.CustomerID == tagData.CustomerID);
+                RentalRecord rentalRecord = customer?.GetActiveRentals().FirstOrDefault(r => r.RentalRecordID == tagData.RentalRecordID);
+
+                if (customer == null || rentalRecord == null)
+                {
+                    CustomMessageBox.Show(
+                        "Error",
+                        "Could not find the rental information.",
+                        CustomMessageBoxIcon.Error,
+                        CustomMessageBoxButtons.Ok);
+                    return;
+                }
+
+                // Open the return rental form with customer and rental record
+                Tools.OpenForm(new ReturnRental_Form(MainMenu_Form.Instance, customer, rentalRecord));
                 Hide();
             }
             else

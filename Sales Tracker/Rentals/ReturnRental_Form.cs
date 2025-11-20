@@ -17,57 +17,14 @@ namespace Sales_Tracker
         private readonly MainMenu_Form _mainMenuForm;
         private readonly Customer _customer;
         private readonly RentalRecord _rentalRecord;
-        private readonly DataGridViewRow _dataGridViewRow;
 
-        // Init - Constructor for existing rental transaction rows
-        public ReturnRental_Form(MainMenu_Form mainMenu, DataGridViewRow rentalRow)
-        {
-            InitializeComponent();
-            _mainMenuForm = mainMenu;
-            _dataGridViewRow = rentalRow;
-
-            // Get rental record ID from the row's tag
-            if (rentalRow.Tag is TagData tagData)
-            {
-                // Find the customer and rental record
-                _customer = MainMenu_Form.Instance.CustomerList.FirstOrDefault(c => c.CustomerID == tagData.CustomerID);
-                _rentalRecord = _customer?.GetActiveRentals().FirstOrDefault(r => r.RentalRecordID == tagData.RentalRecordID);
-
-                if (_customer == null || _rentalRecord == null)
-                {
-                    CustomMessageBox.Show("Error",
-                        "Could not find the rental information.",
-                        CustomMessageBoxIcon.Error,
-                        CustomMessageBoxButtons.Ok);
-                    Close();
-                    return;
-                }
-
-                LoadRentalDetails();
-            }
-            else
-            {
-                CustomMessageBox.Show("Error",
-                    "Invalid rental data.",
-                    CustomMessageBoxIcon.Error,
-                    CustomMessageBoxButtons.Ok);
-                Close();
-                return;
-            }
-
-            UpdateTheme();
-            LanguageManager.UpdateLanguageForControl(this);
-            LoadingPanel.ShowBlankLoadingPanel(this);
-        }
-
-        // Init - Constructor for active rentals (from rental inventory)
+        // Init
         public ReturnRental_Form(MainMenu_Form mainMenu, Customer customer, RentalRecord rentalRecord)
         {
             InitializeComponent();
             _mainMenuForm = mainMenu;
             _customer = customer;
             _rentalRecord = rentalRecord;
-            _dataGridViewRow = null; // No existing row for active rentals
 
             if (_customer == null || _rentalRecord == null)
             {
@@ -211,26 +168,36 @@ namespace Sales_Tracker
         }
         private void UpdateDataGridViewRow(DateTime returnDate)
         {
-            // If we have an existing row (rental was already in Rental_DataGridView), update it
-            if (_dataGridViewRow != null)
+            // Find if a row already exists for this rental in Rental_DataGridView
+            DataGridViewRow existingRow = null;
+            foreach (DataGridViewRow row in _mainMenuForm.Rental_DataGridView.Rows)
             {
-                // Update the tag data
-                if (_dataGridViewRow.Tag is TagData tagData)
+                if (row.Tag is TagData tagData && tagData.RentalRecordID == _rentalRecord.RentalRecordID)
+                {
+                    existingRow = row;
+                    break;
+                }
+            }
+
+            if (existingRow != null)
+            {
+                // Update the existing row
+                if (existingRow.Tag is TagData tagData)
                 {
                     tagData.IsReturned = true;
                     tagData.ReturnDate = returnDate;
-                    _dataGridViewRow.Tag = tagData;
+                    existingRow.Tag = tagData;
                 }
 
                 // Apply visual indicator (strikethrough and color)
-                foreach (DataGridViewCell cell in _dataGridViewRow.Cells)
+                foreach (DataGridViewCell cell in existingRow.Cells)
                 {
-                    cell.Style.Font = new Font(cell.Style.Font ?? _dataGridViewRow.DataGridView.DefaultCellStyle.Font, FontStyle.Strikeout);
+                    cell.Style.Font = new Font(cell.Style.Font ?? existingRow.DataGridView.DefaultCellStyle.Font, FontStyle.Strikeout);
                     cell.Style.ForeColor = Color.Gray;
                 }
 
-                // Add return date to notes column if exists
-                DataGridViewCell noteCell = _dataGridViewRow.Cells[ReadOnlyVariables.Note_column];
+                // Add return date to notes column
+                DataGridViewCell noteCell = existingRow.Cells[ReadOnlyVariables.Note_column];
                 if (noteCell != null)
                 {
                     string currentNote = noteCell.Value?.ToString() ?? "";
@@ -248,8 +215,7 @@ namespace Sales_Tracker
             }
             else
             {
-                // No existing row - this was an active rental being returned from inventory view
-                // Add a new row to Rental_DataGridView
+                // No existing row - add a new row to Rental_DataGridView
                 AddRentalRowToDataGridView(returnDate);
             }
         }
@@ -261,22 +227,25 @@ namespace Sales_Tracker
             if (rentalItem == null) { return; }
 
             // Get the product and category information
-            Product product = MainMenu_Form.Instance.GetProductPurchaseListProductIsFrom(
-                rentalItem.ProductName,
-                rentalItem.CompanyName) ??
-                MainMenu_Form.Instance.GetProductSaleListProductIsFrom(
-                rentalItem.ProductName,
-                rentalItem.CompanyName) ??
-                MainMenu_Form.Instance.GetProductRentalListProductIsFrom(
+            Product product = MainMenu_Form.GetProductProductNameIsFrom(
+                MainMenu_Form.Instance.CategoryPurchaseList,
                 rentalItem.ProductName,
                 rentalItem.CompanyName);
 
-            string categoryName = MainMenu_Form.Instance.GetCategoryNameFromProductName(
+            if (product == null)
+            {
+                Log.Write(1, $"Product not found: {rentalItem.ProductName} from {rentalItem.CompanyName}");
+                return;
+            }
+
+            string categoryName = MainMenu_Form.GetCategoryNameProductIsFrom(
+                MainMenu_Form.Instance.CategoryPurchaseList,
                 rentalItem.ProductName,
                 rentalItem.CompanyName) ?? "";
 
             // Determine the rental rate based on rate type
-            decimal rate = _rentalRecord.RateType.ToLower() switch
+            string rateTypeLower = _rentalRecord.RateType?.ToLower() ?? "";
+            decimal rate = rateTypeLower switch
             {
                 "daily" => rentalItem.DailyRate,
                 "weekly" => rentalItem.WeeklyRate,
@@ -303,7 +272,7 @@ namespace Sales_Tracker
                 MainMenu_Form.SelectedAccountant,                // Accountant
                 rentalItem.ProductName,                          // Product / Service
                 categoryName,                                    // Category
-                product?.CountryOfOrigin ?? "-",                 // Country of destination
+                product.CountryOfOrigin ?? "-",                  // Country of destination
                 rentalItem.CompanyName,                          // Company of origin
                 _rentalRecord.StartDate.ToString("yyyy-MM-dd"),  // Date
                 _rentalRecord.Quantity,                          // Total items
