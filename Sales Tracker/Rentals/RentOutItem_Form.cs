@@ -48,6 +48,7 @@ namespace Sales_Tracker
             RentalStartDate_DateTimePicker.Value = DateTime.Today;
 
             UpdateTotalCost();
+            ValidateInputs();
         }
         private void InitializeCustomerSearchBox()
         {

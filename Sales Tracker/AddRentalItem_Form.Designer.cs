@@ -171,7 +171,7 @@ namespace Sales_Tracker
             TotalQuantity_TextBox.HoverState.BorderColor = Color.FromArgb(94, 148, 255);
             TotalQuantity_TextBox.Location = new Point(837, 153);
             TotalQuantity_TextBox.Margin = new Padding(4, 5, 4, 5);
-            TotalQuantity_TextBox.MaxLength = 10;
+            TotalQuantity_TextBox.MaxLength = 8;
             TotalQuantity_TextBox.Name = "TotalQuantity_TextBox";
             TotalQuantity_TextBox.PlaceholderText = "";
             TotalQuantity_TextBox.SelectedText = "";
@@ -206,7 +206,7 @@ namespace Sales_Tracker
             DailyRate_TextBox.HoverState.BorderColor = Color.FromArgb(94, 148, 255);
             DailyRate_TextBox.Location = new Point(434, 292);
             DailyRate_TextBox.Margin = new Padding(4, 5, 4, 5);
-            DailyRate_TextBox.MaxLength = 10;
+            DailyRate_TextBox.MaxLength = 8;
             DailyRate_TextBox.Name = "DailyRate_TextBox";
             DailyRate_TextBox.PlaceholderText = "";
             DailyRate_TextBox.SelectedText = "";
@@ -241,7 +241,7 @@ namespace Sales_Tracker
             WeeklyRate_TextBox.HoverState.BorderColor = Color.FromArgb(94, 148, 255);
             WeeklyRate_TextBox.Location = new Point(592, 292);
             WeeklyRate_TextBox.Margin = new Padding(4, 5, 4, 5);
-            WeeklyRate_TextBox.MaxLength = 10;
+            WeeklyRate_TextBox.MaxLength = 8;
             WeeklyRate_TextBox.Name = "WeeklyRate_TextBox";
             WeeklyRate_TextBox.PlaceholderText = "";
             WeeklyRate_TextBox.SelectedText = "";
@@ -276,7 +276,7 @@ namespace Sales_Tracker
             MonthlyRate_TextBox.HoverState.BorderColor = Color.FromArgb(94, 148, 255);
             MonthlyRate_TextBox.Location = new Point(750, 292);
             MonthlyRate_TextBox.Margin = new Padding(4, 5, 4, 5);
-            MonthlyRate_TextBox.MaxLength = 10;
+            MonthlyRate_TextBox.MaxLength = 8;
             MonthlyRate_TextBox.Name = "MonthlyRate_TextBox";
             MonthlyRate_TextBox.PlaceholderText = "";
             MonthlyRate_TextBox.SelectedText = "";
@@ -388,7 +388,7 @@ namespace Sales_Tracker
             SecurityDeposit_TextBox.HoverState.BorderColor = Color.FromArgb(94, 148, 255);
             SecurityDeposit_TextBox.Location = new Point(908, 292);
             SecurityDeposit_TextBox.Margin = new Padding(4, 5, 4, 5);
-            SecurityDeposit_TextBox.MaxLength = 10;
+            SecurityDeposit_TextBox.MaxLength = 8;
             SecurityDeposit_TextBox.Name = "SecurityDeposit_TextBox";
             SecurityDeposit_TextBox.PlaceholderText = "";
             SecurityDeposit_TextBox.SelectedText = "";

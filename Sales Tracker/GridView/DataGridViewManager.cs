@@ -366,7 +366,7 @@ namespace Sales_Tracker.GridView
             string productNameColumn = Rentals_Form.Column.ProductName.ToString();
             string name = e.Row.Cells[productNameColumn].Value?.ToString();
 
-            // Actually remove the item from the rental inventory
+            // Remove the item from the rental inventory
             if (!string.IsNullOrEmpty(rentalItemID))
             {
                 RentalInventoryManager.RemoveRentalItem(rentalItemID);
