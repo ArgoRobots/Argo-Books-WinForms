@@ -1,4 +1,4 @@
-namespace Sales_Tracker
+namespace Sales_Tracker.Rentals
 {
     partial class Rentals_Form
     {

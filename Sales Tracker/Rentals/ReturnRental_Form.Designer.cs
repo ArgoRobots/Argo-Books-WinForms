@@ -1,7 +1,7 @@
 using Sales_Tracker.UI;
 using System.Windows.Forms;
 
-namespace Sales_Tracker
+namespace Sales_Tracker.Rentals
 {
     partial class ReturnRental_Form
     {
