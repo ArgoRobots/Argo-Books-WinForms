@@ -83,17 +83,6 @@ namespace Sales_Tracker
             DateTime returnDate = ReturnDate_Picker.Value;
             string notes = Notes_TextBox.Text.Trim();
 
-            // Confirm return
-            CustomMessageBoxResult result = CustomMessageBox.Show("Confirm Return",
-                $"Are you sure you want to return this rental for {_customer.FullName}?\n\n" +
-                $"Rental ID: {_rentalRecord.RentalRecordID}\n" +
-                $"Product: {_rentalRecord.ProductName}\n" +
-                $"Return Date: {returnDate:MMM dd, yyyy}",
-                CustomMessageBoxIcon.Question,
-                CustomMessageBoxButtons.YesNo);
-
-            if (result != CustomMessageBoxResult.Yes) { return; }
-
             // Process return
             ProcessReturn(returnDate, notes);
         }
@@ -128,7 +117,7 @@ namespace Sales_Tracker
                 _customer?.ReturnRental(_rentalRecord.RentalRecordID);
 
                 // Update DataGridView row
-                UpdateDataGridViewRow(returnDate);
+                bool wasExistingRow = UpdateDataGridViewRow(returnDate);
 
                 // Refresh the grid to ensure visual changes are displayed
                 _mainMenuForm.Rental_DataGridView.Refresh();
@@ -137,8 +126,11 @@ namespace Sales_Tracker
                 RentalInventoryManager.SaveInventory();
                 MainMenu_Form.Instance.SaveCustomersToFile();
 
-                // Save rental data
-                DataGridViewManager.DataGridViewRowChanged(_mainMenuForm.Rental_DataGridView);
+                // Save rental data (only if we updated an existing row, not added a new one)
+                if (wasExistingRow)
+                {
+                    DataGridViewManager.DataGridViewRowChanged(_mainMenuForm.Rental_DataGridView);
+                }
 
                 // Refresh charts and UI
                 _mainMenuForm.LoadOrRefreshMainCharts();
@@ -166,7 +158,7 @@ namespace Sales_Tracker
                     CustomMessageBoxButtons.Ok);
             }
         }
-        private void UpdateDataGridViewRow(DateTime returnDate)
+        private bool UpdateDataGridViewRow(DateTime returnDate)
         {
             // Find if a row already exists for this rental in Rental_DataGridView
             DataGridViewRow existingRow = null;
@@ -212,11 +204,14 @@ namespace Sales_Tracker
                         noteCell.Value = $"{currentNote}\n{returnNote}";
                     }
                 }
+
+                return true; // Existing row was updated
             }
             else
             {
                 // No existing row - add a new row to Rental_DataGridView
                 AddRentalRowToDataGridView(returnDate);
+                return false; // New row was added
             }
         }
 
