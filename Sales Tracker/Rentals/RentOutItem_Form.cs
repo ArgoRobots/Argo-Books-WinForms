@@ -64,16 +64,16 @@ namespace Sales_Tracker
             SearchBox.Attach(Customer_TextBox, this, GetCustomerSearchResults, searchBoxMaxHeight, false, false, false, false);
         }
 
-        private List<SearchBoxResult> GetCustomerSearchResults(string searchText)
+        private List<SearchResult> GetCustomerSearchResults()
         {
-            List<SearchBoxResult> results = [];
+            List<SearchResult> results = [];
 
             foreach (Customer customer in MainMenu_Form.Instance.CustomerList)
             {
                 string displayText = $"{customer.FullName} ({customer.CustomerID})";
-                if (displayText.Contains(searchText, StringComparison.OrdinalIgnoreCase))
+                if (displayText.Contains(Customer_TextBox.Text, StringComparison.OrdinalIgnoreCase))
                 {
-                    results.Add(new SearchBoxResult(displayText, customer));
+                    results.Add(new SearchResult(displayText, null, 0));
                 }
             }
 
