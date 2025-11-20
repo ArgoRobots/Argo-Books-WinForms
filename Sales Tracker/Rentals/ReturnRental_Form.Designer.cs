@@ -89,7 +89,7 @@ namespace Sales_Tracker.Rentals
             RentalDetails_Label.Margin = new Padding(4, 0, 4, 0);
             RentalDetails_Label.Name = "RentalDetails_Label";
             RentalDetails_Label.Padding = new Padding(15);
-            RentalDetails_Label.Size = new Size(640, 260);
+            RentalDetails_Label.Size = new Size(638, 260);
             RentalDetails_Label.TabIndex = 1;
             RentalDetails_Label.Text = "Rental Details";
             RentalDetails_Label.UseMnemonic = false;
@@ -106,7 +106,7 @@ namespace Sales_Tracker.Rentals
             ReturnDate_Label.Text = "Return Date";
             // 
             // ReturnDate_Picker
-            //
+            // 
             ReturnDate_Picker.BackColor = Color.Transparent;
             ReturnDate_Picker.Checked = true;
             ReturnDate_Picker.CustomizableEdges = customizableEdges1;
@@ -122,20 +122,20 @@ namespace Sales_Tracker.Rentals
             ReturnDate_Picker.Size = new Size(300, 50);
             ReturnDate_Picker.TabIndex = 3;
             ReturnDate_Picker.Value = new DateTime(2025, 11, 19, 0, 0, 0, 0);
-            //
+            // 
             // Tax_Label
-            //
+            // 
             Tax_Label.AutoSize = true;
             Tax_Label.Font = new Font("Segoe UI", 11F);
-            Tax_Label.Location = new Point(30, 490);
+            Tax_Label.Location = new Point(30, 492);
             Tax_Label.Margin = new Padding(4, 0, 4, 0);
             Tax_Label.Name = "Tax_Label";
-            Tax_Label.Size = new Size(129, 30);
+            Tax_Label.Size = new Size(44, 30);
             Tax_Label.TabIndex = 4;
-            Tax_Label.Text = "Tax (optional)";
-            //
+            Tax_Label.Text = "Tax";
+            // 
             // Tax_TextBox
-            //
+            // 
             Tax_TextBox.CustomizableEdges = customizableEdges3;
             Tax_TextBox.DefaultText = "";
             Tax_TextBox.Font = new Font("Segoe UI", 10F);
@@ -148,20 +148,20 @@ namespace Sales_Tracker.Rentals
             Tax_TextBox.ShadowDecoration.CustomizableEdges = customizableEdges4;
             Tax_TextBox.Size = new Size(150, 50);
             Tax_TextBox.TabIndex = 5;
-            //
+            // 
             // Fee_Label
-            //
+            // 
             Fee_Label.AutoSize = true;
             Fee_Label.Font = new Font("Segoe UI", 11F);
-            Fee_Label.Location = new Point(190, 490);
+            Fee_Label.Location = new Point(190, 492);
             Fee_Label.Margin = new Padding(4, 0, 4, 0);
             Fee_Label.Name = "Fee_Label";
-            Fee_Label.Size = new Size(129, 30);
+            Fee_Label.Size = new Size(48, 30);
             Fee_Label.TabIndex = 6;
-            Fee_Label.Text = "Fee (optional)";
-            //
+            Fee_Label.Text = "Fee";
+            // 
             // Fee_TextBox
-            //
+            // 
             Fee_TextBox.CustomizableEdges = customizableEdges5;
             Fee_TextBox.DefaultText = "";
             Fee_TextBox.Font = new Font("Segoe UI", 10F);
@@ -174,20 +174,20 @@ namespace Sales_Tracker.Rentals
             Fee_TextBox.ShadowDecoration.CustomizableEdges = customizableEdges6;
             Fee_TextBox.Size = new Size(150, 50);
             Fee_TextBox.TabIndex = 7;
-            //
+            // 
             // Shipping_Label
-            //
+            // 
             Shipping_Label.AutoSize = true;
             Shipping_Label.Font = new Font("Segoe UI", 11F);
-            Shipping_Label.Location = new Point(350, 490);
+            Shipping_Label.Location = new Point(350, 492);
             Shipping_Label.Margin = new Padding(4, 0, 4, 0);
             Shipping_Label.Name = "Shipping_Label";
-            Shipping_Label.Size = new Size(182, 30);
+            Shipping_Label.Size = new Size(98, 30);
             Shipping_Label.TabIndex = 8;
-            Shipping_Label.Text = "Shipping (optional)";
-            //
+            Shipping_Label.Text = "Shipping";
+            // 
             // Shipping_TextBox
-            //
+            // 
             Shipping_TextBox.CustomizableEdges = customizableEdges7;
             Shipping_TextBox.DefaultText = "";
             Shipping_TextBox.Font = new Font("Segoe UI", 10F);
@@ -200,20 +200,20 @@ namespace Sales_Tracker.Rentals
             Shipping_TextBox.ShadowDecoration.CustomizableEdges = customizableEdges8;
             Shipping_TextBox.Size = new Size(150, 50);
             Shipping_TextBox.TabIndex = 9;
-            //
+            // 
             // Discount_Label
-            //
+            // 
             Discount_Label.AutoSize = true;
             Discount_Label.Font = new Font("Segoe UI", 11F);
-            Discount_Label.Location = new Point(510, 490);
+            Discount_Label.Location = new Point(510, 492);
             Discount_Label.Margin = new Padding(4, 0, 4, 0);
             Discount_Label.Name = "Discount_Label";
-            Discount_Label.Size = new Size(176, 30);
+            Discount_Label.Size = new Size(96, 30);
             Discount_Label.TabIndex = 10;
-            Discount_Label.Text = "Discount (optional)";
-            //
+            Discount_Label.Text = "Discount";
+            // 
             // Discount_TextBox
-            //
+            // 
             Discount_TextBox.CustomizableEdges = customizableEdges9;
             Discount_TextBox.DefaultText = "";
             Discount_TextBox.Font = new Font("Segoe UI", 10F);
@@ -226,52 +226,52 @@ namespace Sales_Tracker.Rentals
             Discount_TextBox.ShadowDecoration.CustomizableEdges = customizableEdges10;
             Discount_TextBox.Size = new Size(150, 50);
             Discount_TextBox.TabIndex = 11;
-            //
+            // 
             // Notes_Label
-            //
+            // 
             Notes_Label.AutoSize = true;
             Notes_Label.Font = new Font("Segoe UI", 11F);
-            Notes_Label.Location = new Point(30, 605);
+            Notes_Label.Location = new Point(30, 721);
             Notes_Label.Margin = new Padding(4, 0, 4, 0);
             Notes_Label.Name = "Notes_Label";
             Notes_Label.Size = new Size(238, 30);
             Notes_Label.TabIndex = 12;
             Notes_Label.Text = "Return Notes (optional)";
-            //
+            // 
             // Notes_TextBox
-            //
+            // 
             Notes_TextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             Notes_TextBox.Cursor = Cursors.IBeam;
             Notes_TextBox.CustomizableEdges = customizableEdges11;
             Notes_TextBox.DefaultText = "";
             Notes_TextBox.Font = new Font("Segoe UI", 10F);
-            Notes_TextBox.Location = new Point(30, 645);
+            Notes_TextBox.Location = new Point(30, 759);
             Notes_TextBox.Margin = new Padding(5, 8, 5, 8);
             Notes_TextBox.Multiline = true;
             Notes_TextBox.Name = "Notes_TextBox";
             Notes_TextBox.PlaceholderText = "Enter any additional notes about the return...";
             Notes_TextBox.SelectedText = "";
             Notes_TextBox.ShadowDecoration.CustomizableEdges = customizableEdges12;
-            Notes_TextBox.Size = new Size(640, 100);
+            Notes_TextBox.Size = new Size(638, 110);
             Notes_TextBox.TabIndex = 13;
-            //
+            // 
             // AmountCharged_Label
-            //
+            // 
             AmountCharged_Label.AutoSize = true;
             AmountCharged_Label.Font = new Font("Segoe UI", 11F);
-            AmountCharged_Label.Location = new Point(30, 765);
+            AmountCharged_Label.Location = new Point(30, 607);
             AmountCharged_Label.Margin = new Padding(4, 0, 4, 0);
             AmountCharged_Label.Name = "AmountCharged_Label";
-            AmountCharged_Label.Size = new Size(163, 30);
+            AmountCharged_Label.Size = new Size(179, 30);
             AmountCharged_Label.TabIndex = 14;
             AmountCharged_Label.Text = "Amount Charged";
-            //
+            // 
             // AmountCharged_TextBox
-            //
+            // 
             AmountCharged_TextBox.CustomizableEdges = customizableEdges13;
             AmountCharged_TextBox.DefaultText = "";
             AmountCharged_TextBox.Font = new Font("Segoe UI", 10F);
-            AmountCharged_TextBox.Location = new Point(30, 805);
+            AmountCharged_TextBox.Location = new Point(30, 645);
             AmountCharged_TextBox.Margin = new Padding(5, 8, 5, 8);
             AmountCharged_TextBox.MaxLength = 10;
             AmountCharged_TextBox.Name = "AmountCharged_TextBox";
@@ -280,14 +280,14 @@ namespace Sales_Tracker.Rentals
             AmountCharged_TextBox.ShadowDecoration.CustomizableEdges = customizableEdges14;
             AmountCharged_TextBox.Size = new Size(200, 50);
             AmountCharged_TextBox.TabIndex = 15;
-            //
+            // 
             // Return_Button
-            //
+            // 
             Return_Button.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             Return_Button.CustomizableEdges = customizableEdges15;
             Return_Button.Font = new Font("Segoe UI", 11F);
             Return_Button.ForeColor = Color.White;
-            Return_Button.Location = new Point(470, 885);
+            Return_Button.Location = new Point(468, 884);
             Return_Button.Margin = new Padding(4, 5, 4, 5);
             Return_Button.Name = "Return_Button";
             Return_Button.ShadowDecoration.CustomizableEdges = customizableEdges16;
@@ -295,14 +295,14 @@ namespace Sales_Tracker.Rentals
             Return_Button.TabIndex = 16;
             Return_Button.Text = "Process Return";
             Return_Button.Click += Return_Button_Click;
-            //
+            // 
             // Cancel_Button
-            //
+            // 
             Cancel_Button.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             Cancel_Button.CustomizableEdges = customizableEdges17;
             Cancel_Button.Font = new Font("Segoe UI", 11F);
             Cancel_Button.ForeColor = Color.White;
-            Cancel_Button.Location = new Point(262, 885);
+            Cancel_Button.Location = new Point(260, 884);
             Cancel_Button.Margin = new Padding(4, 5, 4, 5);
             Cancel_Button.Name = "Cancel_Button";
             Cancel_Button.ShadowDecoration.CustomizableEdges = customizableEdges18;
@@ -312,10 +312,10 @@ namespace Sales_Tracker.Rentals
             Cancel_Button.Click += Cancel_Button_Click;
             // 
             // ReturnRental_Form
-            //
+            // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(700, 965);
+            ClientSize = new Size(698, 964);
             Controls.Add(Title_Label);
             Controls.Add(RentalDetails_Label);
             Controls.Add(ReturnDate_Label);
@@ -338,6 +338,7 @@ namespace Sales_Tracker.Rentals
             Margin = new Padding(4, 5, 4, 5);
             MaximizeBox = false;
             MinimizeBox = false;
+            MinimumSize = new Size(720, 1020);
             Name = "ReturnRental_Form";
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;

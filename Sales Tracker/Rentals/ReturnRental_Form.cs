@@ -111,7 +111,6 @@ namespace Sales_Tracker.Rentals
             decimal discount = string.IsNullOrWhiteSpace(Discount_TextBox.Text) ? 0 : decimal.Parse(Discount_TextBox.Text);
             decimal amountCharged = string.IsNullOrWhiteSpace(AmountCharged_TextBox.Text) ? 0 : decimal.Parse(AmountCharged_TextBox.Text);
 
-            // Process return
             ProcessReturn(returnDate, notes, tax, fee, shipping, discount, amountCharged);
         }
         private void Cancel_Button_Click(object sender, EventArgs e)
@@ -151,9 +150,6 @@ namespace Sales_Tracker.Rentals
 
                 // Add DataGridView row for the return
                 AddRentalRowToDataGridView(returnDate);
-
-                // Refresh the grid to ensure visual changes are displayed
-                MainMenu_Form.Instance.Rental_DataGridView.Refresh();
 
                 // Save all changes
                 RentalInventoryManager.SaveInventory();

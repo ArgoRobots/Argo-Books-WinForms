@@ -123,7 +123,7 @@ namespace Sales_Tracker.Rentals
             ProductName_TextBox.Clear();
             TotalQuantity_TextBox.Clear();
             RentalRate_TextBox.Clear();
-            RateType_ComboBox.SelectedIndex = 0; // Reset to "Day"
+            RateType_ComboBox.SelectedIndex = 0;  // Reset to "Day"
             SecurityDeposit_TextBox.Clear();
             Notes_TextBox.Clear();
         }
