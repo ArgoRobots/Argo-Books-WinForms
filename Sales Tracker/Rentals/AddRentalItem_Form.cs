@@ -1,3 +1,4 @@
+using Guna.UI2.WinForms;
 using Sales_Tracker.Classes;
 using Sales_Tracker.DataClasses;
 using Sales_Tracker.Language;
@@ -20,12 +21,11 @@ namespace Sales_Tracker.Rentals
             InitializeComponent();
 
             AddEventHandlersToTextBoxes();
-            Date_DateTimePicker.Value = DateTime.Now;
-            Date_DateTimePicker.MaxDate = DateTime.Now;
             CheckIfProductsExist();
             UpdateTheme();
             SetAccessibleDescriptions();
             LanguageManager.UpdateLanguageForControl(this);
+            RateType_ComboBox.SelectedIndex = 0;  // Set to "Day"
 
             PanelCloseFilter panelCloseFilter = new(this, ClosePanels,
                 TextBoxManager.RightClickTextBox_Panel,
@@ -49,17 +49,9 @@ namespace Sales_Tracker.Rentals
             TextBoxManager.Attach(TotalQuantity_TextBox);
             TotalQuantity_TextBox.TextChanged += ValidateInputs;
 
-            TextBoxValidation.OnlyAllowNumbersAndOneDecimal(DailyRate_TextBox);
-            TextBoxManager.Attach(DailyRate_TextBox);
-            DailyRate_TextBox.TextChanged += ValidateInputs;
-
-            TextBoxValidation.OnlyAllowNumbersAndOneDecimal(WeeklyRate_TextBox);
-            TextBoxManager.Attach(WeeklyRate_TextBox);
-            WeeklyRate_TextBox.TextChanged += ValidateInputs;
-
-            TextBoxValidation.OnlyAllowNumbersAndOneDecimal(MonthlyRate_TextBox);
-            TextBoxManager.Attach(MonthlyRate_TextBox);
-            MonthlyRate_TextBox.TextChanged += ValidateInputs;
+            TextBoxValidation.OnlyAllowNumbersAndOneDecimal(RentalRate_TextBox);
+            TextBoxManager.Attach(RentalRate_TextBox);
+            RentalRate_TextBox.TextChanged += ValidateInputs;
 
             TextBoxValidation.OnlyAllowNumbersAndOneDecimal(SecurityDeposit_TextBox);
             TextBoxManager.Attach(SecurityDeposit_TextBox);
@@ -80,11 +72,9 @@ namespace Sales_Tracker.Rentals
             [
                 RentalItemID_Label,
                 ProductName_Label,
-                Date_Label,
                 TotalQuantity_Label,
-                DailyRate_Label,
-                WeeklyRate_Label,
-                MonthlyRate_Label,
+                RentalRate_Label,
+                RateType_Label,
                 SecurityDeposit_Label,
                 Notes_Label,
                 WarningProduct_LinkLabel
@@ -133,9 +123,8 @@ namespace Sales_Tracker.Rentals
             RentalItemID_TextBox.Clear();
             ProductName_TextBox.Clear();
             TotalQuantity_TextBox.Clear();
-            DailyRate_TextBox.Clear();
-            WeeklyRate_TextBox.Clear();
-            MonthlyRate_TextBox.Clear();
+            RentalRate_TextBox.Clear();
+            RateType_ComboBox.SelectedIndex = 0;  // Reset to "Day"
             SecurityDeposit_TextBox.Clear();
             Notes_TextBox.Clear();
         }
@@ -165,38 +154,30 @@ namespace Sales_Tracker.Rentals
 
             int totalQuantity = int.Parse(TotalQuantity_TextBox.Text);
 
-            decimal dailyRate = string.IsNullOrWhiteSpace(DailyRate_TextBox.Text)
+            decimal rentalRate = string.IsNullOrWhiteSpace(RentalRate_TextBox.Text)
                 ? 0
-                : decimal.Parse(DailyRate_TextBox.Text);
+                : decimal.Parse(RentalRate_TextBox.Text);
 
-            decimal? weeklyRate = string.IsNullOrWhiteSpace(WeeklyRate_TextBox.Text)
-                ? null
-                : decimal.Parse(WeeklyRate_TextBox.Text);
-
-            decimal? monthlyRate = string.IsNullOrWhiteSpace(MonthlyRate_TextBox.Text)
-                ? null
-                : decimal.Parse(MonthlyRate_TextBox.Text);
+            string rateType = RateType_ComboBox.SelectedItem?.ToString() ?? "Day";
 
             decimal securityDeposit = string.IsNullOrWhiteSpace(SecurityDeposit_TextBox.Text)
                 ? 0
                 : decimal.Parse(SecurityDeposit_TextBox.Text);
 
             string notes = Notes_TextBox.Text.Trim();
-            DateTime dateAdded = Date_DateTimePicker.Value;
 
-            // Create new rental item
+            // Create new rental item with appropriate rate based on type
             RentalItem newItem = new()
             {
                 RentalItemID = rentalItemID,
                 ProductName = productName,
                 CompanyName = companyName,
                 TotalQuantity = totalQuantity,
-                DailyRate = dailyRate,
-                WeeklyRate = weeklyRate,
-                MonthlyRate = monthlyRate,
+                DailyRate = rateType == "Day" ? rentalRate : 0,
+                WeeklyRate = rateType == "Week" ? rentalRate : null,
+                MonthlyRate = rateType == "Month" ? rentalRate : null,
                 SecurityDeposit = securityDeposit,
                 Notes = notes,
-                DateAdded = dateAdded,
                 Status = RentalItem.AvailabilityStatus.Available
             };
 
@@ -249,12 +230,10 @@ namespace Sales_Tracker.Rentals
                 ProductName_TextBox.Tag?.ToString() != "0" &&
                 !string.IsNullOrWhiteSpace(TotalQuantity_TextBox.Text);
 
-            // At least one rate field must be filled
-            bool hasAtLeastOneRate = !string.IsNullOrWhiteSpace(DailyRate_TextBox.Text) ||
-                                     !string.IsNullOrWhiteSpace(WeeklyRate_TextBox.Text) ||
-                                     !string.IsNullOrWhiteSpace(MonthlyRate_TextBox.Text);
+            // Rental rate must be filled
+            bool hasRentalRate = !string.IsNullOrWhiteSpace(RentalRate_TextBox.Text);
 
-            AddRentalItem_Button.Enabled = allFieldsFilled && hasAtLeastOneRate;
+            AddRentalItem_Button.Enabled = allFieldsFilled && hasRentalRate;
         }
         private void ClosePanels()
         {

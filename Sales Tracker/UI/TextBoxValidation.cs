@@ -95,9 +95,18 @@ namespace Sales_Tracker.UI
         /// <summary>
         /// Determines whether the specified email address already exists in the customer list.
         /// </summary>
-        public static bool IsEmailDuplicate(string email)
+        /// <param name="email">The email address to check for duplicates.</param>
+        /// <param name="currentEmail">Optional current email to exclude from duplicate check (for editing existing customers).</param>
+        public static bool IsEmailDuplicate(string email, string currentEmail = null)
         {
             if (string.IsNullOrWhiteSpace(email))
+            {
+                return false;
+            }
+
+            // If current email is provided and matches the email being checked, exclude it from duplicate check
+            if (!string.IsNullOrWhiteSpace(currentEmail) &&
+                email.Equals(currentEmail, StringComparison.OrdinalIgnoreCase))
             {
                 return false;
             }

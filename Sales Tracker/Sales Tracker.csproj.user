@@ -46,6 +46,9 @@
     <Compile Update="MainMenu_Form.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Rentals\CurrentRentals_Form.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Rentals\Rentals_Form.cs">
       <SubType>Form</SubType>
     </Compile>

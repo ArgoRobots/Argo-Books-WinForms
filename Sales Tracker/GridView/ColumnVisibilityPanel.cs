@@ -69,7 +69,8 @@ namespace Sales_Tracker.GridView
         public static void Show(Guna2DataGridView dataGridView, DataGridViewCellMouseEventArgs e)
         {
             if (MainMenu_Form.Instance.Selected != MainMenu_Form.SelectedOption.Purchases &&
-                MainMenu_Form.Instance.Selected != MainMenu_Form.SelectedOption.Sales)
+                MainMenu_Form.Instance.Selected != MainMenu_Form.SelectedOption.Sales &&
+                MainMenu_Form.Instance.Selected != MainMenu_Form.SelectedOption.Rentals)
             {
                 return;
             }

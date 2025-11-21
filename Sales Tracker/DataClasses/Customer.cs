@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using Sales_Tracker.Rentals;
 
 namespace Sales_Tracker.DataClasses
@@ -19,7 +20,17 @@ namespace Sales_Tracker.DataClasses
         public string BanReason { get; set; } = "";
         public DateTime? BanDate { get; set; } = null;
         public string Notes { get; set; } = "";
-        public List<RentalRecord> RentalRecords { get; set; } = [];
+
+        /// <summary>
+        /// Gets all rental records for this customer from the rental inventory.
+        /// </summary>
+        [JsonIgnore]
+        public List<RentalRecord> RentalRecords =>
+            RentalInventoryManager.RentalInventory
+                .SelectMany(item => item.RentalRecords)
+                .Where(record => record.CustomerID == CustomerID)
+                .ToList();
+
         public PaymentStatus CurrentPaymentStatus { get; set; } = PaymentStatus.Current;
         public decimal OutstandingBalance { get; set; } = 0m;
         public DateTime CreatedDate { get; set; } = DateTime.Now;
@@ -47,11 +58,10 @@ namespace Sales_Tracker.DataClasses
         }
 
         /// <summary>
-        /// Adds a rental record to the customer's rental history.
+        /// Updates customer metadata when a rental is created for them.
         /// </summary>
-        public void AddRentalRecord(RentalRecord record)
+        public void OnRentalCreated(RentalRecord record)
         {
-            RentalRecords.Add(record);
             LastRentalDate = record.StartDate;
             UpdateOutstandingBalance();
         }

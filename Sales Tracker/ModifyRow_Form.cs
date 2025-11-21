@@ -168,6 +168,17 @@ namespace Sales_Tracker
             return -1;
         }
 
+        /// <summary>
+        /// Gets the original email from the old values list, or null if not available.
+        /// </summary>
+        private string? GetOriginalEmail()
+        {
+            int emailColumnIndex = GetEmailColumnIndex();
+            return emailColumnIndex >= 0 && emailColumnIndex < _listOfOldValues.Count
+                ? _listOfOldValues[emailColumnIndex]
+                : null;
+        }
+
         // Event handlers
         private void Save_Button_Click(object sender, EventArgs e)
         {
@@ -926,7 +937,6 @@ namespace Sales_Tracker
             ConstructSecondPanel();
             int left = 0;
             int secondLeft = 0;
-            int searchBoxMaxHeight = 100;
 
             foreach (DataGridViewColumn column in _selectedRow.DataGridView.Columns)
             {
@@ -945,14 +955,6 @@ namespace Sales_Tracker
                     case nameof(Rentals_Form.Column.ProductName):
                         ConstructLabel(Rentals_Form.ColumnHeaders[Rentals_Form.Column.ProductName], left, Panel);
                         _controlToFocus = ConstructTextBox(left, columnName, cellValue, 100, CustomControls.KeyPressValidation.None, false, Panel);
-                        left += ScaledStandardWidth + CustomControls.SpaceBetweenControls;
-                        break;
-
-                    case nameof(Rentals_Form.Column.CompanyName):
-                        ConstructLabel(Rentals_Form.ColumnHeaders[Rentals_Form.Column.CompanyName], left, Panel);
-                        Guna2TextBox companyTextBox = ConstructTextBox(left, columnName, cellValue, 50, CustomControls.KeyPressValidation.None, false, Panel);
-                        List<SearchResult> companySearchResults = SearchBox.ConvertToSearchResults(MainMenu_Form.Instance.CompanyList);
-                        SearchBox.Attach(companyTextBox, this, () => companySearchResults, searchBoxMaxHeight, false, false, false, true);
                         left += ScaledStandardWidth + CustomControls.SpaceBetweenControls;
                         break;
 
@@ -997,46 +999,59 @@ namespace Sales_Tracker
                         left += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
                         break;
 
-                    case nameof(Rentals_Form.Column.Available):
-                        // Skip Available - it's calculated
-                        break;
+                    case nameof(Rentals_Form.Column.RentalRate):
+                        // Extract rate info from the RentalItem object
+                        if (_selectedRow.Tag is RentalItem rentalItem)
+                        {
+                            // Determine current rate value and type
+                            string rateValue = "";
+                            string rateType = "Day";
 
-                    case nameof(Rentals_Form.Column.Rented):
-                        ConstructLabel(Rentals_Form.ColumnHeaders[Rentals_Form.Column.Rented], secondLeft, _secondPanel);
-                        Guna2TextBox rentedTextBox = ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbers, false, _secondPanel);
-                        rentedTextBox.Width = ScaledSmallWidth;
-                        secondLeft += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
-                        break;
+                            if (rentalItem.DailyRate > 0)
+                            {
+                                rateValue = rentalItem.DailyRate.ToString("0.00");
+                                rateType = "Day";
+                            }
+                            else if (rentalItem.WeeklyRate.HasValue && rentalItem.WeeklyRate.Value > 0)
+                            {
+                                rateValue = rentalItem.WeeklyRate.Value.ToString("0.00");
+                                rateType = "Week";
+                            }
+                            else if (rentalItem.MonthlyRate.HasValue && rentalItem.MonthlyRate.Value > 0)
+                            {
+                                rateValue = rentalItem.MonthlyRate.Value.ToString("0.00");
+                                rateType = "Month";
+                            }
 
-                    case nameof(Rentals_Form.Column.Maintenance):
-                        ConstructLabel(Rentals_Form.ColumnHeaders[Rentals_Form.Column.Maintenance], secondLeft, _secondPanel);
-                        Guna2TextBox maintenanceTextBox = ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbers, false, _secondPanel);
-                        maintenanceTextBox.Width = ScaledSmallWidth;
-                        secondLeft += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
-                        break;
+                            // Rental Rate Amount
+                            ConstructLabel("Rental Rate", secondLeft, _secondPanel);
+                            Guna2TextBox rateAmountTextBox = ConstructTextBox(secondLeft, "RentalRateAmount", rateValue, 10, CustomControls.KeyPressValidation.OnlyNumbersAndDecimal, false, _secondPanel);
+                            rateAmountTextBox.Width = ScaledSmallWidth;
+                            rateAmountTextBox.TextChanged += ValidateInputs;
+                            secondLeft += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
 
-                    case nameof(Rentals_Form.Column.DailyRate):
-                        ConstructLabel(Rentals_Form.ColumnHeaders[Rentals_Form.Column.DailyRate], secondLeft, _secondPanel);
-                        Guna2TextBox dailyRateTextBox = ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbersAndDecimal, false, _secondPanel);
-                        dailyRateTextBox.Text = ExtractNumericValue(cellValue);
-                        dailyRateTextBox.Width = ScaledSmallWidth;
-                        secondLeft += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
-                        break;
-
-                    case nameof(Rentals_Form.Column.WeeklyRate):
-                        ConstructLabel(Rentals_Form.ColumnHeaders[Rentals_Form.Column.WeeklyRate], secondLeft, _secondPanel);
-                        Guna2TextBox weeklyRateTextBox = ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbersAndDecimal, false, _secondPanel);
-                        weeklyRateTextBox.Text = ExtractNumericValue(cellValue);
-                        weeklyRateTextBox.Width = ScaledSmallWidth;
-                        secondLeft += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
-                        break;
-
-                    case nameof(Rentals_Form.Column.MonthlyRate):
-                        ConstructLabel(Rentals_Form.ColumnHeaders[Rentals_Form.Column.MonthlyRate], secondLeft, _secondPanel);
-                        Guna2TextBox monthlyRateTextBox = ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbersAndDecimal, false, _secondPanel);
-                        monthlyRateTextBox.Text = ExtractNumericValue(cellValue);
-                        monthlyRateTextBox.Width = ScaledSmallWidth;
-                        secondLeft += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
+                            // Rate Type ComboBox
+                            ConstructLabel("Rate Type", secondLeft, _secondPanel);
+                            Guna2ComboBox rateTypeComboBox = new()
+                            {
+                                Location = new Point(secondLeft, 45 + CustomControls.SpaceBetweenControls),
+                                Size = new Size(ScaledSmallWidth, ScaledControlHeight),
+                                ItemHeight = (int)(44 * DpiHelper.GetRelativeDpiScale()),
+                                FillColor = CustomColors.ControlBack,
+                                ForeColor = CustomColors.Text,
+                                BorderColor = CustomColors.ControlBorder,
+                                BorderRadius = 3,
+                                Name = "RateType",
+                                Font = new Font("Segoe UI", 9),
+                                AccessibleDescription = AccessibleDescriptionManager.DoNotCache,
+                                HoverState = { BorderColor = CustomColors.AccentBlue },
+                                DropDownStyle = ComboBoxStyle.DropDownList
+                            };
+                            rateTypeComboBox.Items.AddRange(["Day", "Week", "Month"]);
+                            rateTypeComboBox.SelectedItem = rateType;
+                            _secondPanel.Controls.Add(rateTypeComboBox);
+                            secondLeft += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
+                        }
                         break;
 
                     case nameof(Rentals_Form.Column.SecurityDeposit):
@@ -1053,10 +1068,6 @@ namespace Sales_Tracker
                         Guna2DateTimePicker dateAddedPicker = ConstructDatePicker(secondLeft, columnName, dateAdded, _secondPanel);
                         dateAddedPicker.ValueChanged += ValidateInputs;
                         secondLeft += ScaledDatePickerWidth + CustomControls.SpaceBetweenControls;
-                        break;
-
-                    case nameof(Rentals_Form.Column.LastRentalDate):
-                        // Skip LastRentalDate - it's automatically updated
                         break;
                 }
             }
@@ -1214,10 +1225,7 @@ namespace Sales_Tracker
                         }
                     }
                     // Handle rental inventory currency fields
-                    else if (column == nameof(Rentals_Form.Column.DailyRate) ||
-                             column == nameof(Rentals_Form.Column.WeeklyRate) ||
-                             column == nameof(Rentals_Form.Column.MonthlyRate) ||
-                             column == nameof(Rentals_Form.Column.SecurityDeposit))
+                    else if (column == nameof(Rentals_Form.Column.SecurityDeposit))
                     {
                         if (decimal.TryParse(textBox.Text.Trim(), out decimal value))
                         {
@@ -1226,6 +1234,27 @@ namespace Sales_Tracker
                         else
                         {
                             _selectedRow.Cells[column].Value = 0m;
+                        }
+                    }
+                    // Handle rental rate fields
+                    else if (column == "RentalRateAmount" || column == "RateType")
+                    {
+                        // Update the display RentalRate column
+                        if (_selectedTag == MainMenu_Form.DataGridViewTag.RentalInventory.ToString() && _selectedRow.Tag is RentalItem item)
+                        {
+                            // Get rate amount and type from controls
+                            string rateAmount = allControls.OfType<Guna2TextBox>().FirstOrDefault(tb => tb.Name == "RentalRateAmount")?.Text ?? "";
+                            string rateType = allControls.OfType<Guna2ComboBox>().FirstOrDefault(cb => cb.Name == "RateType")?.SelectedItem?.ToString() ?? "Day";
+
+                            // Format the display value
+                            string formattedRate = ReadOnlyVariables.EmptyCell;
+                            if (!string.IsNullOrWhiteSpace(rateAmount) && decimal.TryParse(rateAmount, out decimal rate) && rate > 0)
+                            {
+                                string suffix = rateType.ToLower();
+                                formattedRate = $"{MainMenu_Form.CurrencySymbol}{rate:N2}/{suffix}";
+                            }
+
+                            _selectedRow.Cells[nameof(Rentals_Form.Column.RentalRate)].Value = formattedRate;
                         }
                     }
                     // All other columns
@@ -1245,6 +1274,8 @@ namespace Sales_Tracker
                 else if (control is Guna2ComboBox comboBox)
                 {
                     string columnName = comboBox.Name;
+                    // Skip RateType combobox - it's handled in the rental rate fields section
+                    if (columnName == "RateType") continue;
                     _selectedRow.Cells[columnName].Value = comboBox.SelectedItem.ToString().Trim();
                 }
                 else if (control is Guna2DateTimePicker datePicker)
@@ -1368,6 +1399,13 @@ namespace Sales_Tracker
             {
                 if (control is Guna2TextBox gunaTextBox)
                 {
+                    // Skip validation for disabled textboxes (e.g., disabled rental rate fields)
+                    if (!gunaTextBox.Enabled)
+                    {
+                        HideValidationMessage(gunaTextBox);
+                        continue;
+                    }
+
                     // ProductID is optional for products
                     bool isProductID = _selectedTag == nameof(MainMenu_Form.DataGridViewTag.Product) &&
                                        gunaTextBox.Name == nameof(Products_Form.Column.ProductID);
@@ -1379,25 +1417,17 @@ namespace Sales_Tracker
                                                     gunaTextBox.Name == nameof(Customers_Form.Column.Address) ||
                                                     gunaTextBox.Name == nameof(Customers_Form.Column.PhoneNumber));
 
+                    // RentalItemID is optional for rental inventory
+                    bool isRentalItemID = _selectedTag == MainMenu_Form.DataGridViewTag.RentalInventory.ToString() &&
+                                          gunaTextBox.Name == nameof(Rentals_Form.Column.RentalItemID);
+
                     bool isEmailField = gunaTextBox.Name == nameof(Customers_Form.Column.Email);
                     bool isValidEmail = !isEmailField || TextBoxValidation.IsValidEmail(gunaTextBox.Text);
 
                     // For email uniqueness check, exclude the current customer's original email
-                    bool isUniqueEmail = true;
-                    if (isEmailField && !string.IsNullOrWhiteSpace(gunaTextBox.Text))
-                    {
-                        // Get the index of the Email column in _listOfOldValues
-                        int emailColumnIndex = GetEmailColumnIndex();
-                        string originalEmail = emailColumnIndex >= 0 && emailColumnIndex < _listOfOldValues.Count
-                            ? _listOfOldValues[emailColumnIndex]
-                            : "";
-
-                        // Only check for duplicates if the email has changed
-                        if (!gunaTextBox.Text.Trim().Equals(originalEmail, StringComparison.OrdinalIgnoreCase))
-                        {
-                            isUniqueEmail = !TextBoxValidation.IsEmailDuplicate(gunaTextBox.Text);
-                        }
-                    }
+                    bool isUniqueEmail = !isEmailField ||
+                                       string.IsNullOrWhiteSpace(gunaTextBox.Text) ||
+                                       !TextBoxValidation.IsEmailDuplicate(gunaTextBox.Text, GetOriginalEmail());
 
                     bool isEmpty = string.IsNullOrEmpty(gunaTextBox.Text) ||
                                    gunaTextBox.Text == ReadOnlyVariables.EmptyCell ||
@@ -1415,7 +1445,7 @@ namespace Sales_Tracker
                         gunaTextBox.BorderColor = CustomColors.AccentRed;
                         isValid = false;
                     }
-                    else if (isEmpty && !isProductID && !isOptionalCustomerField)
+                    else if (isEmpty && !isProductID && !isOptionalCustomerField && !isRentalItemID)
                     {
                         ShowValidationMessage(gunaTextBox, LanguageManager.TranslateString("This field is required"));
                         gunaTextBox.BorderColor = CustomColors.AccentRed;
@@ -2126,22 +2156,37 @@ namespace Sales_Tracker
                                 rentalItem.QuantityInMaintenance = maintenance;
                             }
                             break;
-                        case nameof(Rentals_Form.Column.DailyRate):
-                            if (decimal.TryParse(textBox.Text.Trim(), out decimal dailyRate))
+                        case "RentalRateAmount":
+                            // Get the rate type from combobox
+                            string rateType = allControls.OfType<Guna2ComboBox>().FirstOrDefault(cb => cb.Name == "RateType")?.SelectedItem?.ToString() ?? "Day";
+
+                            // Parse the rate amount
+                            decimal rateAmount = 0;
+                            if (decimal.TryParse(textBox.Text.Trim(), out decimal parsedRate))
                             {
-                                rentalItem.DailyRate = dailyRate;
+                                rateAmount = parsedRate;
                             }
-                            break;
-                        case nameof(Rentals_Form.Column.WeeklyRate):
-                            if (decimal.TryParse(textBox.Text.Trim(), out decimal weeklyRate))
+
+                            // Reset all rates first
+                            rentalItem.DailyRate = 0;
+                            rentalItem.WeeklyRate = null;
+                            rentalItem.MonthlyRate = null;
+
+                            // Set the appropriate rate based on type
+                            if (rateAmount > 0)
                             {
-                                rentalItem.WeeklyRate = weeklyRate == 0 ? null : weeklyRate;
-                            }
-                            break;
-                        case nameof(Rentals_Form.Column.MonthlyRate):
-                            if (decimal.TryParse(textBox.Text.Trim(), out decimal monthlyRate))
-                            {
-                                rentalItem.MonthlyRate = monthlyRate == 0 ? null : monthlyRate;
+                                switch (rateType)
+                                {
+                                    case "Day":
+                                        rentalItem.DailyRate = rateAmount;
+                                        break;
+                                    case "Week":
+                                        rentalItem.WeeklyRate = rateAmount;
+                                        break;
+                                    case "Month":
+                                        rentalItem.MonthlyRate = rateAmount;
+                                        break;
+                                }
                             }
                             break;
                         case nameof(Rentals_Form.Column.SecurityDeposit):

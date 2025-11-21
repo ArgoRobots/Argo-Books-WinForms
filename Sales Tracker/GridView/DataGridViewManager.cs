@@ -165,12 +165,18 @@ namespace Sales_Tracker.GridView
             MainMenu_Form.SelectedOption selected = MainMenu_Form.Instance.Selected;
 
             if (selected is MainMenu_Form.SelectedOption.Purchases
-                or MainMenu_Form.SelectedOption.Sales
-                or MainMenu_Form.SelectedOption.Rentals)
+                or MainMenu_Form.SelectedOption.Sales)
             {
                 MainMenu_Form.Instance.UpdateTotalLabels();
                 MainMenu_Form.Instance.LoadOrRefreshMainCharts();
                 MainMenu_Form.SaveDataGridViewToFileAsJson(dataGridView, selected);
+            }
+            else if (selected is MainMenu_Form.SelectedOption.Rentals)
+            {
+                // Rentals are stored in RentalInventory.txt (single source of truth)
+                // Don't save to rentals.txt
+                MainMenu_Form.Instance.UpdateTotalLabels();
+                MainMenu_Form.Instance.LoadOrRefreshMainCharts();
             }
             else if (selected is MainMenu_Form.SelectedOption.CategoryPurchases or
                 MainMenu_Form.SelectedOption.CategorySales or

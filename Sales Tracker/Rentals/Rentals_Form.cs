@@ -61,6 +61,7 @@ namespace Sales_Tracker.Rentals
         private void UpdateTheme()
         {
             ThemeManager.SetThemeForForm(this);
+            ThemeManager.MakeGButtonBluePrimary(CurrentRentals_Button);
             ThemeManager.MakeGButtonBluePrimary(AddRentalItem_Button);
         }
 
@@ -75,9 +76,7 @@ namespace Sales_Tracker.Rentals
             Available,
             Rented,
             Maintenance,
-            DailyRate,
-            WeeklyRate,
-            MonthlyRate,
+            RentalRate,
             SecurityDeposit,
             DateAdded,
             LastRentalDate
@@ -92,9 +91,7 @@ namespace Sales_Tracker.Rentals
             { Column.Available, "Available" },
             { Column.Rented, "Rented" },
             { Column.Maintenance, "Maintenance" },
-            { Column.DailyRate, "Daily Rate" },
-            { Column.WeeklyRate, "Weekly Rate" },
-            { Column.MonthlyRate, "Monthly Rate" },
+            { Column.RentalRate, "Rental Rate" },
             { Column.SecurityDeposit, "Deposit" },
             { Column.DateAdded, "Date Added" },
             { Column.LastRentalDate, "Last Rental" }
@@ -115,6 +112,7 @@ namespace Sales_Tracker.Rentals
             // Align controls
             Search_TextBox.Left = RentalInventory_DataGridView.Right - Search_TextBox.Width;
             AddRentalItem_Button.Left = Search_TextBox.Left - AddRentalItem_Button.Width - CustomControls.SpaceBetweenControls;
+            CurrentRentals_Button.Left = AddRentalItem_Button.Left - CurrentRentals_Button.Width - CustomControls.SpaceBetweenControls;
         }
         private void DataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
@@ -137,28 +135,12 @@ namespace Sales_Tracker.Rentals
                 }
             }
 
-            // Format currency columns
-            string[] currencyColumns = [
-                Column.DailyRate.ToString(),
-                Column.WeeklyRate.ToString(),
-                Column.MonthlyRate.ToString(),
-                Column.SecurityDeposit.ToString()
-            ];
-
-            if (currencyColumns.Contains(grid.Columns[e.ColumnIndex].Name))
+            // Format security deposit column
+            if (grid.Columns[e.ColumnIndex].Name == Column.SecurityDeposit.ToString())
             {
                 if (e.Value != null && decimal.TryParse(e.Value.ToString(), out decimal value))
                 {
-                    if (value == 0 && (grid.Columns[e.ColumnIndex].Name == Column.DailyRate.ToString() ||
-                                      grid.Columns[e.ColumnIndex].Name == Column.WeeklyRate.ToString() ||
-                                      grid.Columns[e.ColumnIndex].Name == Column.MonthlyRate.ToString()))
-                    {
-                        e.Value = ReadOnlyVariables.EmptyCell;
-                    }
-                    else
-                    {
-                        e.Value = $"{MainMenu_Form.CurrencySymbol}{value:N2}";
-                    }
+                    e.Value = $"{MainMenu_Form.CurrencySymbol}{value:N2}";
                     e.FormattingApplied = true;
                 }
             }
@@ -167,6 +149,8 @@ namespace Sales_Tracker.Rentals
         {
             foreach (RentalItem item in RentalInventoryManager.RentalInventory)
             {
+                string rentalRate = GetFormattedRentalRate(item);
+
                 int rowIndex = RentalInventory_DataGridView.Rows.Add(
                     item.RentalItemID,
                     item.ProductName,
@@ -176,9 +160,7 @@ namespace Sales_Tracker.Rentals
                     item.QuantityAvailable,
                     item.QuantityRented,
                     item.QuantityInMaintenance,
-                    item.DailyRate,
-                    item.WeeklyRate ?? 0m,
-                    item.MonthlyRate ?? 0m,
+                    rentalRate,
                     item.SecurityDeposit,
                     item.DateAdded.ToString("yyyy-MM-dd"),
                     item.LastRentalDate?.ToString("yyyy-MM-dd") ?? "-");
@@ -187,6 +169,26 @@ namespace Sales_Tracker.Rentals
             }
 
             DataGridViewManager.ScrollToTopOfDataGridView(RentalInventory_DataGridView);
+        }
+
+        /// <summary>
+        /// Gets formatted rental rate string (e.g., "$25.00/day", "$150.00/week", "$500.00/month")
+        /// </summary>
+        private string GetFormattedRentalRate(RentalItem item)
+        {
+            if (item.DailyRate > 0)
+            {
+                return $"{MainMenu_Form.CurrencySymbol}{item.DailyRate:N2}/day";
+            }
+            else if (item.WeeklyRate.HasValue && item.WeeklyRate.Value > 0)
+            {
+                return $"{MainMenu_Form.CurrencySymbol}{item.WeeklyRate.Value:N2}/week";
+            }
+            else if (item.MonthlyRate.HasValue && item.MonthlyRate.Value > 0)
+            {
+                return $"{MainMenu_Form.CurrencySymbol}{item.MonthlyRate.Value:N2}/month";
+            }
+            return ReadOnlyVariables.EmptyCell;
         }
 
         // Form event handlers
@@ -205,6 +207,10 @@ namespace Sales_Tracker.Rentals
         }
 
         // Event handlers
+        private void CurrentRentals_Button_Click(object sender, EventArgs e)
+        {
+            Tools.OpenForm(new CurrentRentals_Form());
+        }
         private void AddRentalItem_Button_Click(object sender, EventArgs e)
         {
             Tools.OpenForm(new AddRentalItem_Form());

@@ -16,6 +16,8 @@ namespace Sales_Tracker.Rentals
     public class RentalRecord
     {
         public string RentalRecordID { get; set; }
+        public string Accountant { get; set; }
+        public string CustomerID { get; set; }
         public string RentalItemID { get; set; }
         public string ProductName { get; set; }
         public int Quantity { get; set; }
@@ -27,9 +29,24 @@ namespace Sales_Tracker.Rentals
         public decimal SecurityDeposit { get; set; }
         public decimal TotalCost { get; set; }
         public decimal AmountPaid { get; set; }
+        public decimal Tax { get; set; }
+        public decimal Fee { get; set; }
+        public decimal Shipping { get; set; }
+        public decimal Discount { get; set; }
+        public decimal AmountCharged { get; set; }
         public string Notes { get; set; } = "";
+        public string Receipt { get; set; } = "";
         public bool IsActive { get; set; } = true;
         public bool IsOverdue { get; set; }
+
+        // USD values for currency conversion
+        public decimal RateUSD { get; set; }
+        public decimal TaxUSD { get; set; }
+        public decimal FeeUSD { get; set; }
+        public decimal ShippingUSD { get; set; }
+        public decimal DiscountUSD { get; set; }
+        public decimal AmountChargedUSD { get; set; }
+        public string OriginalCurrency { get; set; } = "USD";
 
         public RentalRecord()
         {
@@ -38,6 +55,7 @@ namespace Sales_Tracker.Rentals
         }
 
         public RentalRecord(
+            string customerID,
             string rentalItemID,
             string productName,
             int quantity,
@@ -48,6 +66,7 @@ namespace Sales_Tracker.Rentals
             string notes = "")
         {
             RentalRecordID = Guid.NewGuid().ToString();
+            CustomerID = customerID;
             RentalItemID = rentalItemID;
             ProductName = productName;
             Quantity = quantity;

@@ -124,6 +124,7 @@ namespace Sales_Tracker.Rentals
 
             // Create rental record
             RentalRecord record = new(
+                customerID: _selectedCustomer.CustomerID,
                 rentalItemID: _rentalItem.RentalItemID,
                 productName: _rentalItem.ProductName,
                 quantity: quantity,
@@ -132,7 +133,21 @@ namespace Sales_Tracker.Rentals
                 startDate: RentalStartDate_DateTimePicker.Value,
                 securityDeposit: deposit,
                 notes: Notes_TextBox.Text.Trim()
-            );
+            )
+            {
+                Accountant = MainMenu_Form.SelectedAccountant
+            };
+
+            // Convert values to USD for currency conversion
+            string defaultCurrency = DataFileManager.GetValue(AppDataSettings.DefaultCurrencyType);
+            record.OriginalCurrency = defaultCurrency;
+            string date =Tools.FormatDateTime(record.StartDate);
+            decimal exchangeRateToUSD = Currency.GetExchangeRate(defaultCurrency, "USD", date);
+            if (exchangeRateToUSD != -1)
+            {
+                record.RateUSD = Math.Round(rate * exchangeRateToUSD, 2);
+                // Other USD fields will be set when returning (tax, fee, shipping, discount, amountCharged)
+            }
 
             // Rent out the item
             if (!_rentalItem.RentOut(quantity, _selectedCustomer.CustomerID))
@@ -142,16 +157,23 @@ namespace Sales_Tracker.Rentals
                 return;
             }
 
+            // Add rental record to rental item (single source of truth)
             _rentalItem.RentalRecords.Add(record);
 
-            // Add rental record to customer
-            _selectedCustomer.AddRentalRecord(record);
+            // Update customer metadata
+            _selectedCustomer.OnRentalCreated(record);
             _selectedCustomer.UpdatePaymentStatus();
-
-            CreateRentalTransaction(_selectedCustomer, record, quantity, rate, totalCost);
 
             // Save changes
             RentalInventoryManager.SaveInventory();
+            MainMenu_Form.Instance.SaveCustomersToFile();
+
+            // Refresh rental DataGridView from inventory (single source of truth)
+            MainMenu_Form.Instance.Rental_DataGridView.Rows.Clear();
+            MainMenu_Form.Instance.LoadRentalsFromInventory();
+
+            // Refresh charts and UI
+            MainMenu_Form.Instance.LoadOrRefreshMainCharts();
 
             // Update the inventory row
             _inventoryRow.Cells[Rentals_Form.Column.Available.ToString()].Value = _rentalItem.QuantityAvailable;
@@ -159,7 +181,7 @@ namespace Sales_Tracker.Rentals
             _inventoryRow.Cells[Rentals_Form.Column.Status.ToString()].Value = _rentalItem.Status.ToString();
             _inventoryRow.Cells[Rentals_Form.Column.LastRentalDate.ToString()].Value = _rentalItem.LastRentalDate?.ToString("yyyy-MM-dd") ?? "-";
 
-            // Refresh the form
+            // Refresh the rental inventory form
             Rentals_Form.Instance?.RefreshDataGridView();
 
             string message = $"Rented out {quantity} unit(s) of '{_rentalItem.ProductName}' to {_selectedCustomer.FullName}";
@@ -210,18 +232,32 @@ namespace Sales_Tracker.Rentals
             // Generate a unique rental ID
             string rentalID = GenerateNextRentalID();
 
-            // Prepare the row values
+            // Format rental rate display
+            string ratePeriod = record.RateType switch
+            {
+                RentalRateType.Daily => "day",
+                RentalRateType.Weekly => "week",
+                RentalRateType.Monthly => "month",
+                _ => "day"
+            };
+            string formattedRate = $"{MainMenu_Form.CurrencySymbol}{rate:N2}/{ratePeriod}";
+
+            // End date is empty for active rentals (will be set when returned)
+            string endDate = "-";
+
+            // Prepare the row values (matching RentalColumnHeaders structure)
             object[] rowValues =
             [
                 rentalID,                                 // Rental #
-                MainMenu_Form.SelectedAccountant,         // Accountant
+                record.Accountant,                        // Accountant
                 _rentalItem.ProductName,                  // Product / Service
                 categoryName,                             // Category
                 product.CountryOfOrigin ?? "-",           // Country of destination (using origin for rental)
                 _rentalItem.CompanyName,                  // Company of origin
-                record.StartDate.ToString("yyyy-MM-dd"),  // Date
+                record.StartDate.ToString("yyyy-MM-dd"),  // Start date
+                endDate,                                  // End date (empty for active rentals)
                 quantity,                                 // Total items
-                rate.ToString("N2"),                      // Price per unit (rental rate)
+                formattedRate,                            // Rental rate
                 "0.00",                                   // Shipping (not applicable for rentals)
                 "0.00",                                   // Tax
                 "0.00",                                   // Fee

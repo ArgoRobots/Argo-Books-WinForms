@@ -2,7 +2,6 @@ using Sales_Tracker.Classes;
 using Sales_Tracker.DataClasses;
 using Sales_Tracker.GridView;
 using Sales_Tracker.Language;
-using Sales_Tracker.Rentals;
 using Sales_Tracker.Theme;
 using Sales_Tracker.UI;
 
@@ -21,6 +20,8 @@ namespace Sales_Tracker.Rentals
         public ReturnRental_Form(Customer customer, RentalRecord rentalRecord)
         {
             InitializeComponent();
+            ReturnDate_Picker.Value = DateTime.Now;
+
             _customer = customer;
             _rentalRecord = rentalRecord;
 
@@ -35,9 +36,33 @@ namespace Sales_Tracker.Rentals
             }
 
             LoadRentalDetails();
+            AddEventHandlersToTextBoxes();
             UpdateTheme();
             LanguageManager.UpdateLanguageForControl(this);
             LoadingPanel.ShowBlankLoadingPanel(this);
+        }
+        private void AddEventHandlersToTextBoxes()
+        {
+            TextBoxValidation.OnlyAllowNumbersAndOneDecimal(Tax_TextBox);
+            TextBoxManager.Attach(Tax_TextBox);
+
+            TextBoxValidation.OnlyAllowNumbersAndOneDecimal(Fee_TextBox);
+            TextBoxManager.Attach(Fee_TextBox);
+
+            TextBoxValidation.OnlyAllowNumbersAndOneDecimal(Shipping_TextBox);
+            TextBoxManager.Attach(Shipping_TextBox);
+
+            TextBoxValidation.OnlyAllowNumbersAndOneDecimal(Discount_TextBox);
+            TextBoxManager.Attach(Discount_TextBox);
+
+            TextBoxValidation.OnlyAllowNumbersAndOneDecimal(AmountCharged_TextBox);
+            TextBoxManager.Attach(AmountCharged_TextBox);
+            AmountCharged_TextBox.TextChanged += AmountCharged_TextBox_TextChanged;
+
+            TextBoxManager.Attach(Notes_TextBox);
+
+            // Initial validation
+            ValidateForm();
         }
         private void LoadRentalDetails()
         {
@@ -64,7 +89,7 @@ namespace Sales_Tracker.Rentals
                 $"Outstanding: {MainMenu_Form.CurrencySymbol}{outstanding:N2}";
 
             RentalDetails_Label.BackColor = CustomColors.ControlBack;
-            RentalDetails_Label.ForeColor=CustomColors.Text;
+            RentalDetails_Label.ForeColor = CustomColors.Text;
         }
         private void UpdateTheme()
         {
@@ -84,8 +109,18 @@ namespace Sales_Tracker.Rentals
             DateTime returnDate = ReturnDate_Picker.Value;
             string notes = Notes_TextBox.Text.Trim();
 
-            // Process return
-            ProcessReturn(returnDate, notes);
+            // Parse optional fee fields
+            decimal tax = string.IsNullOrWhiteSpace(Tax_TextBox.Text) ? 0 : decimal.Parse(Tax_TextBox.Text);
+            decimal fee = string.IsNullOrWhiteSpace(Fee_TextBox.Text) ? 0 : decimal.Parse(Fee_TextBox.Text);
+            decimal shipping = string.IsNullOrWhiteSpace(Shipping_TextBox.Text) ? 0 : decimal.Parse(Shipping_TextBox.Text);
+            decimal discount = string.IsNullOrWhiteSpace(Discount_TextBox.Text) ? 0 : decimal.Parse(Discount_TextBox.Text);
+            decimal amountCharged = decimal.Parse(AmountCharged_TextBox.Text);
+
+            ProcessReturn(returnDate, notes, tax, fee, shipping, discount, amountCharged);
+        }
+        private void AmountCharged_TextBox_TextChanged(object sender, EventArgs e)
+        {
+            ValidateForm();
         }
         private void Cancel_Button_Click(object sender, EventArgs e)
         {
@@ -93,8 +128,15 @@ namespace Sales_Tracker.Rentals
             Close();
         }
 
+        // Validation
+        private void ValidateForm()
+        {
+            // Return_Button is enabled only if AmountCharged_TextBox is not empty
+            Return_Button.Enabled = !string.IsNullOrWhiteSpace(AmountCharged_TextBox.Text);
+        }
+
         // Business logic
-        private void ProcessReturn(DateTime returnDate, string notes)
+        private void ProcessReturn(DateTime returnDate, string notes, decimal tax, decimal fee, decimal shipping, decimal discount, decimal amountCharged)
         {
             try
             {
@@ -102,6 +144,28 @@ namespace Sales_Tracker.Rentals
                 _rentalRecord.ReturnDate = returnDate;
                 _rentalRecord.IsActive = false;
                 _rentalRecord.IsOverdue = false;
+                _rentalRecord.Tax = tax;
+                _rentalRecord.Fee = fee;
+                _rentalRecord.Shipping = shipping;
+                _rentalRecord.Discount = discount;
+                _rentalRecord.AmountCharged = amountCharged;
+
+                // Convert values to USD for currency conversion
+                string defaultCurrency = DataFileManager.GetValue(AppDataSettings.DefaultCurrencyType);
+                if (string.IsNullOrEmpty(_rentalRecord.OriginalCurrency))
+                {
+                    _rentalRecord.OriginalCurrency = defaultCurrency;
+                }
+                string date = Tools.FormatDate(returnDate);
+                decimal exchangeRateToUSD = Currency.GetExchangeRate(defaultCurrency, "USD", date);
+                if (exchangeRateToUSD != -1)
+                {
+                    _rentalRecord.TaxUSD = Math.Round(tax * exchangeRateToUSD, 2);
+                    _rentalRecord.FeeUSD = Math.Round(fee * exchangeRateToUSD, 2);
+                    _rentalRecord.ShippingUSD = Math.Round(shipping * exchangeRateToUSD, 2);
+                    _rentalRecord.DiscountUSD = Math.Round(discount * exchangeRateToUSD, 2);
+                    _rentalRecord.AmountChargedUSD = Math.Round(amountCharged * exchangeRateToUSD, 2);
+                }
 
                 if (!string.IsNullOrWhiteSpace(notes))
                 {
@@ -117,15 +181,13 @@ namespace Sales_Tracker.Rentals
                 // Update customer rental status
                 _customer?.ReturnRental(_rentalRecord.RentalRecordID);
 
-                // Add DataGridView row for the return
-                AddRentalRowToDataGridView(returnDate);
-
-                // Refresh the grid to ensure visual changes are displayed
-                MainMenu_Form.Instance.Rental_DataGridView.Refresh();
-
                 // Save all changes
                 RentalInventoryManager.SaveInventory();
                 MainMenu_Form.Instance.SaveCustomersToFile();
+
+                // Refresh rental DataGridView from inventory
+                MainMenu_Form.Instance.Rental_DataGridView.Rows.Clear();
+                MainMenu_Form.Instance.LoadRentalsFromInventory();
 
                 // Refresh charts and UI
                 MainMenu_Form.Instance.LoadOrRefreshMainCharts();
@@ -177,7 +239,7 @@ namespace Sales_Tracker.Rentals
                 rentalItem.CompanyName) ?? "";
 
             // Determine the rental rate based on rate type
-            string rateTypeLower = _rentalRecord.RateType.ToString();
+            string rateTypeLower = _rentalRecord.RateType.ToString().ToLower();
             decimal? rate = rateTypeLower switch
             {
                 "daily" => rentalItem.DailyRate,
@@ -185,6 +247,16 @@ namespace Sales_Tracker.Rentals
                 "monthly" => rentalItem.MonthlyRate,
                 _ => 0
             };
+
+            // Format rental rate display
+            string ratePeriod = rateTypeLower switch
+            {
+                "daily" => "day",
+                "weekly" => "week",
+                "monthly" => "month",
+                _ => "day"
+            };
+            string formattedRate = $"{MainMenu_Form.CurrencySymbol}{rate:N2}/{ratePeriod}";
 
             // Format the notes with return date
             string notes = _rentalRecord.Notes ?? "";
@@ -198,24 +270,30 @@ namespace Sales_Tracker.Rentals
                 notes = returnNote;
             }
 
-            // Prepare the row values (matching structure from RentOutItem_Form)
+            // Calculate charged difference
+            // Expected amount = TotalCost + Tax + Fee + Shipping - Discount
+            decimal expectedAmount = _rentalRecord.TotalCost + _rentalRecord.Tax + _rentalRecord.Fee + _rentalRecord.Shipping - _rentalRecord.Discount;
+            decimal chargedDifference = _rentalRecord.AmountCharged - expectedAmount;
+
+            // Prepare the row values (matching RentalColumnHeaders structure)
             object[] rowValues =
             [
                 _rentalRecord.RentalRecordID,                    // Rental #
-                MainMenu_Form.SelectedAccountant,                // Accountant
+                _rentalRecord.Accountant,                        // Accountant
                 rentalItem.ProductName,                          // Product / Service
                 categoryName,                                    // Category
                 product.CountryOfOrigin ?? "-",                  // Country of destination
                 rentalItem.CompanyName,                          // Company of origin
-                _rentalRecord.StartDate.ToString("yyyy-MM-dd"),  // Date
+                _rentalRecord.StartDate.ToString("yyyy-MM-dd"),  // Start date
+                returnDate.ToString("yyyy-MM-dd"),               // End date
                 _rentalRecord.Quantity,                          // Total items
-                rate.ToString(),                                 // Price per unit (rental rate)
-                "0.00",                                          // Shipping
-                "0.00",                                          // Tax
-                "0.00",                                          // Fee
-                "0.00",                                          // Discount
-                "0.00",                                          // Charged difference
-                _rentalRecord.TotalCost.ToString("N2"),          // Total rental revenue
+                formattedRate,                                   // Rental rate
+                _rentalRecord.Shipping.ToString("0.00"),         // Shipping
+                _rentalRecord.Tax.ToString("0.00"),              // Tax
+                _rentalRecord.Fee.ToString("0.00"),              // Fee
+                _rentalRecord.Discount.ToString("0.00"),         // Discount
+                chargedDifference.ToString("0.00"),              // Charged difference
+                _rentalRecord.AmountCharged.ToString("0.00"),    // Amount charged (Total rental revenue column)
                 "-",                                             // Notes placeholder
                 ReadOnlyVariables.EmptyCell                      // Has receipt
             ];
