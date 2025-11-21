@@ -168,10 +168,6 @@ namespace Sales_Tracker.Rentals
             RentalInventoryManager.SaveInventory();
             MainMenu_Form.Instance.SaveCustomersToFile();
 
-            // Refresh rental DataGridView from inventory (single source of truth)
-            MainMenu_Form.Instance.Rental_DataGridView.Rows.Clear();
-            MainMenu_Form.Instance.LoadRentalsFromInventory();
-
             // Refresh charts and UI
             MainMenu_Form.Instance.LoadOrRefreshMainCharts();
 
