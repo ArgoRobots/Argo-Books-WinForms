@@ -341,7 +341,7 @@ namespace Sales_Tracker
                 }
             }
 
-            // Check if there are any rows (including returned rentals)
+            // Check if there are any rows
             bool hasVisibleRows = Rental_DataGridView.Rows.Count > 0;
             LabelManager.ManageNoDataLabelOnControl(hasVisibleRows, Rental_DataGridView);
         }
@@ -2270,7 +2270,7 @@ namespace Sales_Tracker
             { Column.Fee, "Fee" },
             { Column.Discount, "Discount" },
             { Column.ChargedDifference, "Charged difference" },
-            { Column.Total, "Total rental revenue" },
+            { Column.Total, "Total revenue" },
             { Column.Note, "Notes" },
             { Column.HasReceipt, "Has receipt" }
         };

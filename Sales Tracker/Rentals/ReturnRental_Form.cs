@@ -2,7 +2,6 @@ using Sales_Tracker.Classes;
 using Sales_Tracker.DataClasses;
 using Sales_Tracker.GridView;
 using Sales_Tracker.Language;
-using Sales_Tracker.Rentals;
 using Sales_Tracker.Theme;
 using Sales_Tracker.UI;
 
@@ -90,7 +89,7 @@ namespace Sales_Tracker.Rentals
                 $"Outstanding: {MainMenu_Form.CurrencySymbol}{outstanding:N2}";
 
             RentalDetails_Label.BackColor = CustomColors.ControlBack;
-            RentalDetails_Label.ForeColor=CustomColors.Text;
+            RentalDetails_Label.ForeColor = CustomColors.Text;
         }
         private void UpdateTheme()
         {
@@ -157,7 +156,8 @@ namespace Sales_Tracker.Rentals
                 {
                     _rentalRecord.OriginalCurrency = defaultCurrency;
                 }
-                decimal exchangeRateToUSD = Currency.GetExchangeRate(defaultCurrency, "USD", returnDate);
+                string date = Tools.FormatDate(returnDate);
+                decimal exchangeRateToUSD = Currency.GetExchangeRate(defaultCurrency, "USD", date);
                 if (exchangeRateToUSD != -1)
                 {
                     _rentalRecord.TaxUSD = Math.Round(tax * exchangeRateToUSD, 2);
@@ -185,7 +185,7 @@ namespace Sales_Tracker.Rentals
                 RentalInventoryManager.SaveInventory();
                 MainMenu_Form.Instance.SaveCustomersToFile();
 
-                // Refresh rental DataGridView from inventory (single source of truth)
+                // Refresh rental DataGridView from inventory
                 MainMenu_Form.Instance.Rental_DataGridView.Rows.Clear();
                 MainMenu_Form.Instance.LoadRentalsFromInventory();
 

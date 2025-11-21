@@ -937,7 +937,6 @@ namespace Sales_Tracker
             ConstructSecondPanel();
             int left = 0;
             int secondLeft = 0;
-            int searchBoxMaxHeight = 100;
 
             foreach (DataGridViewColumn column in _selectedRow.DataGridView.Columns)
             {
@@ -957,10 +956,6 @@ namespace Sales_Tracker
                         ConstructLabel(Rentals_Form.ColumnHeaders[Rentals_Form.Column.ProductName], left, Panel);
                         _controlToFocus = ConstructTextBox(left, columnName, cellValue, 100, CustomControls.KeyPressValidation.None, false, Panel);
                         left += ScaledStandardWidth + CustomControls.SpaceBetweenControls;
-                        break;
-
-                    case nameof(Rentals_Form.Column.CompanyName):
-                        // Skip CompanyName - it should only be set from the products form
                         break;
 
                     case nameof(Rentals_Form.Column.Status):
@@ -1002,18 +997,6 @@ namespace Sales_Tracker
                         Guna2TextBox totalQtyTextBox = ConstructTextBox(left, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbers, false, Panel);
                         totalQtyTextBox.Width = ScaledSmallWidth;
                         left += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
-                        break;
-
-                    case nameof(Rentals_Form.Column.Available):
-                        // Skip Available - it's calculated
-                        break;
-
-                    case nameof(Rentals_Form.Column.Rented):
-                        // Skip Rented - it's calculated and managed by the system
-                        break;
-
-                    case nameof(Rentals_Form.Column.Maintenance):
-                        // Skip Maintenance - it's calculated and managed by the system
                         break;
 
                     case nameof(Rentals_Form.Column.RentalRate):
@@ -1064,7 +1047,7 @@ namespace Sales_Tracker
                                 HoverState = { BorderColor = CustomColors.AccentBlue },
                                 DropDownStyle = ComboBoxStyle.DropDownList
                             };
-                            rateTypeComboBox.Items.AddRange(new object[] { "Day", "Week", "Month" });
+                            rateTypeComboBox.Items.AddRange(["Day", "Week", "Month"]);
                             rateTypeComboBox.SelectedItem = rateType;
                             _secondPanel.Controls.Add(rateTypeComboBox);
                             secondLeft += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
@@ -1085,10 +1068,6 @@ namespace Sales_Tracker
                         Guna2DateTimePicker dateAddedPicker = ConstructDatePicker(secondLeft, columnName, dateAdded, _secondPanel);
                         dateAddedPicker.ValueChanged += ValidateInputs;
                         secondLeft += ScaledDatePickerWidth + CustomControls.SpaceBetweenControls;
-                        break;
-
-                    case nameof(Rentals_Form.Column.LastRentalDate):
-                        // Skip LastRentalDate - it's automatically updated
                         break;
                 }
             }

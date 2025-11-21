@@ -133,13 +133,16 @@ namespace Sales_Tracker.Rentals
                 startDate: RentalStartDate_DateTimePicker.Value,
                 securityDeposit: deposit,
                 notes: Notes_TextBox.Text.Trim()
-            );
-            record.Accountant = MainMenu_Form.SelectedAccountant;
+            )
+            {
+                Accountant = MainMenu_Form.SelectedAccountant
+            };
 
             // Convert values to USD for currency conversion
             string defaultCurrency = DataFileManager.GetValue(AppDataSettings.DefaultCurrencyType);
             record.OriginalCurrency = defaultCurrency;
-            decimal exchangeRateToUSD = Currency.GetExchangeRate(defaultCurrency, "USD", record.StartDate);
+            string date =Tools.FormatDateTime(record.StartDate);
+            decimal exchangeRateToUSD = Currency.GetExchangeRate(defaultCurrency, "USD", date);
             if (exchangeRateToUSD != -1)
             {
                 record.RateUSD = Math.Round(rate * exchangeRateToUSD, 2);
