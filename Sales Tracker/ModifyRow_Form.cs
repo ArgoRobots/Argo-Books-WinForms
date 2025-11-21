@@ -1354,7 +1354,7 @@ namespace Sales_Tracker
 
                 // Extract rate period from original value (e.g., "$25.00/day" -> "day")
                 string ratePeriod = "day"; // default
-                if (originalValue.Contains("/"))
+                if (originalValue.Contains('/'))
                 {
                     string[] parts = originalValue.Split('/');
                     if (parts.Length > 1)

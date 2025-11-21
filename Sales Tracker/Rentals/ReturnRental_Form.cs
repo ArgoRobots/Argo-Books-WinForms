@@ -157,7 +157,7 @@ namespace Sales_Tracker.Rentals
                     _rentalRecord.OriginalCurrency = defaultCurrency;
                 }
                 string date = Tools.FormatDate(returnDate);
-                decimal exchangeRateToUSD = Currency.GetExchangeRate(defaultCurrency, "USD", date, showErrorMessage: false);
+                decimal exchangeRateToUSD = Currency.GetExchangeRate(defaultCurrency, "USD", date);
                 if (exchangeRateToUSD != -1)
                 {
                     _rentalRecord.TaxUSD = Math.Round(tax * exchangeRateToUSD, 2);
@@ -309,7 +309,6 @@ namespace Sales_Tracker.Rentals
             // Create and attach TagData
             TagData tagData = new()
             {
-                IsReturned = true,
                 ReturnDate = returnDate,
                 CustomerID = _customer.CustomerID,
                 CustomerName = _customer.FullName,

@@ -142,7 +142,7 @@ namespace Sales_Tracker.Rentals
             string defaultCurrency = DataFileManager.GetValue(AppDataSettings.DefaultCurrencyType);
             record.OriginalCurrency = defaultCurrency;
             string date = Tools.FormatDate(record.StartDate);
-            decimal exchangeRateToUSD = Currency.GetExchangeRate(defaultCurrency, "USD", date, showErrorMessage: false);
+            decimal exchangeRateToUSD = Currency.GetExchangeRate(defaultCurrency, "USD", date);
             if (exchangeRateToUSD != -1)
             {
                 record.RateUSD = Math.Round(rate * exchangeRateToUSD, 2);

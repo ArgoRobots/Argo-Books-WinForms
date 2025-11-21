@@ -781,7 +781,7 @@ namespace Sales_Tracker.GridView
 
                     case MainMenu_Form.SelectedOption.Rentals:
                         itemType = "rental item";
-                        identifier = grid.SelectedRows[0].Cells[Rentals_Form.Column.ProductName.ToString()].Value?.ToString() ?? "Unknown";
+                        identifier = grid.SelectedRows[0].Cells[ReadOnlyVariables.ID_column].Value?.ToString() ?? "Unknown";
                         break;
 
                     case MainMenu_Form.SelectedOption.Purchases:
