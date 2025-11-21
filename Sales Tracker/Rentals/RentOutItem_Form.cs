@@ -141,8 +141,8 @@ namespace Sales_Tracker.Rentals
             // Convert values to USD for currency conversion
             string defaultCurrency = DataFileManager.GetValue(AppDataSettings.DefaultCurrencyType);
             record.OriginalCurrency = defaultCurrency;
-            string date =Tools.FormatDateTime(record.StartDate);
-            decimal exchangeRateToUSD = Currency.GetExchangeRate(defaultCurrency, "USD", date);
+            string date = Tools.FormatDate(record.StartDate);
+            decimal exchangeRateToUSD = Currency.GetExchangeRate(defaultCurrency, "USD", date, showErrorMessage: false);
             if (exchangeRateToUSD != -1)
             {
                 record.RateUSD = Math.Round(rate * exchangeRateToUSD, 2);

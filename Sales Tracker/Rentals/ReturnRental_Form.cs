@@ -157,7 +157,7 @@ namespace Sales_Tracker.Rentals
                     _rentalRecord.OriginalCurrency = defaultCurrency;
                 }
                 string date = Tools.FormatDate(returnDate);
-                decimal exchangeRateToUSD = Currency.GetExchangeRate(defaultCurrency, "USD", date);
+                decimal exchangeRateToUSD = Currency.GetExchangeRate(defaultCurrency, "USD", date, showErrorMessage: false);
                 if (exchangeRateToUSD != -1)
                 {
                     _rentalRecord.TaxUSD = Math.Round(tax * exchangeRateToUSD, 2);
@@ -185,9 +185,8 @@ namespace Sales_Tracker.Rentals
                 RentalInventoryManager.SaveInventory();
                 MainMenu_Form.Instance.SaveCustomersToFile();
 
-                // Refresh rental DataGridView from inventory
-                MainMenu_Form.Instance.Rental_DataGridView.Rows.Clear();
-                MainMenu_Form.Instance.LoadRentalsFromInventory();
+                // Add the returned rental row to DataGridView
+                AddRentalRowToDataGridView(returnDate);
 
                 // Refresh charts and UI
                 MainMenu_Form.Instance.LoadOrRefreshMainCharts();
