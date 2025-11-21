@@ -222,7 +222,7 @@ namespace Sales_Tracker
 
             AddRowsFromFile(Purchase_DataGridView, SelectedOption.Purchases);
             AddRowsFromFile(Sale_DataGridView, SelectedOption.Sales);
-            LoadRentalsFromInventory();
+            AddRowsFromFile(Rental_DataGridView, SelectedOption.Rentals);
         }
         public void LoadRentalsFromInventory()
         {
