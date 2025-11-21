@@ -111,7 +111,6 @@ namespace Sales_Tracker.Rentals
             CurrentRentals_DataGridView.Location = new Point((ClientSize.Width - CurrentRentals_DataGridView.Width) / 2, _topForDataGridView);
             CurrentRentals_DataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Left;
             CurrentRentals_DataGridView.CellFormatting += DataGridView_CellFormatting;
-            CurrentRentals_DataGridView.CellMouseDown += DataGridView_CellMouseDown;
 
             // Align controls
             Search_TextBox.Left = CurrentRentals_DataGridView.Right - Search_TextBox.Width;
@@ -162,31 +161,6 @@ namespace Sales_Tracker.Rentals
                     e.FormattingApplied = true;
                 }
             }
-        }
-        private void DataGridView_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right && e.RowIndex >= 0)
-            {
-                CurrentRentals_DataGridView.ClearSelection();
-                CurrentRentals_DataGridView.Rows[e.RowIndex].Selected = true;
-                ShowContextMenu(e.RowIndex);
-            }
-        }
-        private void ShowContextMenu(int rowIndex)
-        {
-            DataGridViewRow row = CurrentRentals_DataGridView.Rows[rowIndex];
-
-            if (row.Tag is not RentalRecord rentalRecord) { return; }
-
-            Customer customer = MainMenu_Form.Instance.CustomerList.FirstOrDefault(c => c.CustomerID == rentalRecord.CustomerID);
-
-            ContextMenuStrip contextMenu = new();
-            contextMenu.Items.Add("Return Rental", null, (s, e) => ReturnRental(rentalRecord, customer));
-            contextMenu.Items.Add("View Customer Details", null, (s, e) => ViewCustomerDetails(customer));
-            contextMenu.Items.Add(new ToolStripSeparator());
-            contextMenu.Items.Add("Refresh List", null, (s, e) => RefreshDataGridView());
-
-            contextMenu.Show(CurrentRentals_DataGridView, CurrentRentals_DataGridView.PointToClient(Cursor.Position));
         }
         private void LoadCurrentRentals()
         {
