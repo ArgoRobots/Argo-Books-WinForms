@@ -1684,6 +1684,12 @@ namespace Sales_Tracker
         {
             if (_selectedTag == MainMenu_Form.DataGridViewTag.SaleOrPurchase.ToString())
             {
+                // Skip charged difference calculation for rentals - they handle it differently
+                if (MainMenu_Form.Instance.Selected == MainMenu_Form.SelectedOption.Rentals)
+                {
+                    return;
+                }
+
                 MainMenu_Form.IsProgramLoading = true;
 
                 string productName = _selectedRow.Cells[ReadOnlyVariables.Product_column].Value.ToString();
@@ -2394,6 +2400,11 @@ namespace Sales_Tracker
                     }
                 }
             }
+
+            // Recalculate charged difference for the rental
+            decimal expectedAmount = record.TotalCost + record.Tax + record.Fee + record.Shipping - record.Discount;
+            decimal chargedDifference = record.AmountCharged - expectedAmount;
+            _selectedRow.Cells[nameof(MainMenu_Form.Column.ChargedDifference)].Value = chargedDifference.ToString("N2");
 
             // Save the updated rental inventory
             RentalInventoryManager.SaveInventory();
