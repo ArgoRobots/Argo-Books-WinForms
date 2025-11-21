@@ -222,13 +222,14 @@ namespace Sales_Tracker
 
             AddRowsFromFile(Purchase_DataGridView, SelectedOption.Purchases);
             AddRowsFromFile(Sale_DataGridView, SelectedOption.Sales);
-            AddRowsFromFile(Rental_DataGridView, SelectedOption.Rentals);
+            LoadRentalsFromInventory();
         }
         public void LoadRentalsFromInventory()
         {
             foreach (RentalItem rentalItem in RentalInventoryManager.RentalInventory)
             {
-                foreach (RentalRecord record in rentalItem.RentalRecords)
+                // Only show RETURNED rentals in MainMenu_Form (active rentals are in CurrentRentals_Form)
+                foreach (RentalRecord record in rentalItem.RentalRecords.Where(r => r.ReturnDate.HasValue))
                 {
                     // Get the product details from category lists
                     Product product = GetProductProductNameIsFrom(
