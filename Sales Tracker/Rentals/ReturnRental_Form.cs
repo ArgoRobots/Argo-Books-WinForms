@@ -306,9 +306,30 @@ namespace Sales_Tracker.Rentals
                 DataGridViewManager.AddNoteToCell(MainMenu_Form.Instance.Rental_DataGridView, rowIndex, notes);
             }
 
-            // Create and attach TagData
+            // Create and attach TagData with USD values for currency conversion
             TagData tagData = new()
             {
+                // USD values
+                PricePerUnitUSD = _rentalRecord.RateUSD,
+                ShippingUSD = _rentalRecord.ShippingUSD,
+                TaxUSD = _rentalRecord.TaxUSD,
+                FeeUSD = _rentalRecord.FeeUSD,
+                DiscountUSD = _rentalRecord.DiscountUSD,
+                ChargedDifferenceUSD = Math.Round((_rentalRecord.AmountChargedUSD - (_rentalRecord.RateUSD * _rentalRecord.Quantity + _rentalRecord.TaxUSD + _rentalRecord.FeeUSD + _rentalRecord.ShippingUSD - _rentalRecord.DiscountUSD)), 2),
+                ChargedOrCreditedUSD = _rentalRecord.AmountChargedUSD,
+                OriginalCurrency = _rentalRecord.OriginalCurrency ?? "USD",
+
+                // Original values
+                OriginalPricePerUnit = _rentalRecord.Rate,
+                OriginalShipping = _rentalRecord.Shipping,
+                OriginalTax = _rentalRecord.Tax,
+                OriginalFee = _rentalRecord.Fee,
+                OriginalDiscount = _rentalRecord.Discount,
+                OriginalChargedDifference = chargedDifference,
+                OriginalChargedOrCredited = _rentalRecord.AmountCharged,
+
+                // Rental specific
+                IsReturned = true,
                 ReturnDate = returnDate,
                 CustomerID = _customer.CustomerID,
                 CustomerName = _customer.FullName,
