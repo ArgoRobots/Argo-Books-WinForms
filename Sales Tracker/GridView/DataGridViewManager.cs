@@ -1314,6 +1314,9 @@ namespace Sales_Tracker.GridView
         {
             int visibleRowIndex = 0;
 
+            // Check if this is the Rental DataGridView
+            bool isRentalGrid = dataGridView == MainMenu_Form.Instance?.Rental_DataGridView;
+
             foreach (DataGridViewRow row in dataGridView.Rows)
             {
                 if (!row.Visible) { continue; }
@@ -1325,6 +1328,7 @@ namespace Sales_Tracker.GridView
                 bool isPartiallyLost = LostManager.IsTransactionPartiallyLost(row);
 
                 // Priority order: Lost > Returned > Normal
+                // Note: For rentals, IsReturned means the rental ended normally, not a refund
                 if (isFullyLost)
                 {
                     // Fully lost - dark red/maroon background
@@ -1335,14 +1339,14 @@ namespace Sales_Tracker.GridView
                     // Partially lost - dark orange/brown background
                     LostManager.UpdateRowAppearanceForLoss(row, false, true);
                 }
-                else if (isFullyReturned)
+                else if (isFullyReturned && !isRentalGrid)
                 {
-                    // Fully returned - red background
+                    // Fully returned - red background (but not for rentals)
                     ReturnManager.UpdateRowAppearanceForReturn(row, true, false);
                 }
-                else if (isPartiallyReturned)
+                else if (isPartiallyReturned && !isRentalGrid)
                 {
-                    // Partially returned - orange background
+                    // Partially returned - orange background (but not for rentals)
                     ReturnManager.UpdateRowAppearanceForReturn(row, false, true);
                 }
                 else

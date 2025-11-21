@@ -603,6 +603,17 @@ namespace Sales_Tracker
                         secondLeft += ScaledDatePickerWidth + CustomControls.SpaceBetweenControls;
                         break;
 
+                    case nameof(MainMenu_Form.Column.EndDate):
+                        // Only show for rentals that have been returned (have an end date)
+                        if (cellValue != "-" && cellValue != ReadOnlyVariables.EmptyCell)
+                        {
+                            ConstructLabel(MainMenu_Form.Instance.RentalColumnHeaders[MainMenu_Form.Column.EndDate], secondLeft, _secondPanel);
+                            DateTime endDate = Tools.ParseDateOrToday(cellValue);
+                            ConstructDatePicker(secondLeft, columnName, endDate, _secondPanel);
+                            secondLeft += ScaledDatePickerWidth + CustomControls.SpaceBetweenControls;
+                        }
+                        break;
+
                     case nameof(MainMenu_Form.Column.TotalItems):
                         if (cellValue == ReadOnlyVariables.EmptyCell) { continue; }
 
@@ -621,6 +632,18 @@ namespace Sales_Tracker
                         ConstructLabel(MainMenu_Form.Instance.PurchaseColumnHeaders[MainMenu_Form.Column.PricePerUnit], secondLeft, _secondPanel);
                         Guna2TextBox pricePerUnitTextBox = ConstructTextBox(secondLeft, columnName, cellValue, 10, CustomControls.KeyPressValidation.OnlyNumbersAndDecimal, false, _secondPanel);
                         pricePerUnitTextBox.Width = ScaledSmallWidth;
+                        secondLeft += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
+                        break;
+
+                    case nameof(MainMenu_Form.Column.RentalRate):
+                        if (cellValue == ReadOnlyVariables.EmptyCell) { continue; }
+
+                        // Extract numeric value from formatted rental rate (e.g., "$25.00/day" -> "25.00")
+                        string rateValue = ExtractNumericValue(cellValue);
+
+                        ConstructLabel(MainMenu_Form.Instance.RentalColumnHeaders[MainMenu_Form.Column.RentalRate], secondLeft, _secondPanel);
+                        Guna2TextBox rentalRateTextBox = ConstructTextBox(secondLeft, columnName, rateValue, 10, CustomControls.KeyPressValidation.OnlyNumbersAndDecimal, false, _secondPanel);
+                        rentalRateTextBox.Width = ScaledSmallWidth;
                         secondLeft += ScaledSmallWidth + CustomControls.SpaceBetweenControls;
                         break;
 
@@ -1192,6 +1215,10 @@ namespace Sales_Tracker
                     {
                         ProcessNumericColumn(textBox, column);
                     }
+                    else if (column == nameof(MainMenu_Form.Column.RentalRate))
+                    {
+                        ProcessRentalRateColumn(textBox);
+                    }
                     else if (column == ReadOnlyVariables.Product_column)
                     {
                         ProcessProductColumn(textBox);
@@ -1311,6 +1338,30 @@ namespace Sales_Tracker
             if (decimal.TryParse(textBox.Text.Trim(), out decimal number))
             {
                 _selectedRow.Cells[column].Value = string.Format("{0:N2}", number);
+            }
+        }
+        private void ProcessRentalRateColumn(Guna2TextBox textBox)
+        {
+            if (decimal.TryParse(textBox.Text.Trim(), out decimal rate))
+            {
+                // Get the original value to extract the rate period (day/week/month)
+                int columnIndex = _selectedRow.DataGridView.Columns[nameof(MainMenu_Form.Column.RentalRate)].Index;
+                string originalValue = _listOfOldValues[columnIndex];
+
+                // Extract rate period from original value (e.g., "$25.00/day" -> "day")
+                string ratePeriod = "day"; // default
+                if (originalValue.Contains("/"))
+                {
+                    string[] parts = originalValue.Split('/');
+                    if (parts.Length > 1)
+                    {
+                        ratePeriod = parts[1].Trim();
+                    }
+                }
+
+                // Reformat with currency symbol and period
+                string formattedRate = $"{MainMenu_Form.CurrencySymbol}{rate:N2}/{ratePeriod}";
+                _selectedRow.Cells[nameof(MainMenu_Form.Column.RentalRate)].Value = formattedRate;
             }
         }
         private void ProcessProductColumn(Guna2TextBox textBox)
@@ -1747,8 +1798,19 @@ namespace Sales_Tracker
         {
             if (_selectedTag == MainMenu_Form.DataGridViewTag.SaleOrPurchase.ToString())
             {
-                string type = MainMenu_Form.Instance.Selected == MainMenu_Form.SelectedOption.Purchases ? "purchase" : "sale";
+                string type = MainMenu_Form.Instance.Selected == MainMenu_Form.SelectedOption.Purchases
+                    ? "purchase"
+                    : MainMenu_Form.Instance.Selected == MainMenu_Form.SelectedOption.Sales
+                        ? "sale"
+                        : "rental";
                 string id = _selectedRow.Cells[ReadOnlyVariables.ID_column].Value.ToString();
+
+                // Update underlying rental record if this is a rental
+                if (MainMenu_Form.Instance.Selected == MainMenu_Form.SelectedOption.Rentals)
+                {
+                    UpdateRentalRecord();
+                }
+
                 CustomMessage_Form.AddThingThatHasChangedAndLogMessage(MainMenu_Form.ThingsThatHaveChangedInFile, 2, $"Modified {type} '{id}'");
                 return;
             }
@@ -2221,6 +2283,119 @@ namespace Sales_Tracker
             }
 
             // Save the updated inventory
+            RentalInventoryManager.SaveInventory();
+        }
+        private void UpdateRentalRecord()
+        {
+            // Get the TagData from the row
+            if (_selectedRow.Tag is not TagData tagData)
+            {
+                return;
+            }
+
+            // Find the rental record by ID
+            string rentalRecordID = tagData.RentalRecordID;
+            if (string.IsNullOrEmpty(rentalRecordID))
+            {
+                return;
+            }
+
+            // Find the rental item and record
+            RentalItem rentalItem = RentalInventoryManager.RentalInventory
+                .FirstOrDefault(item => item.RentalRecords.Any(r => r.RentalRecordID == rentalRecordID));
+
+            if (rentalItem == null)
+            {
+                return;
+            }
+
+            RentalRecord record = rentalItem.RentalRecords
+                .FirstOrDefault(r => r.RentalRecordID == rentalRecordID);
+
+            if (record == null)
+            {
+                return;
+            }
+
+            // Collect all controls from both panels
+            IEnumerable<Control> allControls = Panel.Controls.Cast<Control>();
+            if (_secondPanel != null)
+            {
+                allControls = allControls.Concat(_secondPanel.Controls.Cast<Control>());
+            }
+
+            // Update rental record with new values from controls
+            foreach (Control control in allControls)
+            {
+                if (control is Guna2TextBox textBox)
+                {
+                    switch (textBox.Name)
+                    {
+                        case nameof(MainMenu_Form.Column.Accountant):
+                            record.Accountant = textBox.Text.Trim();
+                            break;
+                        case nameof(MainMenu_Form.Column.TotalItems):
+                            if (int.TryParse(textBox.Text.Trim(), out int quantity))
+                            {
+                                record.Quantity = quantity;
+                            }
+                            break;
+                        case nameof(MainMenu_Form.Column.RentalRate):
+                            if (decimal.TryParse(textBox.Text.Trim(), out decimal rate))
+                            {
+                                record.Rate = rate;
+                            }
+                            break;
+                        case nameof(MainMenu_Form.Column.Shipping):
+                            if (decimal.TryParse(textBox.Text.Trim(), out decimal shipping))
+                            {
+                                record.Shipping = shipping;
+                            }
+                            break;
+                        case nameof(MainMenu_Form.Column.Tax):
+                            if (decimal.TryParse(textBox.Text.Trim(), out decimal tax))
+                            {
+                                record.Tax = tax;
+                            }
+                            break;
+                        case nameof(MainMenu_Form.Column.Fee):
+                            if (decimal.TryParse(textBox.Text.Trim(), out decimal fee))
+                            {
+                                record.Fee = fee;
+                            }
+                            break;
+                        case nameof(MainMenu_Form.Column.Discount):
+                            if (decimal.TryParse(textBox.Text.Trim(), out decimal discount))
+                            {
+                                record.Discount = discount;
+                            }
+                            break;
+                        case nameof(MainMenu_Form.Column.Total):
+                            if (decimal.TryParse(textBox.Text.Trim(), out decimal total))
+                            {
+                                record.AmountCharged = total;
+                            }
+                            break;
+                        case nameof(MainMenu_Form.Column.Note):
+                            record.Notes = textBox.Text.Trim();
+                            break;
+                    }
+                }
+                else if (control is Guna2DateTimePicker datePicker)
+                {
+                    switch (datePicker.Name)
+                    {
+                        case nameof(MainMenu_Form.Column.Date):
+                            record.StartDate = datePicker.Value;
+                            break;
+                        case nameof(MainMenu_Form.Column.EndDate):
+                            record.ReturnDate = datePicker.Value;
+                            break;
+                    }
+                }
+            }
+
+            // Save the updated rental inventory
             RentalInventoryManager.SaveInventory();
         }
 
