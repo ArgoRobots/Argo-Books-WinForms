@@ -110,6 +110,7 @@ namespace Sales_Tracker.Rentals
             CurrentRentals_DataGridView.Size = new Size(ClientSize.Width - 80, ClientSize.Height - _topForDataGridView - 70);
             CurrentRentals_DataGridView.Location = new Point((ClientSize.Width - CurrentRentals_DataGridView.Width) / 2, _topForDataGridView);
             CurrentRentals_DataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Left;
+            CurrentRentals_DataGridView.Tag = MainMenu_Form.DataGridViewTag.CurrentRentals;
             CurrentRentals_DataGridView.CellFormatting += DataGridView_CellFormatting;
 
             // Align controls

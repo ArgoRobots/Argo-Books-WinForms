@@ -168,9 +168,6 @@ namespace Sales_Tracker.Rentals
             RentalInventoryManager.SaveInventory();
             MainMenu_Form.Instance.SaveCustomersToFile();
 
-            // Refresh charts and UI
-            MainMenu_Form.Instance.LoadOrRefreshMainCharts();
-
             // Update the inventory row
             _inventoryRow.Cells[Rentals_Form.Column.Available.ToString()].Value = _rentalItem.QuantityAvailable;
             _inventoryRow.Cells[Rentals_Form.Column.Rented.ToString()].Value = _rentalItem.QuantityRented;

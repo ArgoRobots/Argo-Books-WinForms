@@ -364,7 +364,7 @@ namespace Sales_Tracker.GridView
         }
         private static void HandleRentalsDeletion(DataGridViewRowCancelEventArgs e)
         {
-            string IDColumn =  ReadOnlyVariables.ID_column;
+            string IDColumn = ReadOnlyVariables.ID_column;
             string itemID = e.Row.Cells[IDColumn].Value?.ToString();
 
             // Remove the item from the rental inventory
@@ -654,6 +654,7 @@ namespace Sales_Tracker.GridView
             int currentIndex = 0;
 
             bool isRentalInventory = grid.Tag?.ToString() == MainMenu_Form.DataGridViewTag.RentalInventory.ToString();
+            bool isCurrentRental = grid.Tag?.ToString() == MainMenu_Form.DataGridViewTag.CurrentRentals.ToString();
 
             // Add buttons for Rental Inventory
             if (isRentalInventory)
@@ -668,13 +669,25 @@ namespace Sales_Tracker.GridView
                             RightClickDataGridViewRowMenu.RentOut_Button.Visible = true;
                             flowPanel.Controls.SetChildIndex(RightClickDataGridViewRowMenu.RentOut_Button, currentIndex++);
                         }
+                    }
 
-                        // Check if item has rented quantity for returning
-                        if (rentalItem.QuantityRented > 0)
-                        {
+                    RightClickDataGridViewRowMenu.Modify_Button.Visible = true;
+                    flowPanel.Controls.SetChildIndex(RightClickDataGridViewRowMenu.Modify_Button, currentIndex++);
+                }
+
+                RightClickDataGridViewRowMenu.Delete_Button.Visible = true;
+                flowPanel.Controls.SetChildIndex(RightClickDataGridViewRowMenu.Delete_Button, currentIndex++);
+
+                return;  // Don't add any more buttons
+            }
+            if (isCurrentRental)
+            {
+                if (isSingleRowSelected)
+                {
+                    if (grid.SelectedRows[0].Tag is RentalRecord )
+                    {
                             RightClickDataGridViewRowMenu.ReturnRental_Button.Visible = true;
                             flowPanel.Controls.SetChildIndex(RightClickDataGridViewRowMenu.ReturnRental_Button, currentIndex++);
-                        }
                     }
 
                     RightClickDataGridViewRowMenu.Modify_Button.Visible = true;

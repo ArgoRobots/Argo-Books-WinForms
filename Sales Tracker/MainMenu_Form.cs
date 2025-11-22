@@ -2284,6 +2284,7 @@ namespace Sales_Tracker
             ItemsInPurchase,
             Customer,
             RentalInventory,
+            CurrentRentals,
             Rental
         }
 

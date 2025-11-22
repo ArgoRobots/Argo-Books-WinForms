@@ -896,7 +896,7 @@ namespace Sales_Tracker.GridView
             DataGridViewRow selectedRow = grid.SelectedRows[0];
 
             // Handle rental inventory items (RentalItem tag)
-            if (selectedRow.Tag is RentalItem rentalItem)
+            if (selectedRow.Tag is RentalRecord rentalRecord)
             {
                 // Find all active rentals for this rental item across all customers
                 List<(Customer customer, RentalRecord rental)> activeRentals = [];
@@ -904,7 +904,7 @@ namespace Sales_Tracker.GridView
                 foreach (Customer customer in MainMenu_Form.Instance.CustomerList)
                 {
                     List<RentalRecord> customerActiveRentals = customer.GetActiveRentals()
-                        .Where(r => r.RentalItemID == rentalItem.RentalItemID)
+                        .Where(r => r.RentalItemID == rentalRecord.RentalItemID)
                         .ToList();
 
                     foreach (RentalRecord rental in customerActiveRentals)
