@@ -895,7 +895,7 @@ namespace Sales_Tracker.GridView
 
             DataGridViewRow selectedRow = grid.SelectedRows[0];
 
-            // Handle direct RentalRecord tag (from CurrentRentals_Form)
+            // ReturnRental is only called from CurrentRentals_Form where Tag is always RentalRecord
             if (selectedRow.Tag is RentalRecord rentalRecord)
             {
                 Customer customer = MainMenu_Form.Instance.CustomerList
@@ -905,60 +905,8 @@ namespace Sales_Tracker.GridView
                 {
                     Tools.OpenForm(new ReturnRental_Form(customer, rentalRecord));
                     Hide();
-                    return;
                 }
             }
-
-            // Handle rental inventory items (RentalItem tag from Rentals_Form)
-            if (selectedRow.Tag is RentalItem rentalItem)
-            {
-                // Find all active rentals for this rental item across all customers
-                List<(Customer customer, RentalRecord rental)> activeRentals = [];
-
-                foreach (Customer customer in MainMenu_Form.Instance.CustomerList)
-                {
-                    List<RentalRecord> customerActiveRentals = customer.GetActiveRentals()
-                        .Where(r => r.RentalItemID == rentalItem.RentalItemID)
-                        .ToList();
-
-                    foreach (RentalRecord rental in customerActiveRentals)
-                    {
-                        activeRentals.Add((customer, rental));
-                    }
-                }
-
-                if (activeRentals.Count == 0)
-                {
-                    CustomMessageBox.Show(
-                        "No Active Rentals",
-                        "There are no active rentals for this item.",
-                        CustomMessageBoxIcon.Info,
-                        CustomMessageBoxButtons.Ok);
-                    return;
-                }
-
-                if (activeRentals.Count == 1)
-                {
-                    // Only one active rental, open the form with customer and rental record
-                    Tools.OpenForm(new ReturnRental_Form(activeRentals[0].customer, activeRentals[0].rental));
-                    Hide();
-                    return;
-                }
-
-                // Multiple active rentals - direct user to CurrentRentals_Form
-                CustomMessageBox.Show(
-                    "Multiple Active Rentals",
-                    "This item has multiple active rentals. Please use 'Current Rentals' to select a specific rental to return.",
-                    CustomMessageBoxIcon.Info,
-                    CustomMessageBoxButtons.Ok);
-                return;
-            }
-
-            CustomMessageBox.Show(
-                "Error",
-                "Unable to process this rental return. Invalid rental data.",
-                CustomMessageBoxIcon.Error,
-                CustomMessageBoxButtons.Ok);
         }
 
         // Helper methods
