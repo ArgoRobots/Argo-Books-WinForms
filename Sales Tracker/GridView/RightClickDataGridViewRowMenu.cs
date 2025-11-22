@@ -895,8 +895,22 @@ namespace Sales_Tracker.GridView
 
             DataGridViewRow selectedRow = grid.SelectedRows[0];
 
-            // Handle rental inventory items (RentalItem tag)
+            // Handle direct RentalRecord tag (from CurrentRentals_Form)
             if (selectedRow.Tag is RentalRecord rentalRecord)
+            {
+                Customer customer = MainMenu_Form.Instance.CustomerList
+                    .FirstOrDefault(c => c.CustomerID == rentalRecord.CustomerID);
+
+                if (customer != null)
+                {
+                    Tools.OpenForm(new ReturnRental_Form(customer, rentalRecord));
+                    Hide();
+                    return;
+                }
+            }
+
+            // Handle rental inventory items (RentalItem tag from Rentals_Form)
+            if (selectedRow.Tag is RentalItem rentalItem)
             {
                 // Find all active rentals for this rental item across all customers
                 List<(Customer customer, RentalRecord rental)> activeRentals = [];
@@ -904,7 +918,7 @@ namespace Sales_Tracker.GridView
                 foreach (Customer customer in MainMenu_Form.Instance.CustomerList)
                 {
                     List<RentalRecord> customerActiveRentals = customer.GetActiveRentals()
-                        .Where(r => r.RentalItemID == rentalRecord.RentalItemID)
+                        .Where(r => r.RentalItemID == rentalItem.RentalItemID)
                         .ToList();
 
                     foreach (RentalRecord rental in customerActiveRentals)
@@ -930,6 +944,14 @@ namespace Sales_Tracker.GridView
                     Hide();
                     return;
                 }
+
+                // Multiple active rentals - direct user to CurrentRentals_Form
+                CustomMessageBox.Show(
+                    "Multiple Active Rentals",
+                    "This item has multiple active rentals. Please use 'Current Rentals' to select a specific rental to return.",
+                    CustomMessageBoxIcon.Info,
+                    CustomMessageBoxButtons.Ok);
+                return;
             }
 
             CustomMessageBox.Show(
