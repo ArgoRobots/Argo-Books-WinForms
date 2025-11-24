@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-using Sales_Tracker.Classes;
-using Sales_Tracker.Encryption;
-using Sales_Tracker.Language;
+﻿using Argo_Books.Classes;
+using Argo_Books.Encryption;
+using Newtonsoft.Json;
+using Argo_Books.Language;
 
 namespace Tests
 {
@@ -92,7 +92,7 @@ namespace Tests
         public void TestTranslateString()
         {
             // Arrange
-            Sales_Tracker.Properties.Settings.Default.Language = "French";  // Set to French for testing
+            Argo_Books.Properties.Settings.Default.Language = "French";  // Set to French for testing
 
             // Test messages with variables that should find translations
             Dictionary<string, string> testCases = new()
@@ -118,7 +118,7 @@ namespace Tests
         public void Cleanup()
         {
             // Reset language to English
-            Sales_Tracker.Properties.Settings.Default.Language = "English";
+            Argo_Books.Properties.Settings.Default.Language = "English";
 
             // Clean up temporary cache directory
             if (Directory.Exists(tempCacheDir))

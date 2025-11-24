@@ -1,4 +1,4 @@
-using Sales_Tracker.AISearch;
+using Argo_Books.AISearch;
 using System.Windows.Forms;
 
 namespace Tests

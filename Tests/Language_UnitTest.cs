@@ -1,7 +1,7 @@
-﻿using Guna.UI2.WinForms;
+﻿using Argo_Books.Classes;
+using Guna.UI2.WinForms;
 using Newtonsoft.Json;
-using Sales_Tracker.Classes;
-using Sales_Tracker.Language;
+using Argo_Books.Language;
 using System.Windows.Forms;
 
 namespace Tests
@@ -190,7 +190,7 @@ namespace Tests
         public void TestTranslateString_ReturnsOriginalIfNoTranslation()
         {
             // Arrange
-            Sales_Tracker.Properties.Settings.Default.Language = "French";
+            Argo_Books.Properties.Settings.Default.Language = "French";
             string messageWithoutTranslation = "This message has no translation available";
 
             // Act
@@ -205,7 +205,7 @@ namespace Tests
         public void TestTranslateString_ReturnsOriginalForEnglish()
         {
             // Arrange
-            Sales_Tracker.Properties.Settings.Default.Language = "English";
+            Argo_Books.Properties.Settings.Default.Language = "English";
             string originalMessage = "Test message in English";
 
             // Act

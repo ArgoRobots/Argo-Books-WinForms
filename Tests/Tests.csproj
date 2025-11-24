@@ -40,7 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Sales Tracker\Sales Tracker.csproj" />
+    <ProjectReference Include="..\Sales Tracker\Argo Books.csproj" />
   </ItemGroup>
 
   <ItemGroup>

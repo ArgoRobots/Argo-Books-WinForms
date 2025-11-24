@@ -1,10 +1,10 @@
-﻿using Google.Apis.Auth.OAuth2;
+﻿using Argo_Books.Classes;
+using Argo_Books.Encryption;
+using Google.Apis.Auth.OAuth2;
 using Google.Apis.Drive.v3;
 using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
-using Sales_Tracker.Classes;
-using Sales_Tracker.Encryption;
 
 namespace Tests
 {
@@ -41,7 +41,7 @@ namespace Tests
             _ = new SheetsService(new BaseClientService.Initializer
             {
                 HttpClientInitializer = credential,
-                ApplicationName = "Argo Sales Tracker"
+                ApplicationName = "Argo Books"
             });
         }
 
@@ -53,7 +53,7 @@ namespace Tests
             SheetsService service = new(new BaseClientService.Initializer
             {
                 HttpClientInitializer = credential,
-                ApplicationName = "Argo Sales Tracker"
+                ApplicationName = "Argo Books"
             });
 
             Spreadsheet spreadsheet = new()
@@ -75,7 +75,7 @@ namespace Tests
             SheetsService service = new(new BaseClientService.Initializer
             {
                 HttpClientInitializer = credential,
-                ApplicationName = "Argo Sales Tracker"
+                ApplicationName = "Argo Books"
             });
 
             Spreadsheet spreadsheet = new()
@@ -102,7 +102,7 @@ namespace Tests
             SheetsService service = new(new BaseClientService.Initializer
             {
                 HttpClientInitializer = credential,
-                ApplicationName = "Argo Sales Tracker"
+                ApplicationName = "Argo Books"
             });
 
             // Create spreadsheet
@@ -141,7 +141,7 @@ namespace Tests
             SheetsService service = new(new BaseClientService.Initializer
             {
                 HttpClientInitializer = credential,
-                ApplicationName = "Argo Sales Tracker"
+                ApplicationName = "Argo Books"
             });
 
             // Create and write data
@@ -186,7 +186,7 @@ namespace Tests
             SheetsService service = new(new BaseClientService.Initializer
             {
                 HttpClientInitializer = credential,
-                ApplicationName = "Argo Sales Tracker"
+                ApplicationName = "Argo Books"
             });
 
             // Create spreadsheet with multiple sheets
@@ -217,7 +217,7 @@ namespace Tests
             SheetsService service = new(new BaseClientService.Initializer
             {
                 HttpClientInitializer = credential,
-                ApplicationName = "Argo Sales Tracker"
+                ApplicationName = "Argo Books"
             });
 
             // Create spreadsheet
@@ -277,7 +277,7 @@ namespace Tests
                 DriveService driveService = new(new BaseClientService.Initializer
                 {
                     HttpClientInitializer = credential,
-                    ApplicationName = "Argo Sales Tracker"
+                    ApplicationName = "Argo Books"
                 });
 
                 await driveService.Files.Delete(spreadsheetId).ExecuteAsync();
