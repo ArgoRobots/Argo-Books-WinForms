@@ -1,9 +1,9 @@
-# Argo Sales Tracker
+# Argo Books
 
 ## Introduction
-**Argo Sales Tracker** is a Windows app designed to help small to medium sized companies manage their finances. It was created out of the need for a one-time payment solution, as most existing sales trackers are subscription-based, very overpriced, and have a high learning curve. Argo Sales Tracker offers advanced features while remaining easy to use, filling the gap between basic spreadsheets and enterprise-level solutions.
+**Argo Books** is a Windows app designed to help small to medium sized companies manage their finances. It was created out of the need for a one-time payment solution, as most existing sales trackers are subscription-based, very overpriced, and have a high learning curve. Argo Books offers advanced features while remaining easy to use, filling the gap between basic spreadsheets and enterprise-level solutions.
 
-<img width="2400" height="1528" alt="Argo Sales Tracker" src="https://github.com/user-attachments/assets/d0f3ecad-fd85-49d1-9c1b-8f38b14f32a8" />
+<img width="2400" height="1528" alt="Argo Books" src="https://github.com/user-attachments/assets/d0f3ecad-fd85-49d1-9c1b-8f38b14f32a8" />
 
 ## Features
 - **Import data from spreadsheets**: Import your existing transactions, products, and other data from spreadsheets.
@@ -42,6 +42,6 @@ To use the program effectively, follow these steps:
 3. **Add products**: Once categories are set, you can create products within those categories.
 4. **Add transactions**: Now you can start adding purchases and sales into the system and watch the charts update in real time.
 
-## Publishing Argo Sales Tracker to a .exe file
-The `.exe` installer for Argo Sales Tracker is built using [Advanced Installer Professional Edition](https://www.advancedinstaller.com/) to ensure a smooth and professional installation experience.
+## Publishing Argo Books to a .exe file
+The `.exe` installer for Argo Books is built using [Advanced Installer Professional Edition](https://www.advancedinstaller.com/) to ensure a smooth and professional installation experience.
 Feel free to contact me directly to request the Advanced Installer project files. Note that the professional edition is a paid product.
