@@ -16,8 +16,6 @@ using LiveChartsCore.SkiaSharpView.Drawing.Geometries;
 using LiveChartsCore.SkiaSharpView.Painting;
 using LiveChartsCore.SkiaSharpView.WinForms;
 using OfficeOpenXml.Drawing.Chart;
-using Argo_Books;
-using Argo_Books.Classes;
 using Argo_Books.Language;
 using SkiaSharp;
 using System.Data;
@@ -2757,7 +2755,6 @@ namespace Argo_Books.Charts
             CartesianChart chart,
             int topCount = 10,
             bool exportToExcel = false,
-            string filePath = null,
             bool canUpdateChart = true)
         {
             List<Customer> customers = MainMenu_Form.Instance.CustomerList;
@@ -2825,7 +2822,6 @@ namespace Argo_Books.Charts
         public static ChartData LoadCustomerPaymentStatusChart(
             PieChart chart,
             bool exportToExcel = false,
-            string filePath = null,
             bool canUpdateChart = true)
         {
             List<Customer> customers = MainMenu_Form.Instance.CustomerList;
@@ -2848,9 +2844,9 @@ namespace Argo_Books.Charts
             foreach (Customer customer in customers)
             {
                 string status = customer.CurrentPaymentStatus.ToString();
-                if (statusCounts.ContainsKey(status))
+                if (statusCounts.TryGetValue(status, out int value))
                 {
-                    statusCounts[status]++;
+                    statusCounts[status] = ++value;
                 }
                 else
                 {
@@ -2883,7 +2879,6 @@ namespace Argo_Books.Charts
             CartesianChart chart,
             bool isLineChart,
             bool exportToExcel = false,
-            string filePath = null,
             bool canUpdateChart = true)
         {
             List<Customer> customers = MainMenu_Form.Instance.CustomerList;
@@ -2908,9 +2903,9 @@ namespace Argo_Books.Charts
                 if (customer.CreatedDate != default && customer.CreatedDate != DateTime.MinValue)
                 {
                     string monthKey = customer.CreatedDate.ToString("yyyy-MM");
-                    if (monthlyGrowth.ContainsKey(monthKey))
+                    if (monthlyGrowth.TryGetValue(monthKey, out int value))
                     {
-                        monthlyGrowth[monthKey]++;
+                        monthlyGrowth[monthKey] = ++value;
                     }
                     else
                     {
@@ -2981,7 +2976,6 @@ namespace Argo_Books.Charts
         public static ChartData LoadActiveVsInactiveCustomersChart(
             PieChart chart,
             bool exportToExcel = false,
-            string filePath = null,
             bool canUpdateChart = true)
         {
             List<Customer> customers = MainMenu_Form.Instance.CustomerList;
@@ -3072,7 +3066,6 @@ namespace Argo_Books.Charts
             CartesianChart chart,
             int topCount = 15,
             bool exportToExcel = false,
-            string filePath = null,
             bool canUpdateChart = true)
         {
             List<Customer> customers = MainMenu_Form.Instance.CustomerList;
@@ -3141,7 +3134,6 @@ namespace Argo_Books.Charts
             CartesianChart chart,
             bool isLineChart,
             bool exportToExcel = false,
-            string filePath = null,
             bool canUpdateChart = true)
         {
             List<Customer> customers = MainMenu_Form.Instance.CustomerList;
